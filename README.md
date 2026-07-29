@@ -28,7 +28,7 @@ it can be checked rather than believed.
 notebook entries, and experiment output are agent-writable. `CONTEXT.md` and the charter
 are human-only — agents propose exact text, the human applies it. So:
 
-```
+```console
 git log --format='%an' -- CONTEXT.md   →  one name
 ```
 

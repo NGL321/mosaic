@@ -151,7 +151,7 @@ Two rules, stated together because each is hollow alone.
 
 This makes one claim mechanically checkable:
 
-```
+```console
 git log --format='%an' -- CONTEXT.md   →  one name
 ```
 
@@ -223,11 +223,67 @@ and repair its own work. It cannot independently assess reasoning it generated.
   thread — which makes the human–machine boundary **visible in the record** rather than
   advertised in a README.
 
-**Merge commits. Never rebase a pushed branch.** `inquiry/` branches take `main` by
-merging it in. This produces uglier history, and the ugliness is correct: rebase rewrites
-*when* something was known, and a programme whose asset is an auditable record of what it
-believed and when cannot afford a history that lies about chronology to look tidy. Same
-reason as the squash rule.
+**Never rebase a pushed branch.** `inquiry/` branches take `main` by merging it in. This
+produces uglier history, and the ugliness is correct: rebase rewrites *when* something
+was known, and a programme whose asset is an auditable record of what it believed and
+when cannot afford a history that lies about chronology to look tidy. Same reason as the
+squash rule.
+
+### Revisions during review
+
+**The branch owner applies feedback, as new commits.** Never by amend or force-push: a
+review thread whose commits have been rewritten no longer refers to anything, and the
+prohibition above applies to every pushed branch without exception. Threads resolve by
+citing the SHA that addressed them.
+
+**De minimis exception.** The human researcher may commit directly to a branch under
+review for changes that **cannot alter meaning** — spelling, punctuation, typography,
+formatting, broken links. Round-tripping a misspelt name through an agent is overhead
+with no reviewer benefit. The test is strict:
+
+> *If the change could alter what a reader takes the text to claim, it is not de minimis.*
+
+Bounded three ways:
+
+- It runs **one direction only** — the human writing on an agent's branch, never the
+  reverse. Agents do not acquire de minimis access to authored files. Custody (§5) has no
+  exceptions, because a single exception makes `git log -- CONTEXT.md` stop being an
+  answer to anything.
+- The change is a **separate commit**, never amended into the author's work, so
+  authorship in the log stays truthful about who wrote what.
+- Anything failing the test goes back to the owner as a request, however small it looks.
+  "Small" and "cannot alter meaning" are different claims, and only the second one counts.
+
+**Substantive revision re-fires the gate.** If review changes what a `belt:` claim
+asserts, the falsifier drafted before review no longer covers the claim being merged, and
+§5 runs again on the revised version. Otherwise the gate could be satisfied by a draft
+and the merge carried by something else.
+
+### Merge commits
+
+**Always `--no-ff`**, including single-commit branches: a pull request is a unit of work
+and history should show it as one. **Squash-merge is never used** — it collapses across
+commit types by construction, which §3 forbids for the same reason.
+
+The merge commit takes **the highest commit type on the branch**. This makes
+`git log --first-parent main` the programme's changelog, and puts the version bump at
+trunk level where it can be read without descending into branches.
+
+```text
+record: fill the research substance section of CONTEXT.md (#21)
+
+Resolves #2, #15. Applies the corrections from #13.
+
+Bump: research PATCH
+```
+
+- **Subject** — `<type>: <what landed> (#PR)`.
+- **Body** — the tickets closed, and the one-line gist that also goes to the ticket
+  resolution and the map's *Decisions so far*. Written once, used three times.
+- **`Bump:`** — track and level, **stated rather than inferred**. §3 computes the release
+  bump from commit types; stating it here means a mistyped commit shows up as a visible
+  contradiction between the merge commit and the branch it landed, instead of being
+  silently miscounted at release time.
 
 ---
 
