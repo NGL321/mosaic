@@ -121,11 +121,12 @@ and experience.
 A set of world-states an engine's internal state does not distinguish, whose separation from other
 such sets is *sensitive* and *specific* to some feature, *invariant* to the rest, and *functional*
 — carrying predictive information the engine's inference actually uses. Structure that is not
-functional is not a representation; under least action it is dissipated work.
+functional is not a representation; whatever it retains that is not predictive is, under least
+action, dissipated work.
 _Avoid_: Feature, encoding, latent, embedding, concept
 _After_: Pohl, Walker, Barack, Lee, Denison, Block, Meyniel & Ma (2026) for the four dimensions;
-Tishby, Pereira & Bialek (1999) and Still (2014) for compression against a predictive relevance
-variable.
+Tishby, Pereira & Bialek (1999) for compression against a relevance variable, and Still (2014) for
+making that variable the future.
 _Departs_: Pohl et al.'s dimensions are **evidential** — they say when an experimenter's evidence
 for a representation is strong. Mosaic's definition is **constitutive**, and takes their dimensions
 as its measurement instrument rather than as its content. Named by *content* (which world-states
@@ -183,7 +184,7 @@ _Avoid_: Mapping, translation, alignment, projection, correspondence
 _After_: Cellular sheaves for the structure (restriction maps between stalks); gauge theory for the
 symmetry acting on it (a choice of coordinates within a stalk is a gauge, and Transport is the
 connection that survives that choice). Singer & Wu's connection Laplacian is the special case of
-Hansen & Ghrist's sheaf Laplacian in which every map is orthogonal.
+Hansen & Ghrist's sheaf Laplacian over a graph in which every map is orthogonal.
 _Departs_: "Gauge symmetry between inferences" was the programme's original phrasing and is
 retired. In physics a gauge symmetry is **exact** — redundancy in describing one system. Mosaic
 keeps that sense only *within* a schema, and treats the between-schema case as a connection rather
@@ -202,14 +203,16 @@ The level of description above the engine — how representations relate within 
 relate across engines — together with the claim that general cognitive capacity is a property of
 those relations rather than of any single engine. Mosaic's object of study.
 _Avoid_: Emergence, integration, binding, higher-order cognition
-_After_: Mountcastle's columnar organisation (1957; 1978) for the repeated-unit picture, held as a
-**hypothesis** and a contested one (Horton & Adams, 2005), never a theorem. Piaget for the
-within-schema case. Applied mathematics generally, where a problem is decomposed into local
-approximations that compose into a whole.
+_After_: Mountcastle's columnar organisation (1957; 1978) for the repeated-unit picture, held here
+as a **hypothesis** and a contested one (Horton & Adams, 2005), never a theorem — Mountcastle
+himself offered it as an organising principle. Piaget for the within-schema case. Applied
+mathematics generally, where a problem is decomposed into local approximations that compose into a
+whole.
 _Departs_: This line of thought **originated** in reading the **Thousand Brains Theory** (Hawkins,
 Lewis, Klukas, Purdy & Ahmad, 2019; Hawkins, 2021) and disagreeing with it — the disagreement is
-the programme's seed, not a boundary drawn afterwards. There, cortical columns model *the same
-object* in interchangeable reference frames and vote toward consensus. Mosaic's schemas are
+the programme's seed, not a boundary drawn afterwards. There, many cortical columns model *the same
+object*, each from its own sensory patch and its own location in an object-anchored reference
+frame, and vote toward a consensus about which object is present. Mosaic's schemas are
 heterogeneous by construction — different problems, not one problem in different coordinates — and
 its primary observable is where reconciliation **fails** (Obstruction), not where it succeeds. The
 specific disagreements, and which of them Noah attributes to engineering assumptions imported into
@@ -220,14 +223,26 @@ The programme's first axiom: information transformation is a thermodynamic proce
 subject to the same variational principle as any other physical process. Free energy is one
 candidate functional under it, not the axiom itself.
 _Avoid_: Free energy principle, efficiency, optimisation pressure
-_After_: Jaynes (1957) and Landauer (1961) for the information–thermodynamics identity; Still,
-Sivak, Bell & Crooks (2012) for retained non-predictive information as dissipated work.
+_After_: Jaynes (1957) for entropy as an inferential quantity and Landauer (1961) for the
+thermodynamic cost of erasure — a *bound*, not an identity; Still, Sivak, Bell & Crooks (2012) for
+retained non-predictive information as dissipated work.
 _Departs_: Held as Hard Core by *disciplinary* declaration — Mosaic is computational cognitive
 science, not physics, and does not investigate the axiom's own falsifiers.
 
-<!-- Provenance Tier: machine-produced, verified in conversation against primary sources for the
-     two Pohl/Walker papers only. The Jaynes, Landauer, Still, Tishby, Piaget and Poincaré
-     attributions are unverified recall and stand as Verification Debt. -->
+<!-- Provenance Tier: machine-produced, checked against primary sources. Every attribution in this
+     section was read back to the source in docs/research/2026-07-28-verifying-cited-influences.md
+     (ticket #13). Verified as written: Still et al. (2012), Tishby et al. (1999), Still (2014),
+     Pearl (1988), Friston (2013; 2019), Piaget, Piaget & García (1989), Poincaré (1908), Horton &
+     Adams (2005), Singer & Wu / Hansen & Ghrist, and the Pohl/Walker bibliographic details.
+     Corrected here as a result: the Jaynes/Landauer line (Landauer states a bound, not an identity,
+     and explicitly declines to rest his argument on an entropy–information connection); the
+     Tishby/Still credit split; Representation's "dissipated work" line; the Mountcastle hedge; the
+     Hawkins "interchangeable reference frames" claim.
+
+     Remaining Verification Debt, logged against the Curriculum: Mountcastle (1957; 1978) and
+     Piaget's 1929 Limnaea paper were not read in original; Piaget's own distinct use of *schéma*
+     is unconfirmed from primary French; and the derivation of Still et al.'s Eq. (14), together
+     with its no-feedback assumption, is not yet defensible unaided. -->
 
 **Scale Corollary**:
 The programme's second axiom: the properties above hold at any scale and on any substrate, so a
