@@ -9,7 +9,7 @@
 
 ## 0. Summary
 
-Nine attributions were checked. **Four came back clean. Four need wording changes. One is unresolved.** The two worst findings are both in the Least Action / Representation cluster, which is where the file leans hardest.
+The nine attributions named in the ticket were checked: **six came back clean, three need wording changes.** The table below adds three related sub-claims that came up in the course of checking them — a sentence in *Representation* that leans on Still et al., the *Limnaea* root of assimilation/accommodation, and the Pohl/Walker bibliographic details — bringing it to twelve rows. Of those three, one is **Loose**, one is **Unresolved**, and one is clean. The two worst findings are both in the Least Action / Representation cluster, which is where the file leans hardest.
 
 | Attribution | Verdict | One-line reason |
 |---|---|---|
@@ -23,7 +23,7 @@ Nine attributions were checked. **Four came back clean. Four need wording change
 | **Mountcastle (1957; 1978)** + **Horton & Adams (2005)** | **Loose** | Horton & Adams deny a *function*, not existence — correctly cited. But Mountcastle did not frame it as a hypothesis; the hedge is Mosaic's, and the sentence currently reads as if it were his. |
 | **Hawkins et al. (2019); Hawkins (2021)** | **Loose** | "The same object" and "vote" are the papers' own. "**Interchangeable** reference frames" is not — and misdescribes the theory, in which each column has a *distinct* location and a *distinct* sensory patch. |
 | **Singer & Wu / Hansen & Ghrist** — connection Laplacian as orthogonal-restriction sheaf Laplacian | **Supported** | Hansen & Ghrist state it themselves, §3.6, in one sentence. Two qualifications they add are worth carrying. |
-| *Limnaea stagnalis* as the biological root of assimilation/accommodation | **Unresolved** | Could not reach Piaget's 1929 malacology paper. Also: the mollusc work was **not** his thesis — see §6.3. |
+| *Limnaea stagnalis* as the biological root of assimilation/accommodation | **Unresolved** | Could not reach Piaget's 1929 malacology paper. Also: the mollusc work was **not** his thesis — see §11, item 2. |
 | Pohl et al. (2026) / Walker et al. (2023) bibliographic details | **Supported** | Author lists, years, venues and both arXiv numbers check out exactly. |
 
 ---
@@ -72,7 +72,7 @@ The paper's own abstract (p. 183) also hedges the constant: "requires a minimal 
 
 Does it matter to Mosaic's use? Yes, mildly and in Mosaic's favour. Least Action says "information transformation is a thermodynamic process, so inference is subject to the same variational principle as any other physical process." A *bound* underwrites a variational principle perfectly well — better, in fact, than an identity would, because a variational principle needs something to be extremised against, and Landauer's gap is exactly that. The axiom does not need the stronger claim, so the citation should stop making it.
 
-**Proposed replacement** (applied):
+**Proposed replacement** — proposed only; applied by hand in #21 under `PROTOCOL.md` §5:
 
 > `_After_: Jaynes (1957) for entropy as an inferential quantity and Landauer (1961) for the thermodynamic cost of erasure — a *bound*, not an identity; Still, Sivak, Bell & Crooks (2012) for retained non-predictive information as dissipated work.`
 
@@ -126,7 +126,7 @@ Representation currently says:
 
 Mosaic defines *functional* as "carrying predictive information the engine's inference **actually uses**." Still et al.'s dissipated quantity is `I_mem − I_pred`, and `I_pred = I[s_t, x_{t+1}]` is a mutual information — it requires only that the state *correlate* with the next signal value, not that the system's inference use it. So there is a wedge: information that is predictive but unused is **non-functional in Mosaic's sense and non-dissipated in Still's**. The sentence as written asserts an identification the theorem does not license.
 
-**Proposed replacement** (applied):
+**Proposed replacement** — proposed only; applied by hand in #21 under `PROTOCOL.md` §5:
 
 > "Structure that is not functional is not a representation; whatever it retains that is not predictive is, under least action, dissipated work."
 
@@ -156,7 +156,7 @@ and the objective itself, Eq. (4), p. 971: maximise `I[s_t, x⃗_t] − λ I[s_t
 
 CONTEXT.md credits *both* sources for "compression against a **predictive** relevance variable." Tishby et al. supply the compression-against-a-relevance-variable machinery; the *predictive* specialisation is Still's. Small but real.
 
-**Proposed replacement** (applied):
+**Proposed replacement** — proposed only; applied by hand in #21 under `PROTOCOL.md` §5:
 
 > `Tishby, Pereira & Bialek (1999) for compression against a relevance variable, and Still (2014) for making that variable the future.`
 
@@ -196,11 +196,13 @@ and from §2, *Heuristic proof*: *"any ergodic random dynamical system that poss
 
 There is a substantial critical literature on whether Friston's blankets do the work claimed (Biehl et al.; Aguilera et al.; Bruineberg et al.). Per the ticket, that is a separate ticket and was not surveyed here.
 
-**Verdict: Supported.** No change needed.
+**Verdict: Supported.** No change needed *to the attribution*.
+
+> **Read this verdict narrowly.** The question this ticket asks is whether CONTEXT.md reports Pearl and Friston faithfully, and it does. It is not the question of whether the Markov blanket can carry the weight the *Inference Engine* entry puts on it — and [#14](https://github.com/NGL321/mosaic/issues/14) answers that one **no**, concluding from Biehl, Pollock & Kanai (2021) that the blanket cannot individuate and should be demoted. The two findings are compatible: a faithful citation of a construct that does not work is still a faithful citation. But the entry this section blesses is the entry #14 proposes to rewrite, so neither document should be read without the other.
 
 ---
 
-## 5. Piaget — **Supported** (with one unresolved sub-point, §6.3)
+## 5. Piaget — **Supported** (with one unresolved sub-point, §5.2)
 
 ### 5.1 *Schème* is the generalisable structure of an action
 
@@ -314,7 +316,7 @@ CONTEXT.md's sentence reads:
 
 Grammatically the hedge attaches to Mosaic's holding, which is correct and is good discipline. But a reader can easily take "held as a hypothesis" to be a claim about Mountcastle's own framing, which would be false. One word fixes it.
 
-**Proposed replacement** (applied): `…for the repeated-unit picture, held **here** as a **hypothesis** and a contested one (Horton & Adams, 2005), never a theorem.`
+**Proposed replacement** — proposed only; applied by hand in #21 under `PROTOCOL.md` §5: `…for the repeated-unit picture, held **here** as a **hypothesis** and a contested one (Horton & Adams, 2005), never a theorem.`
 
 **Debt:** I could not reach the full text of Mountcastle (1957), J. Neurophysiol. **20**, 408–434, or the 1978 chapter — both paywalled or print-only. The 1957 conclusion ("the neurons which lie in narrow vertical columns, or cylinders, extending from layer II through layer VI make up an elementary unit of organization") is quoted consistently across the citing literature but I did not read it in original. Logged in §11.
 
@@ -360,7 +362,7 @@ So the framework already carries heterogeneous anchoring — environment, body, 
 
 Mosaic's departure survives, and is if anything cleaner once stated accurately. In TBT every column is modelling **an object** — the domain is homogeneous even where the vantage points differ. Mosaic's schemas are heterogeneous **in what they are about**: different problems, not one object seen from many places. And Mosaic's primary observable is where reconciliation *fails*, whereas TBT's voting is designed to make it succeed. Both of those contrasts hold against the corrected description. Only the word "interchangeable" has to go, and it should, because it hands a reader who knows the paper an easy reason to distrust the rest of the paragraph.
 
-**Proposed replacement** (applied):
+**Proposed replacement** — proposed only; applied by hand in #21 under `PROTOCOL.md` §5:
 
 > "There, many cortical columns model *the same object*, each from its own sensory patch and its own location in an object-anchored reference frame, and vote toward a consensus about which object is present."
 
@@ -390,7 +392,7 @@ They add that for graphs one usually sets α_σ = 1 on 0-cells, *"but this is no
 
 > The graph connection Laplacian of Singer & Wu is the degree-0 sheaf Laplacian of a discrete O(n)-vector bundle **over a graph** — a cellular sheaf on a 1-dimensional complex whose restriction maps are all invertible and are orthonormal up to a positive scalar per cell.
 
-CONTEXT.md's sentence — "Singer & Wu's connection Laplacian is the special case of Hansen & Ghrist's sheaf Laplacian in which every map is orthogonal" — is the naive form of exactly the statement Hansen & Ghrist make, and is the form they themselves use in §3.6. The only substantive omission is *over a graph*: sheaf Laplacians are defined on cell complexes of arbitrary dimension, and without that restriction the sentence overstates. **One phrase added** (applied); the scalar-multiple subtlety is left out of CONTEXT.md deliberately, since it is a normalisation convention rather than a change of content, but it is recorded here so the claim can be defended if pressed.
+CONTEXT.md's sentence — "Singer & Wu's connection Laplacian is the special case of Hansen & Ghrist's sheaf Laplacian in which every map is orthogonal" — is the naive form of exactly the statement Hansen & Ghrist make, and is the form they themselves use in §3.6. The only substantive omission is *over a graph*: sheaf Laplacians are defined on cell complexes of arbitrary dimension, and without that restriction the sentence overstates. **One phrase proposed**, applied by hand in #21; the scalar-multiple subtlety is left out of CONTEXT.md deliberately, since it is a normalisation convention rather than a change of content, but it is recorded here so the claim can be defended if pressed.
 
 **Verdict: Supported.**
 
