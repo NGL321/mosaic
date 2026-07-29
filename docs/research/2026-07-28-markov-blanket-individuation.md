@@ -76,9 +76,21 @@ Note what this is and is not. It **is** the path version, and it is arrived at f
 
 **No, and this is proved rather than argued.**
 
-The decisive result is [Biehl, Pollock & Kanai (2021), Observation 1](https://arxiv.org/abs/2001.06408):
+The decisive result is [Biehl, Pollock & Kanai (2021), Observation 1](https://arxiv.org/abs/2001.06408). The two conditions it concerns are, in the paper's own statement, a claim about the **flow** and a claim about the **density** respectively:
 
-> "Neither one of Condition 1 (the vector field dependency structure) or Condition 2 (conditional independence in the ergodic distribution) implies the other: Condition 1 ⇏ Condition 2; Condition 1 ⇍ Condition 2."
+> **Condition 1** — the vector field factorises as f(x) = (f_ψ(ψ,s,a), f_s(ψ,s,a), f_a(s,a,λ), f_λ(s,a,λ))ᵀ.
+>
+> **Condition 2** — the ergodic density factorises as p\*(ψ,s,a,λ) = p\*(ψ|s,a) p\*(λ|s,a) p\*(s,a).
+
+Observation 1 then states, and the two displayed relations are reproduced here **exactly as the paper sets them** — as its Equations (11) and (12), both written with Condition 1 on the left and the arrow carrying the direction:
+
+> "Neither one of Condition 1 (the vector field dependency structure) or Condition 2 (conditional independence in the ergodic distribution) implies the other:
+>
+> Condition 1 ⇏ Condition 2  (11)
+>
+> Condition 1 ⇍ Condition 2. (12)"
+
+Read the arrows, not the operand order: **⇏** is "does not imply," so (11) says the flow condition does not give you the density condition; **⇍** is "is not implied by," so (12) says the density condition does not give you the flow condition. The paper keeps Condition 1 on the left in both lines rather than transposing to "Condition 2 ⇏ Condition 1", which is why the pair reads oddly when quoted inline. Both directions fail, and that is the whole content of the observation.
 
 The proof is by explicit counterexample in their Appendix A, constructed within the class of Ornstein–Uhlenbeck processes — where the drift matrix M and the inverse covariance U are both constant, so Condition 1 reduces to vanishing blocks of M and Condition 2 to vanishing blocks of U, and the two can be independently arranged. Restricting to the best-behaved possible class is what makes the result strong: if the implication fails for linear Gaussian systems with constant diffusion and solenoidal matrices, it fails generally.
 
@@ -473,7 +485,7 @@ Consequential edits implied elsewhere, flagged but not drafted:
 
 Mathematics Noah would need to defend the amended entry unaided. Ordered by dependency, which is the order the Curriculum should schedule them in.
 
-1. **Information theory to the level of the data-processing inequality and sufficient statistics.** Required to read *any* of Theorems 1–5. The proofs use only the chain rule, H[f(X)] ≤ H[X], and conditioning-reduces-entropy — genuinely elementary, but they must be owned rather than recognised. Cover to Cover & Thomas ch. 2.
+1. **Information theory to the level of the data-processing inequality and sufficient statistics.** Required to read *any* of Theorems 1–5. The proofs use only the chain rule, H[f(X)] ≤ H[X], and conditioning-reduces-entropy — genuinely elementary, but they must be owned rather than recognised. Covered by [Cover & Thomas, *Elements of Information Theory*, 2nd ed.](https://onlinelibrary.wiley.com/doi/book/10.1002/047174882X), ch. 2.
 2. **Shalizi & Crutchfield Theorems 1, 2, 3 and 5, reproved from the paper.** These are the load-bearing claims. Theorem 2 depends on the Refinement Lemma (Lemma 7), which is the only non-trivial step; there is an alternative proof in their Appendix E and both should be worked.
 3. **The Biehl–Pollock–Kanai Ornstein–Uhlenbeck counterexample (Appendix A).** Requires: linear SDEs, the stationary Fokker–Planck equation, the Helmholtz decomposition f = (Γ + R)∇ ln p*, and the continuous Lyapunov equation JΣ* + Σ*Jᵀ + 2Γ = 0. This is the single item Noah must be able to reconstruct on a whiteboard, because it is the technical claim on which the demotion of the blanket rests.
 4. **Excess entropy and entropy convergence.** [Crutchfield & Feldman (2003)](https://arxiv.org/abs/cond-mat/0102181) §III–V: block entropy H(L), its discrete derivatives, and E as the L→∞ intercept. Needed to say what E *is* without hand-waving, and to know that its estimation from finite data is biased.
@@ -521,7 +533,8 @@ Debt **discharged** by the recommendation, worth recording as a credit: the non-
 - Krakauer, D., Bertschinger, N., Olbrich, E., Flack, J. C. & Ay, N. (2020). *The information theory of individuality.* Theory in Biosciences 139:209–223. https://link.springer.com/article/10.1007/s12064-020-00313-7 · https://arxiv.org/abs/1412.2447
 - Still, S., Sivak, D. A., Bell, A. J. & Crooks, G. E. (2012). *Thermodynamics of prediction.* Phys. Rev. Lett. 109:120604. https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.109.120604
 - Bertschinger, N., Olbrich, E., Ay, N. & Jost, J. (2008). *Autonomy: An information theoretic perspective.* BioSystems 91:331–345. https://www.sciencedirect.com/science/article/abs/pii/S0303264707001037
-- Bertschinger, N., Olbrich, E., Ay, N. & Jost, J. *Information and closure in systems theory.* https://www.semanticscholar.org/paper/Information-and-closure-in-systems-theory-Bertschinger-Olbrich/846a8c33af45d6175643627b4df8fb0a9b63d423
+- Bertschinger, N., Olbrich, E., Ay, N. & Jost, J. (2006). *Information and closure in systems theory.* In *Explorations in the Complexity of Possible Life: Proceedings of the 7th German Workshop on Artificial Life*, pp. 9–21. IOS Press, Amsterdam. Workshop chapter with no DOI-stable publisher page; author-hosted copy on Olbrich's profile: https://www.researchgate.net/profile/Eckehard-Olbrich/publication/41832496_Information_and_closure_in_systems_theory/links/5805d79208aee314f68e3137/Information-and-closure-in-systems-theory.pdf
+- Cover, T. M. & Thomas, J. A. *Elements of Information Theory*, 2nd ed. Wiley. https://onlinelibrary.wiley.com/doi/book/10.1002/047174882X — cited in §9 as Curriculum reading, not as evidence.
 
 **Mosaic documents cross-referenced**
 - `PROTOCOL.md` — working protocol (custody, commit types, merges). https://github.com/NGL321/mosaic/blob/main/PROTOCOL.md
