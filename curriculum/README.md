@@ -49,9 +49,15 @@ That requires two things, both of them artifacts:
 1. A document in `docs/research/` that does the reading.
 2. The commit that promotes the **Provenance Tier** badge at the claim site.
 
-Then close the issue, relabel it `debt:discharged`, and cite the SHA that promoted the tier.
-The issue is retained, never deleted — a discharged debt is a record of what the programme
-did not know and when, which is the whole point of keeping it.
+Then **remove `debt:open`, add `debt:discharged`**, close the issue, and cite the SHA that
+promoted the tier. The issue is retained, never deleted — a discharged debt is a record of
+what the programme did not know and when, which is the whole point of keeping it.
+
+**The label is the axis, not the issue state.** `snapshot_debt.py` groups on the label and
+cross-checks the state against it; an issue that is closed but still labelled `debt:open`,
+or that carries both labels, is reported as a bookkeeping error rather than quietly filed
+under whichever heading its state implies. Leaving both labels on is the easy mistake, which
+is why the instruction above says *remove* rather than *add*.
 
 ## Provenance Tiers
 

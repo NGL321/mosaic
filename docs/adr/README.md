@@ -19,6 +19,10 @@ reasoning that forbids rebasing a pushed branch.
 
 ## Index
 
+A number is reserved when the ADR is written, not when it is planned — an index entry
+linking a file that does not exist is a broken link in a document that claims to be a
+permanent record.
+
 | # | Title | Status |
 |---|---|---|
-| [0001](0001-private-transcript-archive.md) | A private Transcript Archive inside a transparent programme | *not yet written — [#10](https://github.com/NGL321/mosaic/issues/10)* |
+| 0001 | A private Transcript Archive inside a transparent programme | *not yet written — [#10](https://github.com/NGL321/mosaic/issues/10)* |

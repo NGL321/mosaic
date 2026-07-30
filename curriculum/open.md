@@ -4,28 +4,29 @@
 
 # Verification Debt — open
 
-Snapshot of [`label:debt:open`](https://github.com/NGL321/mosaic/issues?q=is%3Aissue+label%3Adebt%3Aopen) taken 2026-07-29.
+Snapshot of [`label:debt:open`](https://github.com/NGL321/mosaic/issues?q=is%3Aissue+label%3Adebt%3Aopen) taken 2026-07-29. Rows are grouped by **label**,
+which is authoritative; see [`README.md`](README.md).
 
 The tracker is the source of truth. This file exists so that a clone of the
 repository contains the programme's debt, and so `git log` can answer what the
-programme owed on a given date. See [`README.md`](README.md).
+programme owed on a given date.
 
 
 **5 open · 0 discharged**
 
 | # | holds down | curriculum |
 |---|---|---|
-| [#29](https://github.com/NGL321/mosaic/issues/29) | `Schema Dynamics` — [`CONTEXT.md:201`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) | Cortical neuroanatomy — primary literature. |
-| [#30](https://github.com/NGL321/mosaic/issues/30) | `Schema` — [`CONTEXT.md:135`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) | History of developmental psychology — primary sources, French. |
-| [#31](https://github.com/NGL321/mosaic/issues/31) | `Schema` — [`CONTEXT.md:135`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) | Reading French primary sources. |
-| [#32](https://github.com/NGL321/mosaic/issues/32) | `Least Action` — [`CONTEXT.md:221`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) · `Representation` — [`CONTEXT.md:120`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) | Stochastic thermodynamics; nonequilibrium statistical mechanics. |
-| [#33](https://github.com/NGL321/mosaic/issues/33) | `Extraction` — [`CONTEXT.md:106`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) · `Closure` — [`CONTEXT.md:150`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) | Information theory; Markov chain lumpability. |
+| [#29](https://github.com/NGL321/mosaic/issues/29) | `Schema Dynamics` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) | Cortical neuroanatomy — primary literature. |
+| [#30](https://github.com/NGL321/mosaic/issues/30) | `Schema` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) | History of developmental psychology — primary sources, French. |
+| [#31](https://github.com/NGL321/mosaic/issues/31) | `Schema` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) | Reading French primary sources. |
+| [#32](https://github.com/NGL321/mosaic/issues/32) | `Least Action` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) · `Representation` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) | Stochastic thermodynamics; nonequilibrium statistical mechanics. |
+| [#33](https://github.com/NGL321/mosaic/issues/33) | `Extraction` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) · `Closure` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) | Information theory; Markov chain lumpability. |
 
 ---
 
 ### [#29 — \[debt\] Mountcastle (1957; 1978) has not been read in the original](https://github.com/NGL321/mosaic/issues/29)
 
-**Holds down.** `Schema Dynamics` — [`CONTEXT.md:201`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md)
+**Holds down.** `Schema Dynamics` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md)
 
 **Discharged by.** Read both papers. Confirm Mountcastle offered columnar organisation as an organising principle rather than as a result, which is what the hedge asserts on his behalf.
 
@@ -33,7 +34,7 @@ programme owed on a given date. See [`README.md`](README.md).
 
 ### [#30 — \[debt\] Piaget's 1929 Limnaea paper is unreached](https://github.com/NGL321/mosaic/issues/30)
 
-**Holds down.** `Schema` — [`CONTEXT.md:135`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md)
+**Holds down.** `Schema` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md)
 
 **Discharged by.** Obtain the 1929 paper. Resolve whether the *Limnaea* work grounds assimilation/accommodation as claimed, and settle the thesis question.
 
@@ -41,7 +42,7 @@ programme owed on a given date. See [`README.md`](README.md).
 
 ### [#31 — \[debt\] Piaget's own use of schéma is unconfirmed from primary French](https://github.com/NGL321/mosaic/issues/31)
 
-**Holds down.** `Schema` — [`CONTEXT.md:135`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md)
+**Holds down.** `Schema` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md)
 
 **Discharged by.** Read Piaget in French and establish whether he draws the distinction the `_Departs_` line relies on.
 
@@ -49,7 +50,7 @@ programme owed on a given date. See [`README.md`](README.md).
 
 ### [#32 — \[debt\] Still et al. (2012) Eq. (14) is not defensible unaided](https://github.com/NGL321/mosaic/issues/32)
 
-**Holds down.** `Least Action` — [`CONTEXT.md:221`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) · `Representation` — [`CONTEXT.md:120`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md)
+**Holds down.** `Least Action` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) · `Representation` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md)
 
 **Discharged by.** Rederive Eq. (14) from the paper. State where the no-feedback assumption enters, and what it costs Mosaic if it fails.
 
@@ -57,7 +58,7 @@ programme owed on a given date. See [`README.md`](README.md).
 
 ### [#33 — \[debt\] Extraction and Closure cite four sources from recall, not warrant](https://github.com/NGL321/mosaic/issues/33)
 
-**Holds down.** `Extraction` — [`CONTEXT.md:106`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) · `Closure` — [`CONTEXT.md:150`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md)
+**Holds down.** `Extraction` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) · `Closure` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md)
 
 **Discharged by.** Read each. Confirm the departures claimed against them are real. This is the same job #13 did, on the section it did not cover.
 
