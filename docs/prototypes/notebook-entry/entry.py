@@ -1,0 +1,414 @@
+"""
+PROTOTYPE (ticket #11) — the portable half: what a Lab Notebook entry *is*.
+
+The question this module answers: given a day's worth of mechanically harvestable
+facts (merges, PR transitions, label transitions, session metadata) plus a narrative
+pass over the transcript, what is the entry's data model, what gets *left out*, and
+how are generated and annotated content kept visually distinct?
+
+Pure. No I/O, no terminal codes, no git. `harvest.py` fills the model from real
+sources; `prototype_tui.py` drives it. Nothing flows back into here.
+
+Three things are load-bearing and are the bits worth lifting out if the design holds:
+
+1. `Note.cites` is non-optional in practice — `admissible()` drops any generated line
+   that cannot name an artifact. This is the volume rule with teeth: the generator
+   cannot narrate, because narration has nothing to cite.
+2. `select()` splits prose from ledger and applies a hard word budget to the prose.
+   Mechanically restated history (`Note.spine`) never competes for that budget, and
+   nothing over budget is dropped silently — it collapses into a table that is cheap
+   to skip and still auditable.
+3. Annotations are a separate layer keyed to a note id, never edits to generated
+   text. That is what makes the visual distinction mechanical rather than a habit.
+"""
+
+from __future__ import annotations
+
+import re
+from dataclasses import dataclass, field
+from enum import Enum
+
+# ------------------------------------------------------------------ provenance
+
+TIERS = {
+    "T1": "derived unaided",
+    "T2": "derived with assistance, personally verified",
+    "T3": "machine-produced, unverified",
+}
+
+
+class Kind(str, Enum):
+    """What a generated line is *about*. Decides whether it survives the volume dial."""
+
+    LANDED = "landed"        # a decision reached the record
+    REVERSED = "reversed"    # something the programme took back
+    DEADEND = "deadend"      # a direction abandoned — kept deliberately
+    DEBT = "debt"            # an obligation filed
+    MILESTONE = "milestone"  # curriculum / charter movement
+    ACTIVITY = "activity"    # mechanical churn. Machine exhaust, by definition.
+
+
+class Volume(str, Enum):
+    DECISIONS = "decisions"    # what moved, and what was taken back
+    FULL = "full"              # + dead ends and debt — the intended default
+    EVERYTHING = "everything"  # + churn. The failure mode, kept visible for contrast.
+
+
+KINDS_AT = {
+    Volume.DECISIONS: {Kind.LANDED, Kind.REVERSED, Kind.MILESTONE},
+    Volume.FULL: {Kind.LANDED, Kind.REVERSED, Kind.MILESTONE, Kind.DEADEND, Kind.DEBT},
+    Volume.EVERYTHING: set(Kind),
+}
+
+BUDGET_WORDS = 320
+"""Hard ceiling on generated prose per entry. Not a guideline — `select()` enforces it
+by moving the tail into a collapsed ledger. Picked so an entry is readable in about a
+minute; the number is exactly the kind of thing to argue with while driving this."""
+
+
+# ----------------------------------------------------------------- data model
+
+@dataclass(frozen=True)
+class Cite:
+    """An artifact a generated line points at. No cite, no line."""
+
+    kind: str  # commit | pr | issue | doc | session
+    ref: str
+    url: str = ""
+
+    def md(self) -> str:
+        label = {"commit": f"`{self.ref}`", "pr": f"PR {self.ref}", "issue": self.ref}.get(
+            self.kind, f"`{self.ref}`"
+        )
+        return f"[{label}]({self.url})" if self.url else label
+
+
+@dataclass(frozen=True)
+class Note:
+    """One generated line. `tier` is the Provenance Tier of the *line*, not of the
+    work it describes: a mechanically harvested fact is T2 (assisted, verifiable from
+    the artifact it cites); a narrative claim about *why* is T3 until Noah annotates."""
+
+    id: str
+    kind: Kind
+    text: str
+    cites: tuple[Cite, ...] = ()
+    tier: str = "T2"
+    debt: str = ""  # issue ref, when the line rests on undischarged Verification Debt
+    spine: bool = False
+    """True for a line mechanically restated from the history — a commit subject, an
+    issue title. **These never become prose.** `git log` already carries them, and the
+    first render of this prototype showed them crowding the narrative lines out of the
+    budget: 14 commit restatements above the two sentences worth reading. So the entry
+    is prose for *why*, and a collapsed ledger for *what*."""
+
+    def badge(self) -> str:
+        return f"⟦{self.tier} · {self.debt}⟧" if self.debt else f"⟦{self.tier}⟧"
+
+
+@dataclass(frozen=True)
+class Session:
+    """A Transcript Archive session, cited by content hash (#3 §2) because the archive
+    is private and has no public URL to link. The manifest resolves hash → Drive path."""
+
+    sha256: str
+    started: str
+    ended: str
+    events: int
+    prompts: int
+    branch: str
+    skill: str = ""
+    scrubbed: int = 0  # candidate secrets removed at the public boundary (#3 §3.2)
+
+    @property
+    def short(self) -> str:
+        return self.sha256[:12]
+
+
+@dataclass(frozen=True)
+class Trigger:
+    """Why an entry exists at all. Sessions are *cited*, never a trigger — see README."""
+
+    kind: str  # merge | task | milestone
+    ref: str
+    label: str
+
+
+@dataclass(frozen=True)
+class Annotation:
+    """Noah's layer. Keyed to a note id, or `@lede` for the entry as a whole. Never an
+    edit to generated text — the separation is what makes the rendering distinction real."""
+
+    anchor: str
+    text: str
+
+
+@dataclass
+class Entry:
+    date: str
+    slug: str
+    title: str
+    triggers: tuple[Trigger, ...] = ()
+    notes: tuple[Note, ...] = ()
+    sessions: tuple[Session, ...] = ()
+    annotations: list[Annotation] = field(default_factory=list)
+
+    @property
+    def path(self) -> str:
+        return f"notebook/{self.date}-{self.slug}.md"
+
+    def annotated(self, anchor: str) -> list[Annotation]:
+        return [a for a in self.annotations if a.anchor == anchor]
+
+
+# ------------------------------------------------------------ selection rules
+
+def admissible(note: Note) -> bool:
+    """The volume rule with teeth: a generated line that cannot name an artifact is
+    not a record of anything. Activity lines usually can cite, which is why the
+    citation rule alone is not enough and the `Volume` dial exists as well."""
+    return bool(note.cites)
+
+
+def words(text: str) -> int:
+    return len(re.findall(r"\S+", text))
+
+
+@dataclass
+class Selection:
+    kept: list[Note]              # prose: why it happened, what was taken back
+    ledger: list[Note]            # collapsed table: the mechanical spine, plus prose overflow
+    dropped_uncited: list[Note]
+    dropped_volume: list[Note]
+    budget_words: int
+
+    @property
+    def spent(self) -> int:
+        return sum(words(n.text) for n in self.kept)
+
+
+ORDER = {Kind.REVERSED: 0, Kind.DEADEND: 1, Kind.LANDED: 2, Kind.MILESTONE: 3,
+         Kind.DEBT: 4, Kind.ACTIVITY: 5}
+
+
+def select(entry: Entry, volume: Volume, budget: int = BUDGET_WORDS) -> Selection:
+    """Decide what an entry actually shows. Four rules, applied in this order:
+
+    1. **No citation, no line** — a claim with no artifact is not a record of anything.
+    2. **Volume class** — the dial says which kinds of line are in play at all.
+    3. **Spine to the ledger** — mechanically restated history never competes for prose
+       budget with a line about *why*.
+    4. **Budget** — what is left is ordered reversals and dead ends first, then what
+       landed, and the tail past the budget collapses into the same ledger.
+
+    Rule 4's ordering is deliberate: a programme that spends its readable budget on
+    wins and pushes its reversals into a fold is the one nobody should trust."""
+    dropped_uncited = [n for n in entry.notes if not admissible(n)]
+    live = [n for n in entry.notes if admissible(n)]
+    dropped_volume = [n for n in live if n.kind not in KINDS_AT[volume]]
+    live = [n for n in live if n.kind in KINDS_AT[volume]]
+
+    ledger = sorted((n for n in live if n.spine), key=lambda n: ORDER[n.kind])
+    prose = sorted((n for n in live if not n.spine), key=lambda n: ORDER[n.kind])
+
+    kept: list[Note] = []
+    spent = 0
+    for n in prose:
+        w = words(n.text)
+        if spent + w > budget and kept:
+            ledger.append(n)
+        else:
+            kept.append(n)
+            spent += w
+    return Selection(kept, ledger, dropped_uncited, dropped_volume, budget)
+
+
+def should_emit(entry: Entry, sel: Selection) -> tuple[bool, str]:
+    """The other half of volume control: most days do not deserve an entry. A day whose
+    only content is churn produces nothing — silence is the default, not the exception."""
+    if not sel.kept:
+        return False, "nothing citable survived selection"
+    if all(n.kind is Kind.ACTIVITY for n in sel.kept):
+        return False, "activity only — no decision, no reversal, no milestone"
+    return True, ""
+
+
+# --------------------------------------------------------------- rendering
+
+HEADER = (
+    "<!-- GENERATED from the Transcript Archive and this repository's history.\n"
+    "     Generated lines are plain; every {marker} block is Noah's, written by hand.\n"
+    "     Regenerate with: python tools/notebook_entry.py --date {date} -->"
+)
+
+
+def _cites(note: Note) -> str:
+    return " · ".join(c.md() for c in note.cites)
+
+
+def _sessions_block(entry: Entry) -> str:
+    """Citation by content hash, because the archive is private (#3 §2). The hash is
+    verifiable by anyone holding the transcript and resolvable by Noah through the
+    `Index` manifest; it does not leak the archive's shape."""
+    rows = "\n".join(
+        f"| `sha256:{s.short}…` | {s.started[:16]}Z → {s.ended[:16]}Z | "
+        f"{s.prompts} prompts / {s.events} events | `{s.branch}` |"
+        for s in entry.sessions
+    )
+    scrubbed = sum(s.scrubbed for s in entry.sessions)
+    note = f"\n\n{scrubbed} candidate secret(s) scrubbed at the public boundary." if scrubbed else ""
+    return (
+        "## Sessions\n\n"
+        "Cited by content hash; the Transcript Archive is private and the `Index` "
+        "manifest resolves hash → path.\n\n"
+        "| session | window | size | branch |\n|---|---|---|---|\n" + rows + note
+    )
+
+
+def _legend(entry: Entry, sel: Selection) -> str:
+    used = sorted({n.tier for n in sel.kept} | {"T1"} if entry.annotations else {n.tier for n in sel.kept})
+    lines = [f"`⟦{t}⟧` {TIERS[t]}" for t in used if t in TIERS]
+    debts = sorted({n.debt for n in sel.kept if n.debt})
+    if debts:
+        lines.append("debt: " + " ".join(f"`{d}`" for d in debts))
+    return "<sub>" + " · ".join(lines) + "</sub>"
+
+
+def _ledger(sel: Selection) -> str:
+    """The mechanical spine, and whatever prose ran past the budget. Collapsed, because
+    a reader who wants this can also read `git log` — but auditable, because it is here."""
+    if not sel.ledger:
+        return ""
+    rows = "\n".join(f"| {n.kind.value} | {n.text} | {_cites(n)} |" for n in sel.ledger)
+    return (
+        f"<details>\n<summary>Ledger — {len(sel.ledger)} line(s) the history already "
+        f"carries</summary>\n\n"
+        "| | | |\n|---|---|---|\n" + rows + "\n\n</details>"
+    )
+
+
+def _triggers(entry: Entry) -> str:
+    return "<sub>generated by " + ", ".join(f"{t.kind} {t.label}" for t in entry.triggers) + "</sub>"
+
+
+def render_inline(entry: Entry, sel: Selection) -> str:
+    """A — generated prose, annotations as blockquotes under the line they answer."""
+    out = [HEADER.format(marker="> **Noah —**", date=entry.date), "",
+           f"# {entry.date} — {entry.title}", "", _triggers(entry), ""]
+    for a in entry.annotated("@lede"):
+        out += [f"> **Noah —** {a.text}", ""]
+    for n in sel.kept:
+        out.append(f"- {n.text} {_cites(n)} `{n.badge()}`")
+        for a in entry.annotated(n.id):
+            out += ["", f"  > **Noah —** {a.text}", ""]
+    out += ["", _ledger(sel), "", _sessions_block(entry), "", _legend(entry, sel)]
+    return "\n".join(x for x in out if x is not None).replace("\n\n\n", "\n\n")
+
+
+def render_annotation_first(entry: Entry, sel: Selection) -> str:
+    """B — Noah's reading is the entry; the generated spine collapses beneath it.
+    Aimed straight at the machine-exhaust failure: the human layer is what a reader
+    meets first, and the generated record is one click away and skippable."""
+    out = [HEADER.format(marker="plain-prose", date=entry.date), "",
+           f"# {entry.date} — {entry.title}", ""]
+    lede = entry.annotated("@lede")
+    if lede:
+        out += [a.text for a in lede] + [""]
+    else:
+        out += ["*Unannotated.* The generated record is below; nothing here has been read back.", ""]
+    keyed = [(n, entry.annotated(n.id)) for n in sel.kept]
+    for n, anns in keyed:
+        for a in anns:
+            out += [f"{a.text} <sub>on {_cites(n)}</sub>", ""]
+    out += ["<details>\n<summary>Generated record — "
+            f"{len(sel.kept)} line(s), {sel.spent} words</summary>\n"]
+    for n in sel.kept:
+        out.append(f"- {n.text} {_cites(n)} `{n.badge()}`")
+    out += ["", "</details>", "", _ledger(sel), "", _sessions_block(entry), "",
+            _legend(entry, sel)]
+    return "\n".join(out).replace("\n\n\n", "\n\n")
+
+
+def render_ledger(entry: Entry, sel: Selection) -> str:
+    """C — a table of what landed, annotations in their own section. Densest, and the
+    one that reads most like a changelog, which `CONTEXT.md` explicitly avoids."""
+    out = [HEADER.format(marker="## Noah's notes", date=entry.date), "",
+           f"# {entry.date} — {entry.title}", "", _triggers(entry), "",
+           "| | what | where | tier |", "|---|---|---|---|"]
+    for n in sel.kept:
+        mark = "◆" if entry.annotated(n.id) else ""
+        out.append(f"| {mark}{n.kind.value} | {n.text} | {_cites(n)} | `{n.badge()}` |")
+    out += ["", _ledger(sel), ""]
+    anns = entry.annotations
+    if anns:
+        out += ["## Noah's notes", ""]
+        by_id = {n.id: n for n in sel.kept}
+        for a in anns:
+            where = f" — on *{by_id[a.anchor].text[:48]}…*" if a.anchor in by_id else ""
+            out += [f"- {a.text}{where}", ""]
+    out += [_sessions_block(entry), "", _legend(entry, sel)]
+    return "\n".join(out).replace("\n\n\n", "\n\n")
+
+
+def render_raw(entry: Entry, sel: Selection) -> str:
+    """D — control. Generated only, no annotation layer, no budget applied. This is
+    what the notebook becomes if nobody annotates it; it exists to be compared against."""
+    out = [f"# {entry.date} — {entry.title}", ""]
+    for n in sorted(entry.notes, key=lambda n: n.kind.value):
+        out.append(f"- [{n.kind.value}] {n.text} {_cites(n)}")
+    out += ["", _sessions_block(entry)]
+    return "\n".join(out)
+
+
+VARIANTS = {
+    "A inline blockquote": render_inline,
+    "B annotation-first": render_annotation_first,
+    "C ledger table": render_ledger,
+    "D raw generated (control)": render_raw,
+}
+
+
+# ------------------------------------------------------------------- metrics
+
+@dataclass
+class Metrics:
+    total_words: int
+    generated_words: int
+    annotated_words: int
+    lines: int
+    shown: int
+    ledgered: int
+    dropped: int
+    annotated_notes: int
+    seconds: int
+
+    @property
+    def human_share(self) -> float:
+        return self.annotated_words / self.total_words if self.total_words else 0.0
+
+
+def prose_only(rendered: str) -> str:
+    """What a reader's eye actually crosses. Link targets, HTML and the generation
+    header are not read, and counting them made the first draft of these numbers
+    flatter the entry by roughly a third."""
+    text = re.sub(r"<!--.*?-->", "", rendered, flags=re.S)
+    text = re.sub(r"\((?:https?|mailto):[^)]*\)", "", text)
+    text = re.sub(r"</?[a-z]+[^>]*>", "", text)
+    return text
+
+
+def measure(entry: Entry, sel: Selection, rendered: str) -> Metrics:
+    ann_words = sum(words(a.text) for a in entry.annotations)
+    gen = sum(words(n.text) for n in sel.kept + sel.ledger)
+    total = words(prose_only(rendered))
+    return Metrics(
+        total_words=total,
+        generated_words=gen,
+        annotated_words=ann_words,
+        lines=len(rendered.splitlines()),
+        shown=len(sel.kept),
+        ledgered=len(sel.ledger),
+        dropped=len(sel.dropped_uncited) + len(sel.dropped_volume),
+        annotated_notes=len({a.anchor for a in entry.annotations} & {n.id for n in sel.kept}),
+        seconds=round(total / 250 * 60),  # 250 wpm
+    )

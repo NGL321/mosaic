@@ -1,0 +1,59 @@
+# 2026-07-29 — custody stops claiming attendance, and 1.0.0 becomes computed
+
+- [activity] Prototype the three readings of §5 custody as pure predicates (#23) [`53fac57`](https://github.com/NGL321/mosaic/commit/53fac57)
+- [activity] Workshop a fourth custody reading — amanuensis plus warrant (#23) [`6680d66`](https://github.com/NGL321/mosaic/commit/6680d66)
+- [activity] Drop attendance from what a truthful custody rule concludes (#23) [`a598221`](https://github.com/NGL321/mosaic/commit/a598221)
+- [activity] Add the pre-charter grace, and make 1.0.0 computed rather than chosen (#23) [`2d5b974`](https://github.com/NGL321/mosaic/commit/2d5b974)
+- [activity] Draft the charter gate — the first experiment ends scaffolding (#23) [`703b21d`](https://github.com/NGL321/mosaic/commit/703b21d)
+- [activity] Settle the two open readings in the charter-gate draft (#23) [`f3746a7`](https://github.com/NGL321/mosaic/commit/f3746a7)
+- [activity] Point the deferred set at github issues, and split it from verification debt (#23) [`53e0e32`](https://github.com/NGL321/mosaic/commit/53e0e32)
+- [activity] Align debt discharge with the mechanism #5 settled (#23) [`5ff0ee9`](https://github.com/NGL321/mosaic/commit/5ff0ee9)
+- [activity] Apply review feedback to the debt snapshot generator (#34) [`203a234`](https://github.com/NGL321/mosaic/commit/203a234)
+- [activity] Make the custody check bite on what §5 actually says (#23) [`47ba7d0`](https://github.com/NGL321/mosaic/commit/47ba7d0)
+- [activity] Filed: Declare the competence floor [#40](https://github.com/NGL321/mosaic/issues/40)
+- [activity] Filed: Recover the missing SYSTEM-BRIEF.md storage protocol [#35](https://github.com/NGL321/mosaic/issues/35)
+- [activity] Filed: Establish the real cost and quota basis for automating async agent work [#27](https://github.com/NGL321/mosaic/issues/27)
+- [activity] Filed: Define the research-output document contract [#26](https://github.com/NGL321/mosaic/issues/26)
+- [activity] Filed: Move asynchronous agent work into an automated, comment-driven pipeline [#24](https://github.com/NGL321/mosaic/issues/24)
+- [activity] Filed: Decide what custody claims, and how it is checked [#23](https://github.com/NGL321/mosaic/issues/23)
+- [activity] Filed: Attribution, licensing, and citation policy for outside contributions [#22](https://github.com/NGL321/mosaic/issues/22)
+- [activity] Filed: Set the branching, commit, and agent-collision protocol [#18](https://github.com/NGL321/mosaic/issues/18)
+- [activity] Filed: Reconsider the first empirical line: formation or structure? [#17](https://github.com/NGL321/mosaic/issues/17)
+- [activity] Filed: State the disagreement with Thousand Brains that started the programme [#16](https://github.com/NGL321/mosaic/issues/16)
+- [activity] Filed: Engine degree: scalar, or position on a rate-relevance curve? [#15](https://github.com/NGL321/mosaic/issues/15)
+- [activity] Filed: Can a Markov blanket carry individuation, or should causal states? [#14](https://github.com/NGL321/mosaic/issues/14)
+- [activity] Filed: Verify the vocabulary's cited influences [#13](https://github.com/NGL321/mosaic/issues/13)
+- [activity] A throwaway prototype of the custody predicate was built and driven case by case before any protocol text was written [`53fac57`](https://github.com/NGL321/mosaic/commit/53fac57)
+- [deadend] The three readings the ticket set up — typed, attended, endorsed — were driven against 15 cases and all three failed: A convicts legitimate assisted work, B is fooled by an attendance claim it cannot check, C declines to rule at all. The trichotomy dissolved rather than resolved, and a fourth reading was drafted after the failure, not before [`6680d66`](https://github.com/NGL321/mosaic/commit/6680d66) · [#23](https://github.com/NGL321/mosaic/issues/23)
+- [deadend] The first CI draft of the §5 check convicted commits that were correctly cited, because the checker and the protocol disagreed about the trailer key. The trailer's spelling is now pinned in the protocol text itself [`47ba7d0`](https://github.com/NGL321/mosaic/commit/47ba7d0)
+- [debt] Filed: [custody] 1889b61 owes a defence pass on CONTEXT.md [#39](https://github.com/NGL321/mosaic/issues/39)
+- [debt] Filed: [custody] 2ec5194 owes a defence pass on CONTEXT.md [#38](https://github.com/NGL321/mosaic/issues/38)
+- [debt] Filed: [custody] 7f501d1 owes a defence pass on CONTEXT.md [#37](https://github.com/NGL321/mosaic/issues/37)
+- [debt] Filed: [debt] Extraction and Closure cite four sources from recall, not warrant [#33](https://github.com/NGL321/mosaic/issues/33)
+- [debt] Filed: [debt] Still et al. (2012) Eq. (14) is not defensible unaided [#32](https://github.com/NGL321/mosaic/issues/32)
+- [debt] Filed: [debt] Piaget's own use of schéma is unconfirmed from primary French [#31](https://github.com/NGL321/mosaic/issues/31)
+- [debt] Filed: [debt] Piaget's 1929 Limnaea paper is unreached [#30](https://github.com/NGL321/mosaic/issues/30)
+- [debt] Filed: [debt] Mountcastle (1957; 1978) has not been read in the original [#29](https://github.com/NGL321/mosaic/issues/29)
+- [debt] Until the competence floor is declared, the defence obligation returns undecidable rather than satisfied — the deficiency reports itself instead of being papered over [#40](https://github.com/NGL321/mosaic/issues/40)
+- [debt] Three commits that landed the vocabulary owe a defence pass on `CONTEXT.md` — filed as deferred custody obligations, which block `1.0.0` and are not Verification Debt [#37](https://github.com/NGL321/mosaic/issues/37) · [#38](https://github.com/NGL321/mosaic/issues/38) · [#39](https://github.com/NGL321/mosaic/issues/39)
+- [landed] Reconcile the individuation findings with #19, #20 and #21 [`8a81a73`](https://github.com/NGL321/mosaic/commit/8a81a73)
+- [landed] Apply pr #25 review feedback [`c4ca66b`](https://github.com/NGL321/mosaic/commit/c4ca66b)
+- [landed] Prototype the record's physical form for #5 [`83fa2be`](https://github.com/NGL321/mosaic/commit/83fa2be)
+- [landed] Establish the cost and quota basis for automating async agent work [`82ab062`](https://github.com/NGL321/mosaic/commit/82ab062)
+- [landed] Scaffold the record's directory tree and the debt snapshot (#5) [`2626c45`](https://github.com/NGL321/mosaic/commit/2626c45)
+- [landed] Decide what custody claims, and mechanise what can be checked (#23) [`2611689`](https://github.com/NGL321/mosaic/commit/2611689)
+- [landed] Write down the storage discipline the record already cites (#35) [`0449c40`](https://github.com/NGL321/mosaic/commit/0449c40)
+- [landed] Custody was split into three obligations — identity, citation, defence — each checked where it can actually be checked, and an agent co-author trailer became a routing signal rather than a conviction [`2611689`](https://github.com/NGL321/mosaic/commit/2611689) · [PR #36](https://github.com/NGL321/mosaic/pull/36)
+- [landed] `1.0.0` is now computed rather than chosen: the first designed, runnable experiment is the gate that ends the scaffolding era, with results explicitly not required [`703b21d`](https://github.com/NGL321/mosaic/commit/703b21d) · [`f3746a7`](https://github.com/NGL321/mosaic/commit/f3746a7)
+- [landed] The pre-charter grace was added and bounded three ways — it defers rather than excuses, covers only what the era could not record, and never covers an agent deciding [`2d5b974`](https://github.com/NGL321/mosaic/commit/2d5b974)
+- [landed] The deferred set was repointed at the issue tracker after `main` moved the debt ledger there, and a record-keeping deferral was split from Verification Debt: only the first blocks the charter [`53e0e32`](https://github.com/NGL321/mosaic/commit/53e0e32) · [`5ff0ee9`](https://github.com/NGL321/mosaic/commit/5ff0ee9) · [#5](https://github.com/NGL321/mosaic/issues/5)
+- [landed] How far down a derivation must be defended before it bottoms out was argued at length and is the thread the competence floor came out of 
+- [reversed] Attendance was dropped from what custody concludes. Requiring a session to be attended made the programme less defensible than the amanuensis capability the requirement existed to protect, and the claim is asserted by the one party whose attendance is in question [`a598221`](https://github.com/NGL321/mosaic/commit/a598221) · [`PROTOCOL.md`](https://github.com/NGL321/mosaic/blob/main/PROTOCOL.md)
+
+## Sessions
+
+Cited by content hash; the Transcript Archive is private and the `Index` manifest resolves hash → path.
+
+| session | window | size | branch |
+|---|---|---|---|
+| `sha256:6c69d0f604dd…` | 2026-07-29T23:16Z → 2026-07-30T03:35Z | 8 prompts / 505 events | `tooling/custody-and-charter-gate` |
