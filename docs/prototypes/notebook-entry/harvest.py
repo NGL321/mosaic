@@ -3,8 +3,9 @@ PROTOTYPE (ticket #11) — the I/O half: fill `entry.py`'s model from real sourc
 
 Reads, in order of trust:
 
-1. **This repository's history** — merges and commits in the day's window. Mechanical,
-   verifiable from the artifact, so these notes are `T2`.
+1. **This repository's history** — merges and commits in the day's window. Mechanical
+   and verifiable from the artifact, which is *not* the same as verified: these notes are
+   `T3` like everything else generated, and ride into the ledger via `spine`.
 2. **GitHub** — PR and issue transitions for the same window, via `gh`. Optional; the
    prototype degrades to git-only if `gh` is missing, and says so.
 3. **A real Transcript Archive session** — the Claude Code JSONL under
@@ -176,7 +177,7 @@ def commit_notes(start: str, end: str) -> list[Note]:
             continue
         seen.add(key)
         notes.append(Note(
-            id=f"c{i}", kind=kind, text=text.rstrip(".").capitalize(), tier="T2",
+            id=f"c{i}", kind=kind, text=text.rstrip(".").capitalize(), tier="T3",
             spine=True, cites=(Cite("commit", sha, f"{GH}/commit/{sha}"),),
         ))
     return notes
@@ -199,7 +200,7 @@ def issue_notes(day: str) -> list[Note]:
         if "debt:discharged" in labels:
             kind = Kind.MILESTONE
         notes.append(Note(
-            id=f"i{it['number']}", kind=kind, tier="T2", spine=True,
+            id=f"i{it['number']}", kind=kind, tier="T3", spine=True,
             text=f"Filed: {it['title']}",
             cites=(Cite("issue", f"#{it['number']}", f"{GH}/issues/{it['number']}"),),
         ))

@@ -1,6 +1,8 @@
 # PROTOTYPE — how a Lab Notebook entry is generated and annotated
 
-Throwaway. Ticket [#11](https://github.com/NGL321/mosaic/issues/11). Not part of the record.
+Ticket [#11](https://github.com/NGL321/mosaic/issues/11). Built to be thrown away, and retained
+in-tree as a **primary source** for how the format was chosen — not as a tool. Nothing
+regenerates from it and nothing depends on it.
 
 ```console
 python docs/prototypes/notebook-entry/prototype_tui.py
@@ -102,12 +104,13 @@ convention — a scrub pass with a number attached.
 
 ### Provenance Tiers in an entry
 
-A badge per line, `⟦T2⟧` / `⟦T3 · #40⟧`, the debt issue named — the spelling
+A badge per line, `⟦T3⟧` / `⟦T3 · #40⟧`, the debt issue named when one exists — the spelling
 `curriculum/README.md` already fixed. The tier belongs to **the line**, not to the work it
 describes:
 
-- **T2** — mechanically harvested and verifiable from the artifact it cites.
-- **T3** — a narrative claim about *why*, machine-produced and unverified.
+- **T3** — everything generated, harvested facts included. *Verifiable is not verified*:
+  `curriculum/README.md` rejects a tier for machine-produced-but-checkable content, and
+  review caught this file claiming T2 for harvested lines. Corrected.
 - **T1** — Noah's annotations, by construction.
 
 So a fresh entry is a page of T3 with a T1 layer accreting on top, and the badges make the

@@ -101,14 +101,18 @@ class Cite:
 @dataclass(frozen=True)
 class Note:
     """One generated line. `tier` is the Provenance Tier of the *line*, not of the
-    work it describes: a mechanically harvested fact is T2 (assisted, verifiable from
-    the artifact it cites); a narrative claim about *why* is T3 until Noah annotates."""
+    work it describes. Only two tiers can appear: **T3** for everything generated — both
+    harvested facts and narrative claims, because verifiable is not verified and nobody
+    has read them — and **T1** for Noah's annotations. Badging a harvested line T2 was
+    the first draft's mistake, corrected in review against `curriculum/README.md`, which
+    rejects exactly that reading. Harvested versus narrative is a real distinction and it
+    rides `spine`, not the tier ladder."""
 
     id: str
     kind: Kind
     text: str
     cites: tuple[Cite, ...] = ()
-    tier: str = "T2"
+    tier: str = "T3"
     debt: str = ""  # issue ref, when the line rests on undischarged Verification Debt
     spine: bool = False
     """True for a line mechanically restated from the history — a commit subject, an
