@@ -71,6 +71,7 @@ the first falsifiable claim is named.
 |---|---|
 | [`CONTEXT.md`](CONTEXT.md) | Resolved vocabulary. Human-authored. Read before using any of its terms. |
 | [`PROTOCOL.md`](PROTOCOL.md) | Branches, commit types, custody and warrant, review, collisions. |
+| [`docs/DATA-PROTOCOL.md`](docs/DATA-PROTOCOL.md) | What is stored, what is regenerated, and where run artifacts live. Drive-first. |
 | `docs/research/` | Agent-produced research output. Record, not belief. |
 | `.claude/skills/` | The skills that run the sessions — wayfinder, grilling, research, teach. |
 

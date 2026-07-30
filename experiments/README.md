@@ -27,18 +27,20 @@ not ready to run.
 
 ## What is not stored here
 
-**Regenerable output never enters this repository.** Under the Drive-first storage protocol
-adopted in [#3](https://github.com/NGL321/mosaic/issues/3), runs publish to
-`Desk/mosaic/runs/<run-id>/` and the repository keeps only what is needed to reproduce them:
-seeds, configuration, and code.
+**Regenerable output never enters this repository.** Under
+[`docs/DATA-PROTOCOL.md` §3.3](../docs/DATA-PROTOCOL.md), adopted in
+[#3](https://github.com/NGL321/mosaic/issues/3), runs publish to
+`Desk/mosaic/runs/<run-id>/` (§3.4) and the repository keeps only what is needed to
+reproduce them: seeds, configuration, and code.
 
 `runs/` therefore holds **manifests, not bytes** — one small file per run, recording the
 run id, the config SHA it was produced from, the sha256 of the output, and the Drive path.
 The manifest is what a notebook entry cites, and it is what makes a result traceable after
 the bytes have been moved or pruned.
 
-Retention arithmetic for large sweeps — runs × checkpoints × size — is required by §3.4 of
-the storage protocol before the first sweep and has not been done. It cannot be, until a
+Retention arithmetic for large sweeps — runs × checkpoints × size — is required by
+[`docs/DATA-PROTOCOL.md` §3.4](../docs/DATA-PROTOCOL.md) before the first sweep and has not
+been done. It cannot be, until a
 first rung has an experimental design; that is tracked on the map's **Not yet specified**.
 
 ## Nothing here yet
