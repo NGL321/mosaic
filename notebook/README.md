@@ -76,10 +76,15 @@ wording changes on every regeneration and a prose hash never survives one. Rule 
 guarantees every generated line names an artifact, and that identifier is stable under both
 rewording and reordering.
 
+Ledger lines take the same form under a `ledger:` namespace. Annotations never attach to
+them, but without the namespace both layers mint the same anchor for the same commit, and
+one annotation then answers two different lines.
+
 A line whose citations change is a **different line**: its annotation orphans, and orphans
-are reported rather than dropped. That is the cost of the rule and it is the right cost —
-an annotation answering a claim that no longer exists should not be silently re-attached to
-a claim that does.
+are reported **on the page**, not in a log — a report Noah has to go looking for is a drop
+with extra steps. That is the cost of the rule and it is the right cost: an annotation
+answering a claim that no longer exists should not be silently re-attached to a claim that
+does.
 
 An entry with no annotations says so — *"Unannotated. The generated record is below;
 nothing here has been read back."* The deficit is on the page where a stranger can see it,
@@ -133,6 +138,12 @@ sufficient:
    business truncating him, and an entry that is mostly his words is the outcome this
    format is trying to produce, not a violation. Enforcement is therefore something the
    generator does to itself: it spills its own tail into the ledger and stops.
+
+   **An annotated line is pinned**: neither the budget nor the volume dial may demote it
+   into the ledger. Otherwise a rule that binds only generated prose reaches Noah's layer
+   anyway — the line folds away and his note goes with it, unrendered and unreported. An
+   annotation is evidence he engaged with that line, and evidence of engagement is the
+   last thing an entry should be able to hide.
 4. **Most days get no entry.** When nothing but churn survives selection, the generator
    emits nothing. Silence is the default.
 

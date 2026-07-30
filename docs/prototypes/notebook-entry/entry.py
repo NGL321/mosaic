@@ -102,19 +102,34 @@ class Cite:
         return f"[{label}]({self.url})" if self.url else label
 
 
-def anchor(cites: "tuple[Cite, ...]", used: dict[str, int]) -> str:
+LEDGER_NS = "ledger:"
+
+
+def anchor(cites: "tuple[Cite, ...]", used: dict[str, int], spine: bool = False) -> str:
     """Derive a line's anchor from its primary citation, with an ordinal for collisions.
 
     Stable under both of the things that move a line: rewording by the narrative pass,
     and reordering by `select()`. `used` carries the counts across one generation pass;
     the caller owns it, so this stays pure.
 
+    **Two namespaces, and both halves of that are load-bearing.** Ordinals are counted
+    per layer, so a ledger line citing the same commit cannot push a narrative line from
+    `a598221` to `a598221#2` — an anchor that moves when the ledger changes is the
+    positional bug in a different costume. But per-layer counters alone let the two layers
+    mint the *same* anchor for the same commit, and then one annotation attaches to two
+    lines: this prototype had exactly that, ten collisions on one day, latent until
+    `select()` started pinning annotated lines and each pinned line appeared twice. So the
+    ledger gets a prefix and prose gets the bare citation, which is also the right way
+    round — the bare form is the one that appears in `notebook/README.md` and the one
+    Noah types.
+
     An uncited line gets a positional placeholder, which is harmless because
     `admissible()` drops it before it can be rendered or annotated."""
+    ns = LEDGER_NS if spine else ""
     if not cites:
         n = used["uncited"] = used.get("uncited", 0) + 1
-        return f"uncited#{n}"
-    base = cites[0].ref
+        return f"{ns}uncited#{n}"
+    base = ns + cites[0].ref
     n = used[base] = used.get(base, 0) + 1
     return base if n == 1 else f"{base}#{n}"
 
@@ -251,6 +266,11 @@ class Selection:
     dropped_uncited: list[Note]
     dropped_volume: list[Note]
     budget_words: int
+    pinned: list[Note] = field(default_factory=list)
+    """Lines held in prose because Noah annotated them. See `select()` rule 0."""
+    orphans: list[Annotation] = field(default_factory=list)
+    """Annotations whose anchor names no line in this entry. Rendered as orphans rather
+    than dropped — the whole point of anchoring by citation is that this case is visible."""
 
     @property
     def spent(self) -> int:
@@ -262,8 +282,9 @@ ORDER = {Kind.REVERSED: 0, Kind.DEADEND: 1, Kind.LANDED: 2, Kind.MILESTONE: 3,
 
 
 def select(entry: Entry, volume: Volume, budget: int = BUDGET_WORDS) -> Selection:
-    """Decide what an entry actually shows. Four rules, applied in this order:
+    """Decide what an entry actually shows. Five rules, applied in this order:
 
+    0. **An annotated line is pinned** — it cannot be demoted by the dial or the budget.
     1. **No citation, no line** — a claim with no artifact is not a record of anything.
     2. **Volume class** — the dial says which kinds of line are in play at all.
     3. **Spine to the ledger** — mechanically restated history never competes for prose
@@ -272,25 +293,42 @@ def select(entry: Entry, volume: Volume, budget: int = BUDGET_WORDS) -> Selectio
        landed, and the tail past the budget collapses into the same ledger.
 
     Rule 4's ordering is deliberate: a programme that spends its readable budget on
-    wins and pushes its reversals into a fold is the one nobody should trust."""
+    wins and pushes its reversals into a fold is the one nobody should trust.
+
+    **Rule 0 exists because of a bug this prototype had.** Without it, turning the budget
+    down to 160 words moved an annotated line into the collapsed ledger, and
+    `render_annotation_first` — which reads annotations off `kept` — stopped rendering
+    Noah's note at all. Nothing reported it. That is the budget truncating *him*, which
+    `notebook/README.md` says it must never do, and it is the same silent-suppression
+    family as the positional-anchor bug: the words were not lost, they were just no longer
+    on the page. An annotation is evidence he engaged with the line, so the line stays."""
+    annotated = {a.anchor for a in entry.annotations}
     dropped_uncited = [n for n in entry.notes if not admissible(n)]
     live = [n for n in entry.notes if admissible(n)]
-    dropped_volume = [n for n in live if n.kind not in KINDS_AT[volume]]
-    live = [n for n in live if n.kind in KINDS_AT[volume]]
+    dropped_volume = [n for n in live if n.kind not in KINDS_AT[volume] and n.id not in annotated]
+    live = [n for n in live if n.kind in KINDS_AT[volume] or n.id in annotated]
 
-    ledger = sorted((n for n in live if n.spine), key=lambda n: ORDER[n.kind])
-    prose = sorted((n for n in live if not n.spine), key=lambda n: ORDER[n.kind])
+    ledger = sorted((n for n in live if n.spine and n.id not in annotated),
+                    key=lambda n: ORDER[n.kind])
+    prose = sorted((n for n in live if not n.spine or n.id in annotated),
+                   key=lambda n: ORDER[n.kind])
+    pinned = [n for n in prose if n.id in annotated]
+    orphans = [a for a in entry.annotations
+               if a.anchor != "@lede" and a.anchor not in {n.id for n in entry.notes}]
 
     kept: list[Note] = []
     spent = 0
     for n in prose:
         w = words(n.text)
-        if spent + w > budget and kept:
+        if n.id in annotated:          # rule 0: pinned, and it still spends budget so the
+            kept.append(n)             # count on screen stays honest about the page's length
+            spent += w
+        elif spent + w > budget and kept:
             ledger.append(n)
         else:
             kept.append(n)
             spent += w
-    return Selection(kept, ledger, dropped_uncited, dropped_volume, budget)
+    return Selection(kept, ledger, dropped_uncited, dropped_volume, budget, pinned, orphans)
 
 
 def should_emit(entry: Entry, sel: Selection) -> tuple[bool, str]:
@@ -356,6 +394,19 @@ def _legend(entry: Entry, sel: Selection) -> str:
     return "<sub>" + " · ".join(lines) + "</sub>"
 
 
+def _orphans(sel: Selection) -> str:
+    """Annotations whose line the regeneration no longer produces. On the page, not in a
+    log: `notebook/README.md` says orphans are reported rather than dropped, and a report
+    Noah has to go looking for is a drop with extra steps."""
+    if not sel.orphans:
+        return ""
+    return "\n\n".join(
+        f"> **Orphaned** — {a.text} <sub>anchored to `{a.anchor}`, which this entry no "
+        f"longer carries</sub>"
+        for a in sel.orphans
+    )
+
+
 def _ledger(sel: Selection) -> str:
     """The mechanical spine, and whatever prose ran past the budget. Collapsed, because
     a reader who wants this can also read `git log` — but auditable, because it is here."""
@@ -401,6 +452,7 @@ def render_annotation_first(entry: Entry, sel: Selection) -> str:
     for n, anns in keyed:
         for a in anns:
             out += [f"{a.text} <sub>on {_cites(n)}</sub>", ""]
+    out += [_orphans(sel), ""]
     out += ["<details>\n<summary>Generated record — "
             f"{len(sel.kept)} line(s), {sel.spent} words</summary>\n"]
     for n in sel.kept:

@@ -6,6 +6,7 @@ Dropping the conjunct was the right call for a reason worth keeping: if a rule m
 
 The grace should extend to almost all the rules until 1.0, and 1.0 should really be the end of scaffolding — I should not be able to tick up to it until scaffolding is complete. <sub>on [`2d5b974`](https://github.com/NGL321/mosaic/commit/2d5b974)</sub>
 
+
 <details>
 <summary>Generated record — 9 line(s), 303 words</summary>
 
