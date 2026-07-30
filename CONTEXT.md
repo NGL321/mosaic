@@ -58,8 +58,8 @@ _Avoid_: Journal, log, devlog, changelog, notes
 A project Noah does not intend to keep public from the outset. The test is intent, not publication
 status — unpublished work that is public-by-design is not secure. Mosaic is **not** Secure
 Research: it is algorithmic and empirical work whose whole point is being seen, and its loss or
-theft would cost nothing. Consequently the Drive protocol's sensitive-work compute restrictions do
-not bind it.
+theft would cost nothing. Consequently the sensitive-work compute restrictions in
+[`docs/DATA-PROTOCOL.md` §4](docs/DATA-PROTOCOL.md) do not bind it.
 _Avoid_: Sensitive, private, confidential
 
 <!-- Noah has flagged this term as needing sharpening; the above records current usage, not a
