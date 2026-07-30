@@ -59,23 +59,66 @@ def _gh(*args: str) -> object | None:
 
 # ------------------------------------------------------------------- sessions
 
-def read_session(session_id: str) -> tuple[Session, dict]:
+IDLE = timedelta(hours=1)
+"""A session ends when it has not been worked on for an hour. Noah's rule, and it is
+not cosmetic: a transcript *file* is not a session. `b1243c96` splits into four
+segments spanning two days, one of them straddling midnight. So the file's hash alone
+cannot cite a day's work — the entry cites hash **plus segment window**."""
+
+
+def segments(stamps: list[datetime]) -> list[tuple[datetime, datetime]]:
+    stamps = sorted(stamps)
+    out = [[stamps[0], stamps[0]]]
+    for t in stamps[1:]:
+        if t - out[-1][1] > IDLE:
+            out.append([t, t])
+        else:
+            out[-1][1] = t
+    return [(a, b) for a, b in out]
+
+
+def owning_day(segment: tuple[datetime, datetime]) -> str:
+    """The day a session belongs to is the local day it **ended** on. Only one day can
+    own it, and end is the side that is actually defined — start is ambiguous once the
+    idle rule is doing the splitting."""
+    return segment[1].astimezone().date().isoformat()
+
+
+def read_session(session_id: str, day: str | None = None) -> tuple[Session, dict]:
     """Session metadata plus the content hash the entry will cite. The transcript's
-    *text* is read only to count scrub hits — none of it is carried into the entry."""
+    *text* is read only to count scrub hits — none of it is carried into the entry.
+
+    `day` selects the segments the idle rule assigns to that day; everything counted
+    below is counted **within those segments**, so a file feeding two days does not
+    report the same 505 events to both."""
     path = ARCHIVE / f"{session_id}.jsonl"
     raw = path.read_bytes()
     digest = hashlib.sha256(raw).hexdigest()
 
-    prompts = events = 0
-    first = last = ""
-    branches: set[str] = set()
-    skills: set[str] = set()
-    prs: set[int] = set()
+    records = []
     scrubbed = 0
     for line in raw.decode("utf-8", "replace").splitlines():
         if not line.strip():
             continue
-        d = json.loads(line)
+        records.append(json.loads(line))
+        scrubbed += sum(bool(p.search(line)) for p in SECRET_PATTERNS)
+
+    stamps = [datetime.fromisoformat(d["timestamp"].replace("Z", "+00:00"))
+              for d in records if d.get("timestamp")]
+    segs = segments(stamps)
+    mine = [s for s in segs if owning_day(s) == day] if day else segs
+    if not mine:  # the day owns none of this file's segments
+        mine = segs[-1:]
+    window = (mine[0][0], mine[-1][1])
+
+    prompts = events = 0
+    branches: set[str] = set()
+    skills: set[str] = set()
+    prs: set[int] = set()
+    for d in records:
+        ts = d.get("timestamp")
+        if ts and not (window[0] <= datetime.fromisoformat(ts.replace("Z", "+00:00")) <= window[1]):
+            continue
         events += 1
         if d.get("type") == "user" and not d.get("isMeta") and isinstance(
             (d.get("message") or {}).get("content"), str
@@ -87,17 +130,20 @@ def read_session(session_id: str) -> tuple[Session, dict]:
             skills.add(d["attributionSkill"])
         if d.get("prNumber"):
             prs.add(d["prNumber"])
-        if ts := d.get("timestamp"):
-            first = first or ts
-            last = ts
-        scrubbed += sum(bool(p.search(line)) for p in SECRET_PATTERNS)
 
     session = Session(
-        sha256=digest, started=first, ended=last, events=events, prompts=prompts,
+        sha256=digest,
+        # Local, not UTC: the owning day is a local day, and a window printed in UTC
+        # next to a local date contradicts itself on the page — this entry's session
+        # would read as ending on the 30th under a heading dated the 29th.
+        started=window[0].astimezone().isoformat(), ended=window[1].astimezone().isoformat(),
+        events=events, prompts=prompts,
         branch=sorted(branches)[-1] if branches else "?",
         skill=", ".join(sorted(skills)), scrubbed=scrubbed,
+        segment=f"{len(mine)} of {len(segs)} segment(s)",
     )
-    return session, {"prs": sorted(prs), "branches": sorted(branches)}
+    return session, {"prs": sorted(prs), "branches": sorted(branches),
+                     "segments": segs, "owning_days": sorted({owning_day(s) for s in segs})}
 
 
 # --------------------------------------------------------- mechanical notes
@@ -179,8 +225,8 @@ def load(session_id: str) -> Entry:
     here = Path(__file__).parent
     narrative = json.loads((here / f"pass-{session_id[:8]}.json").read_text(encoding="utf-8"))
 
-    session, meta = read_session(session_id)
     day = narrative["date"]
+    session, meta = read_session(session_id, day)
     start, end = f"{day}T00:00:00-07:00", f"{_next_day(day)}T04:00:00-07:00"
 
     notes = commit_notes(start, end) + issue_notes(day)

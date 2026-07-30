@@ -9,6 +9,21 @@ how are generated and annotated content kept visually distinct?
 Pure. No I/O, no terminal codes, no git. `harvest.py` fills the model from real
 sources; `prototype_tui.py` drives it. Nothing flows back into here.
 
+**Settled by Noah, 2026-07-30**, after driving this:
+
+1. **Nothing in the notebook promotes a Provenance Tier.** An annotation is a T1 claim
+   sitting next to a T3 one; the generated line stays T3. Promotion needs Noah restating
+   the thing himself, which is the gate the tiers exist to impose. Most generated content
+   lives at T3 until it is bumped, and T1 is his own thinking.
+2. **A session ends after an hour without work, and belongs to the day it ended.** Only
+   one day can own it, and end is the side that is actually defined.
+3. **Annotations are not canonical.** Anything worth making canon earns its own entry and
+   its own work — a promotion for the idea, not a louder annotation. `reanchor()` is what
+   that buys: regeneration is permitted, orphans are reported rather than dropped.
+4. **Rendering B — annotation-first — is the format.** "This is my research project. It
+   just happens to be AI-accelerated. Tool output shouldn't be the first thing anyone
+   sees." A, C and D stay in this file as the comparison that produced the choice.
+
 Three things are load-bearing and are the bits worth lifting out if the design holds:
 
 1. `Note.cites` is non-optional in practice — `admissible()` drops any generated line
@@ -109,7 +124,13 @@ class Note:
 @dataclass(frozen=True)
 class Session:
     """A Transcript Archive session, cited by content hash (#3 §2) because the archive
-    is private and has no public URL to link. The manifest resolves hash → Drive path."""
+    is private and has no public URL to link. The manifest resolves hash → Drive path.
+
+    A session is **a segment of a transcript file**, not the file: it ends after an
+    hour without work, and it belongs to the local day it ended on. So the citation is
+    hash *plus* window — the hash identifies the file, the window says which part of it
+    this day owns. `segment` states that plainly on the page rather than leaving a
+    reader to assume the hash covers only what they are reading."""
 
     sha256: str
     started: str
@@ -119,6 +140,7 @@ class Session:
     branch: str
     skill: str = ""
     scrubbed: int = 0  # candidate secrets removed at the public boundary (#3 §3.2)
+    segment: str = ""  # e.g. "1 of 4" — which segments of the file this day owns
 
     @property
     def short(self) -> str:
@@ -137,10 +159,27 @@ class Trigger:
 @dataclass(frozen=True)
 class Annotation:
     """Noah's layer. Keyed to a note id, or `@lede` for the entry as a whole. Never an
-    edit to generated text — the separation is what makes the rendering distinction real."""
+    edit to generated text — the separation is what makes the rendering distinction real.
+
+    **Not canonical.** An annotation is commentary for the record; anything Noah wants
+    to be canon earns its own work, which is a tier promotion for the idea rather than a
+    louder note. What follows from that is `reanchor()`: regeneration is allowed to
+    happen, and annotations are re-applied by anchor rather than treated as untouchable."""
 
     anchor: str
     text: str
+
+
+def reanchor(annotations: list[Annotation], notes: tuple[Note, ...]
+             ) -> tuple[list[Annotation], list[Annotation]]:
+    """Re-apply an annotation layer to a regenerated entry. Returns (applied, orphaned).
+
+    Annotations are not canonical, so a regenerated entry does not have to preserve
+    them — but it must not lose them *silently*. An orphan is a note the regeneration
+    no longer produces, and the honest thing is to report it rather than drop it."""
+    ids = {n.id for n in notes} | {"@lede"}
+    applied = [a for a in annotations if a.anchor in ids]
+    return applied, [a for a in annotations if a.anchor not in ids]
 
 
 @dataclass
@@ -251,7 +290,7 @@ def _sessions_block(entry: Entry) -> str:
     verifiable by anyone holding the transcript and resolvable by Noah through the
     `Index` manifest; it does not leak the archive's shape."""
     rows = "\n".join(
-        f"| `sha256:{s.short}…` | {s.started[:16]}Z → {s.ended[:16]}Z | "
+        f"| `sha256:{s.short}…` | {s.started[:16]} → {s.ended[:16]} | {s.segment} | "
         f"{s.prompts} prompts / {s.events} events | `{s.branch}` |"
         for s in entry.sessions
     )
@@ -260,8 +299,10 @@ def _sessions_block(entry: Entry) -> str:
     return (
         "## Sessions\n\n"
         "Cited by content hash; the Transcript Archive is private and the `Index` "
-        "manifest resolves hash → path.\n\n"
-        "| session | window | size | branch |\n|---|---|---|---|\n" + rows + note
+        "manifest resolves hash → path. A session ends after an hour without work and "
+        "belongs to the day it ended, so the window selects which part of the file this "
+        "entry covers.\n\n"
+        "| session | window | segment | size | branch |\n|---|---|---|---|---|\n" + rows + note
     )
 
 
@@ -366,6 +407,10 @@ VARIANTS = {
     "C ledger table": render_ledger,
     "D raw generated (control)": render_raw,
 }
+
+CHOSEN = "B annotation-first"
+"""The format, settled 2026-07-30. The others are kept because the comparison is the
+evidence for the choice, not because any of them is still a candidate."""
 
 
 # ------------------------------------------------------------------- metrics

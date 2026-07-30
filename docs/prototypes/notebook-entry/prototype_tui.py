@@ -22,6 +22,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 from entry import (  # noqa: E402
+    CHOSEN,
     VARIANTS,
     Annotation,
     Volume,
@@ -62,7 +63,7 @@ class App:
                 (Path(__file__).parent / f"pass-{SESSION[:8]}.json").read_text(encoding="utf-8")
             )["sample_annotations"]
         ]
-        self.variant = 0
+        self.variant = list(VARIANTS).index(CHOSEN)
         self.volume = Volume.FULL
         self.budget = 320
         self.focus = 0
@@ -96,7 +97,8 @@ class App:
               f"skill={s.skill or '—'}, scrubbed={s.scrubbed}{R}")
         print("─" * min(cols, 110))
 
-        print(f"{B}rendering{R} {C}{self.variant_name}{R}"
+        chosen = f" {G}◀ chosen{R}" if self.variant_name == CHOSEN else ""
+        print(f"{B}rendering{R} {C}{self.variant_name}{R}{chosen}"
               f"   {B}volume{R} {Y}{self.volume.value}{R}"
               f"   {B}budget{R} {self.budget}w"
               f"   {B}annotations{R} {G if self.entry.annotations else D}"
