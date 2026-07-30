@@ -25,13 +25,17 @@ Exit codes (distinct so CI can tell "fix the document" from "the tool is broken"
 Advisory failures are reported and do not affect the exit code.
 
 Settled in #26; the prototype it came from, including the two rules that did not survive
-and the reasoning, is on `prototype/research-output-contract`.
+and the reasoning, is on `prototype/research-output-contract`. Hardened in #53, where review
+found two checks that passed falsely — a commented `sources:` turned R9's count comparison off
+in silence, and a document's own ticket read as a filed debt issue — which is the failure this
+tool exists to prevent, in the tool itself.
 """
 
 from __future__ import annotations
 
 import re
 import sys
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -60,7 +64,26 @@ RE_LINK = re.compile(r"\[[^\]]+\]\((https?://[^)]+)\)")
 RE_ISSUE = re.compile(r"#(\d+)")
 RE_HTML_COMMENT = re.compile(r"<!--(.*?)-->", re.S)
 RE_RETRIEVED = re.compile(r"retrieved\s+\d{4}-\d{2}-\d{2}", re.I)
-RE_SESSION = re.compile(r"^(sha256:[0-9a-f]{8,64}|unrecorded)$")
+# A full digest, either case. The archive identifies sessions the way DATA-PROTOCOL §2
+# identifies everything else — by content hash — and half a hash is not one, so a truncation
+# a reader cannot resolve is rejected rather than quietly accepted.
+RE_SESSION = re.compile(r"^(sha256:[0-9a-f]{64}|unrecorded)$", re.I)
+# A YAML value's trailing comment. Whitespace-anchored so a `#` inside a value survives:
+# `supersedes: docs/x.md#anchor` is a path, `sources: 44   # must match` is not.
+RE_YAML_COMMENT = re.compile(r"\s+#.*$")
+# A table's rule row, matched as a rule rather than by containing `---`, which a
+# sub-question is entitled to contain.
+RE_TABLE_RULE = re.compile(r"[|\s:-]+")
+# A list item at column zero, ordered or unordered. Indentation-blind matching made a
+# sub-bullet elaborating on a debt item into a second, unfiled debt item.
+RE_ITEM = re.compile(r"^(\d+\.|[-*])\s+\S")
+RE_FENCE = re.compile(r"^\s*(```+|~~~+)")
+
+# Sources that move. A paper is fixed by its DOI; a pricing page, a rate-limit table or a
+# `latest` docs URL is a claim about today. Needles are deliberately few: R10 is advisory, so
+# a miss costs a reminder and a false hit costs a reviewer's patience.
+VOLATILE = ("pricing", "/plans", "plans-and-", "rate-limit", "quota", "billing", "/status",
+            "changelog", "release-notes", "/blog", "/wiki", "dashboard", "/terms", "/latest")
 
 
 # ---------------------------------------------------------------------------------------
@@ -83,6 +106,11 @@ class Section:
     def slug(self) -> str:
         """`## 4. Implications for the rung` -> `implications for the rung`."""
         return re.sub(r"^\d+(\.\d+)*\.?\s*", "", self.title).strip().lower()
+
+    @property
+    def subsections(self) -> list[Section]:
+        """The headings one level down, with their own bodies."""
+        return [s for s in split_sections(self.body) if s.level == self.level + 1]
 
 
 @dataclass
@@ -111,11 +139,49 @@ class Doc:
 
     @property
     def verdict_rows(self) -> list[str]:
-        """The body rows of §0's verdict table, header and rule excluded."""
+        """
+        The body rows of §0's verdict table, header and rule excluded.
+
+        Both exclusions are positional. Dropping rows that contain `---` deleted any table
+        with a sub-question like `Is A --- B?` in it, and naming the header by its `Verdict`
+        column scored the header as a body row for a table whose column is called `Finding`.
+        The first row of a Markdown table is its header; the rule is a rule.
+        """
         if not self.top_sections:
             return []
         rows = [ln for ln in self.top_sections[0].body.split("\n") if ln.strip().startswith("|")]
-        return [r for r in rows if "---" not in r and not re.search(r"\|\s*Verdict\s*\|", r)]
+        return [r for r in rows[1:] if not RE_TABLE_RULE.fullmatch(r.strip())]
+
+
+def split_sections(body: str) -> list[Section]:
+    heads = list(RE_HEADING.finditer(body))
+    out = []
+    for i, h in enumerate(heads):
+        level = len(h.group(1))
+        # A section owns everything up to the next heading at its own level or higher, so a
+        # `##` section's body includes its `###` subsections. Getting this wrong made every
+        # top-level section look uncited on the prototype's first run.
+        end = len(body)
+        for j in range(i + 1, len(heads)):
+            if len(heads[j].group(1)) <= level:
+                end = heads[j].start()
+                break
+        out.append(Section(level, h.group(2).strip(), body[h.end() : end]))
+    return out
+
+
+def strip_fenced_code(text: str) -> str:
+    """Fenced blocks quote; they do not assert. A document explaining R7 is not violating it."""
+    out: list[str] = []
+    fence: str | None = None
+    for line in text.split("\n"):
+        m = RE_FENCE.match(line)
+        if m and (fence is None or m.group(1)[0] == fence):
+            fence = m.group(1)[0] if fence is None else None
+            continue
+        if fence is None:
+            out.append(line)
+    return "\n".join(out)
 
 
 def parse(path: Path, text: str) -> Doc:
@@ -128,21 +194,14 @@ def parse(path: Path, text: str) -> Doc:
         for line in m.group(1).split("\n"):
             if ":" in line and not line.startswith((" ", "-", "#")):
                 k, _, v = line.partition(":")
-                doc.front[k.strip().lower()] = v.strip()
+                # The template in §1 of the contract comments every key, so a document that
+                # copies it was checked against `unrecorded          # no transcript`. R2
+                # said so loudly; R9 read a commented `sources:` as non-numeric and skipped
+                # its count comparison in silence, which is the worse half by far.
+                doc.front[k.strip().lower()] = RE_YAML_COMMENT.sub("", v).strip()
         body = text[m.end() :]
 
-    heads = list(RE_HEADING.finditer(body))
-    for i, h in enumerate(heads):
-        level = len(h.group(1))
-        # A section owns everything up to the next heading at its own level or higher, so a
-        # `##` section's body includes its `###` subsections. Getting this wrong made every
-        # top-level section look uncited on the prototype's first run.
-        end = len(body)
-        for j in range(i + 1, len(heads)):
-            if len(heads[j].group(1)) <= level:
-                end = heads[j].start()
-                break
-        doc.sections.append(Section(level, h.group(2).strip(), body[h.end() : end]))
+    doc.sections = split_sections(body)
     return doc
 
 
@@ -180,7 +239,10 @@ def _verdict_first(d: Doc) -> tuple[bool, str]:
     first = tops[0]
     if not any(k in first.slug for k in ("verdict", "summary", "conclud")):
         return False, f"first section is {first.title!r}, not a verdict"
-    has_table = "|---" in first.body or "|--" in first.body
+    has_table = any(
+        ln.strip().startswith("|") and RE_TABLE_RULE.fullmatch(ln.strip())
+        for ln in first.body.split("\n")
+    )
     has_line = re.search(r"^>\s+\*\*", first.body, re.M) is not None
     if not (has_table or has_line):
         return False, "verdict section carries neither a verdict table nor a stated verdict"
@@ -208,20 +270,43 @@ def _sub_question_verdicts(d: Doc) -> tuple[bool, str]:
     return True, f"all {len(rows)} sub-questions carry a verdict from the closed set"
 
 
+# A subsection's body has to be a sentence rather than a token. `None.` against `sources not
+# reached` is a claim worth making — "every source in the appendix was opened" — and worth
+# making in words, because the bare word is what a document writes when it has not looked.
+MIN_SUBSECTION = 20
+
+
 def _negative_space(d: Doc) -> tuple[bool, str]:
+    """
+    The three subsections, as headings with something under each.
+
+    Structural, not keyword. The prototype searched the lowercased body for needles as loose
+    as `gap`, so the single sentence *"We could not reach the original; that gap is open, and
+    if false it would change the verdict"* satisfied all three. This is the contract's one
+    real addition (§4) and the section #50 says an agent cannot honestly retrofit; a check it
+    can pass by ceremony is worse than no check at all.
+    """
     s = d.section_like("does not establish", "not established")
     if s is None:
         return False, "no `What this does not establish` section"
     want = {
-        "sources not reached": ("not reached", "could not reach", "unreached"),
-        "open gaps": ("open gap", "gap", "opened"),
-        "load-bearing ifs": ("would change the verdict", "load-bearing", "if false"),
+        "sources not reached": ("not reached", "sources not", "unreached"),
+        "open gaps": ("open gap", "gaps"),
+        "load-bearing ifs": ("load-bearing", "load bearing", "ifs"),
     }
-    body = s.body.lower()
-    missing = [k for k, needles in want.items() if not any(n in body for n in needles)]
+    subs = s.subsections
+    missing, thin = [], []
+    for name, needles in want.items():
+        found = [x for x in subs if any(n in x.slug for n in needles)]
+        if not found:
+            missing.append(name)
+        elif len(found[0].body.strip()) < MIN_SUBSECTION:
+            thin.append(name)
     if missing:
         return False, "section present but missing: " + ", ".join(missing)
-    return True, "sources not reached + open gaps + load-bearing ifs"
+    if thin:
+        return False, "heading with nothing under it: " + ", ".join(thin)
+    return True, "sources not reached + open gaps + load-bearing ifs, each argued"
 
 
 def _debt_filed(d: Doc) -> tuple[bool, str]:
@@ -233,20 +318,33 @@ def _debt_filed(d: Doc) -> tuple[bool, str]:
     hatch: an agent that finds debt can open the issue, so a document reporting unfiled
     debt has left work undone rather than hit a limitation. This is also what keeps the
     tracker the only place debt is ever checked — the front matter mirrors, never adds.
+
+    The hatch stayed open under a different spelling for one more round: any `#\\d+` counted,
+    including the document's own ticket, so *"someone should re-read the #4 survey"* in a
+    document resolving #4 read as filed. A document's own ticket is excluded here. What is
+    still not checked is the semantic half — that the number is an issue, that it is open,
+    that it carries `debt:open` — and §5 of the contract now says so rather than implying CI
+    covers it.
     """
     s = d.section_like("verification debt", "debt")
     if s is None:
         return False, "no Verification Debt section (write `None.` if there is none)"
-    items = [ln for ln in s.body.split("\n") if re.match(r"^\s*(\d+\.|[-*])\s+\S", ln)]
+    items = [ln for ln in s.body.split("\n") if RE_ITEM.match(ln)]
     declared = sorted(int(n) for n in re.findall(r"\d+", d.front.get("debt", "")))
+    own = {int(n) for n in re.findall(r"\d+", d.front.get("ticket", ""))}
+
+    def filed(line: str) -> set[int]:
+        return {int(n) for n in RE_ISSUE.findall(line)} - own
+
     if not items:
         if "none." in s.body.strip().lower()[:32] and not declared:
             return True, "no debt, declared"
         return False, "debt section present but nothing itemised"
-    unfiled = [ln for ln in items if not RE_ISSUE.search(ln)]
+    unfiled = [ln for ln in items if not filed(ln)]
     if unfiled:
-        return False, f"{len(unfiled)}/{len(items)} debt items name no issue — file them first"
-    cited = sorted({int(n) for ln in items for n in RE_ISSUE.findall(ln)})
+        return False, (f"{len(unfiled)}/{len(items)} debt items name no issue other than this "
+                       f"document's own ticket — file them first")
+    cited = sorted(set().union(*(filed(ln) for ln in items)))
     if declared != cited:
         return False, f"front matter debt={declared or '[]'} does not mirror the section {cited}"
     return True, f"{len(items)} items, all filed: {cited}"
@@ -256,7 +354,7 @@ def _no_hidden_record(d: Doc) -> tuple[bool, str]:
     """#5's finding, mechanised: debt logged inside an HTML comment is logged nowhere."""
     # Word-bounded: an unbounded `tier` matches the `tier` inside `prettier`, which is how
     # a lint directive became a custody finding on the first run of these tests.
-    bad = [c for c in RE_HTML_COMMENT.findall(d.text)
+    bad = [c for c in RE_HTML_COMMENT.findall(strip_fenced_code(d.text))
            if re.search(r"\b(debts?|tiers?|unverified|provenance|todo)\b", c, re.I)]
     if bad:
         return False, f"{len(bad)} HTML comment(s) carry record content: {bad[0].strip()[:60]!r}"
@@ -276,11 +374,19 @@ def _appendix_sources(d: Doc) -> tuple[bool, str]:
     s = d.section_like("appendix", "primary sources")
     if s is None:
         return False, "no primary-source appendix"
-    lines = [ln for ln in s.body.split("\n") if re.match(r"^\s*[-*]\s+\S", ln)]
+    # Dashes or numbers: `_debt_filed` accepted both, so a document numbering its sources was
+    # told its appendix listed nothing while its numbered debt list was read fine.
+    lines = [ln for ln in s.body.split("\n") if RE_ITEM.match(ln)]
     if not lines:
         return False, "appendix present but lists nothing"
     declared = d.front.get("sources", "")
-    if declared.isdigit() and int(declared) != len(lines):
+    if not declared.isdigit():
+        # Never silently: an unreadable count used to skip the comparison without a word, and
+        # this is the one check whose whole job is catching a count that has drifted.
+        if not declared:
+            return False, f"front matter declares no source count; the appendix lists {len(lines)}"
+        return False, f"front matter declares sources={declared!r}, which is not a count"
+    if int(declared) != len(lines):
         return False, f"front matter declares sources={declared}, appendix lists {len(lines)}"
     unlinked = [ln for ln in lines if "http" not in ln]
     if unlinked:
@@ -289,15 +395,32 @@ def _appendix_sources(d: Doc) -> tuple[bool, str]:
 
 
 def _volatile_dated(d: Doc) -> tuple[bool, str]:
-    """Facts that rot need a retrieval date. A paper does not move; a pricing page does."""
-    if d.front.get("kind") == "survey":
-        return True, "n/a — surveys cite papers, which do not move"
+    """
+    Facts that rot need a retrieval date. A paper does not move; a pricing page does.
+
+    Per entry, and no longer per `kind`. Exempting `kind: survey` wholesale assumed surveys
+    cite only papers, and #27 is the counter-example the exemption would have waved through:
+    a document whose sources are pricing tables and live docs URLs. What decides is the
+    source, which is knowable from the line, not the document's kind, which is not.
+    """
     s = d.section_like("appendix", "primary sources")
     if s is None:
         return False, "no appendix to date"
-    if RE_RETRIEVED.search(s.title) or RE_RETRIEVED.search(s.body[:400]):
-        return True, "retrieval date stated"
-    return False, "no `retrieved YYYY-MM-DD` on a document citing volatile sources"
+    lines = s.body.split("\n")
+    entries = [ln for ln in lines if RE_ITEM.match(ln)]
+    if not entries:
+        return True, "nothing in the appendix to date — R9 blocks on that already"
+    # One date on the heading or in the preamble covers everything under it, which is how #27
+    # writes it: `## Appendix: primary sources, all retrieved 2026-07-29`.
+    preamble = "\n".join(lines[: lines.index(entries[0])])
+    if RE_RETRIEVED.search(s.title) or RE_RETRIEVED.search(preamble):
+        return True, "one retrieval date covers the appendix"
+    stale = [ln for ln in entries
+             if any(n in ln.lower() for n in VOLATILE) and not RE_RETRIEVED.search(ln)]
+    if stale:
+        return False, (f"{len(stale)}/{len(entries)} entries cite a source that moves and carry "
+                       f"no `retrieved YYYY-MM-DD`: {stale[0].strip()[:48]!r}")
+    return True, f"{len(entries)} entries, none citing an undated source that moves"
 
 
 def _claims_traceable(d: Doc) -> tuple[bool, str]:
@@ -340,7 +463,7 @@ class Check:
     id: str
     title: str
     severity: str  # "blocking" | "advisory"
-    run: object  # Callable[[Doc], tuple[bool, str]]
+    run: Callable[[Doc], tuple[bool, str]]
 
 
 CHECKS: list[Check] = [
@@ -382,9 +505,25 @@ def report(doc: Doc, results, quiet: bool) -> bool:
     return not blocking
 
 
+FLAGS = {"--quiet", "--help", "-h"}
+
+
 def main() -> None:
-    args = [a for a in sys.argv[1:] if not a.startswith("--")]
-    quiet = "--quiet" in sys.argv
+    args = [a for a in sys.argv[1:] if not a.startswith("-")]
+    flags = [a for a in sys.argv[1:] if a.startswith("-")]
+
+    # `--quite` used to run verbose and say nothing about it, which is the wrong direction for
+    # a tool whose output is the point.
+    unknown = [f for f in flags if f not in FLAGS]
+    if unknown or "--help" in flags or "-h" in flags:
+        for f in unknown:
+            print(f"unrecognised flag: {f}", file=sys.stderr)
+        body = __doc__.split("Usage:", 1)[1].split("Exit codes")[0].strip()
+        print("usage:", file=sys.stderr)
+        for line in body.split("\n"):
+            print("    " + line.strip(), file=sys.stderr)
+        sys.exit(EXIT_TOOL)
+    quiet = "--quiet" in flags
 
     paths = [Path(a) for a in args] if args else sorted(DOCS.glob("*.md"))
     paths = [p for p in paths if p.name.lower() != "readme.md"]
@@ -400,7 +539,13 @@ def main() -> None:
 
     passed = 0
     for p in paths:
-        doc = parse(p, p.read_text(encoding="utf-8"))
+        try:
+            text = p.read_text(encoding="utf-8")
+        except UnicodeDecodeError as e:
+            # Exit 2 is documented as "the tool could not run"; a traceback is not that.
+            print(f"{p}: not UTF-8 ({e.reason} at byte {e.start})", file=sys.stderr)
+            sys.exit(EXIT_TOOL)
+        doc = parse(p, text)
         if report(doc, check(doc), quiet):
             passed += 1
 

@@ -33,7 +33,7 @@ map: 1                       # the map ticket it hangs from
 date: 2026-07-25             # the document's date; revisions add `revised:`
 kind: survey                 # survey | verification | question | revision
 tier: T3                     # the document's floor — see §4
-session: sha256:9f2c…        # Transcript Archive session id, or `unrecorded`
+session: unrecorded          # Transcript Archive session id — see below — or `unrecorded`
 sources: 44                  # primary sources in the appendix; must match the count
 debt: [45, 46]               # `debt:open` issues this document filed; [] if none
 supersedes: null             # path of the document this replaces, if any
@@ -48,9 +48,15 @@ debt a document created is greppable from a clone without an API call, the same 
 cache argument that justifies [`curriculum/open.md`](../../curriculum/open.md). If the two ever
 disagree, the tracker is right.
 
-**`session:` accepts the literal `unrecorded`.** A document that cannot cite its transcript
-should say so rather than omit the key: an absent key and an unrecordable session are
-different facts, and only one of them is anybody's fault.
+**`session:` is `sha256:` and a whole 64-character digest, in either case — or the literal
+`unrecorded`.** A document that cannot cite its transcript should say so rather than omit the
+key: an absent key and an unrecordable session are different facts, and only one of them is
+anybody's fault. The digest is not truncated, because the archive identifies a session the way
+[`DATA-PROTOCOL.md` §2](../DATA-PROTOCOL.md) identifies every other object — by content hash —
+and a prefix a reader cannot resolve against the archive is a citation in appearance only.
+
+The keys carry `#` comments here for the reader. They are stripped before checking, so this
+block can be copied as it stands; every value still has to be replaced with a true one.
 
 The **human provenance paragraph** goes immediately under the title and is not replaced by
 the YAML. It states the *scope* of the tier — which sources were read in full, which were
@@ -64,7 +70,7 @@ and it is the sentence a reviewer actually reads.
 | 1 | `# Title` + provenance paragraph | the question, answered in the title where possible |
 | 2 | `## 0. Verdict` | a verdict table — one row per sub-question, each carrying a verdict and naming the section that argues it — and a one-line verdict as a blockquote |
 | 3 | `## 1..N` evidence | the argument |
-| 4 | `## What this does not establish` | three subsections: **sources not reached**, **open gaps**, **load-bearing ifs** |
+| 4 | `## What this does not establish` | three `###` subsections: **sources not reached**, **open gaps**, **load-bearing ifs**, a sentence under each |
 | 5 | `## Verification Debt` | itemised; each item names its `debt:open` issue |
 | 6 | `## Proposals` | exact replacement text for authored files, or the single word `None.` |
 | 7 | `## Appendix: primary sources` | every source, every one linked, retrieval dates where facts rot |
@@ -85,6 +91,14 @@ been four templates.
 - **Load-bearing ifs** — the claims whose falsity would move the verdict. This is the document
   writing its own falsifier, and it is what lets a later reader attack it cheaply instead of
   re-deriving the whole argument first.
+
+Each is its own `###` heading with prose under it, and the checker reads the headings rather
+than searching the section for words. The first version searched for needles as loose as `gap`,
+which the single sentence *"we could not reach the original; that gap is open, and if false it
+would change the verdict"* satisfies three times over — the gate satisfiable by ceremony that
+[`PROTOCOL.md` §5](../../PROTOCOL.md) argues is worse than none. Where a subsection is
+genuinely empty it says so in a sentence — *"every source in the appendix was opened"* — not in
+a word: `None.` is what a document writes when it has not looked.
 
 ## 3. Citations
 
@@ -125,16 +139,16 @@ anyway so that a green run is not mistaken for a merge decision.
 | | Check | Severity | By |
 |---|---|---|---|
 | R1 | Front matter present and complete, `kind` in the closed set | blocking | CI |
-| R2 | `session:` is `sha256:<digest>` or `unrecorded` | blocking | CI |
+| R2 | `session:` is `sha256:` + a 64-character digest, or `unrecorded` | blocking | CI |
 | R3 | First section is the verdict, with a table or a stated one-liner | blocking | CI |
 | R4 | Every verdict-table row carries a verdict from the closed set | blocking | CI |
-| R5 | `What this does not establish`, with all three subsections | blocking | CI |
-| R6 | Every debt item names a filed `debt:open` issue, mirrored in front matter | blocking | CI |
+| R5 | `What this does not establish`, three `###` subsections, each with a body | blocking | CI |
+| R6 | Every debt item names an issue other than this document's own ticket, mirrored in front matter | blocking | CI |
 | R7 | No debt/tier/provenance content inside HTML comments | blocking | CI |
 | R8 | `Proposals` section present, `None.` if empty | blocking | CI |
 | R9 | Appendix present, count matches front matter, every entry linked | blocking | CI |
 | R12 | Every verdict row names the section that argues it | blocking | CI |
-| R10 | Volatile sources carry a retrieval date | advisory | CI |
+| R10 | An appendix entry citing a source that moves carries a retrieval date | advisory | CI |
 | R13 | No substantial evidence section without an inline citation | advisory | CI |
 | R14 | **The argument survives an adversarial read** | blocking | human |
 | R15 | **The recommendation is actionable** | blocking | human |
@@ -142,6 +156,15 @@ anyway so that a green run is not mistaken for a merge decision.
 R14 and R15 are where the merge decision lives. Everything above them exists so a reviewer
 spends their attention there instead of on shape. A document that concludes *"more research is
 needed"* passes every mechanical check on this list.
+
+**Two of these are narrower than they read, and the gap is the reviewer's.** R6 checks that a
+debt item names *some* issue that is not this document's own ticket and that the front matter
+mirrors the same numbers; that the number is an issue at all, that it is open, and that it
+carries `debt:open` are not checkable offline and are not checked. R10 decides which sources
+move by reading the link — pricing, quotas, rate limits, `latest` docs — so it is a reminder
+with false negatives, not a guarantee; it is advisory for that reason. Both were written into
+this table as though CI settled them, which is the specific way a gate comes to certify less
+than it advertises ([#53](https://github.com/NGL321/mosaic/issues/53)).
 
 Numbering is the prototype's and is not contiguous: R11 forbade inline tier badges and was
 retired for having nothing to bite on — no document had ever carried one — and its reasoning
