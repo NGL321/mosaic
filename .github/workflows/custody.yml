@@ -1,0 +1,27 @@
+name: custody
+
+# §5's mechanical obligations, over the commits a pull request adds. What CI can
+# decide, it decides; what it cannot — the defence artifact — it reports for the
+# reviewer. See .github/scripts/custody_check.py.
+
+on:
+  pull_request:
+    paths:
+      - CONTEXT.md
+      - CHARTER.md
+
+jobs:
+  custody:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Check custody obligations
+        run: |
+          python .github/scripts/custody_check.py \
+            "${{ github.event.pull_request.base.sha }}" \
+            "${{ github.event.pull_request.head.sha }}"
