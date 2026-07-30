@@ -1,0 +1,159 @@
+# Research documents
+
+The **evidence** layer: what a research ticket produces. A research document is a piece of
+work; a [notebook entry](../../notebook/README.md) is the narrative of work happening. An
+entry may cite a document; they are not the same artifact and do not share this template.
+
+One file per ticket, `YYYY-MM-DD-slug.md`, flat. Documents are **record** files and so are
+agent-writable under [`PROTOCOL.md` §5](../../PROTOCOL.md); they land as `evidence:` (PATCH).
+
+Check one before opening a pull request:
+
+```console
+python tools/check_research_doc.py
+```
+
+Settled in [#26](https://github.com/NGL321/mosaic/issues/26). The contract exists to remove a
+revision tax: the first three documents were each invented from scratch, shaped differently,
+and one needed a follow-up commit to apply review feedback. An agent that knows the required
+shape before it starts produces work that lands in one pass.
+
+---
+
+## 1. Front matter
+
+YAML, fenced, before the title. The only machine-readable part of the document, and it exists
+so that a dispatch pipeline ([#24](https://github.com/NGL321/mosaic/issues/24)) can route on
+it without reading prose.
+
+```yaml
+---
+ticket: 4                    # the issue this resolves
+map: 1                       # the map ticket it hangs from
+date: 2026-07-25             # the document's date; revisions add `revised:`
+kind: survey                 # survey | verification | question | revision
+tier: T3                     # the document's floor — see §4
+session: sha256:9f2c…        # Transcript Archive session id, or `unrecorded`
+sources: 44                  # primary sources in the appendix; must match the count
+debt: [45, 46]               # `debt:open` issues this document filed; [] if none
+supersedes: null             # path of the document this replaces, if any
+---
+```
+
+**`debt:` mirrors the tracker and never adds to it.** Every number is an open `debt:open`
+issue that already exists, and the same numbers appear in the *Verification Debt* section;
+the checker requires the two to agree. [#5](https://github.com/NGL321/mosaic/issues/5) settled
+that the ledger *is* the issue tracker, and this key does not reopen that — it is there so the
+debt a document created is greppable from a clone without an API call, the same read-through
+cache argument that justifies [`curriculum/open.md`](../../curriculum/open.md). If the two ever
+disagree, the tracker is right.
+
+**`session:` accepts the literal `unrecorded`.** A document that cannot cite its transcript
+should say so rather than omit the key: an absent key and an unrecordable session are
+different facts, and only one of them is anybody's fault.
+
+The **human provenance paragraph** goes immediately under the title and is not replaced by
+the YAML. It states the *scope* of the tier — which sources were read in full, which were
+reached by abstract, what was derived rather than retrieved. `tier: T3` cannot carry that,
+and it is the sentence a reviewer actually reads.
+
+## 2. Sections, in order
+
+| | Section | Contains |
+|---|---|---|
+| 1 | `# Title` + provenance paragraph | the question, answered in the title where possible |
+| 2 | `## 0. Verdict` | a verdict table — one row per sub-question, each carrying a verdict and naming the section that argues it — and a one-line verdict as a blockquote |
+| 3 | `## 1..N` evidence | the argument |
+| 4 | `## What this does not establish` | three subsections: **sources not reached**, **open gaps**, **load-bearing ifs** |
+| 5 | `## Verification Debt` | itemised; each item names its `debt:open` issue |
+| 6 | `## Proposals` | exact replacement text for authored files, or the single word `None.` |
+| 7 | `## Appendix: primary sources` | every source, every one linked, retrieval dates where facts rot |
+
+`kind: revision` adds `## 0.1 What this revision changed` — additive, naming what moved and
+what did not. Nothing else varies by kind: verification, a resolved question, a survey and an
+infrastructure question all fit this, and four templates differing in one field would have
+been four templates.
+
+**§4 is the section that was not already common practice**, and it is the one worth the most:
+
+- **Sources not reached** — what was wanted and could not be got, and why. Writing this
+  against the [#4](https://github.com/NGL321/mosaic/issues/4) survey is what surfaced that its
+  headline refutation rested on a proof reached through a search-engine record and never
+  opened ([#45](https://github.com/NGL321/mosaic/issues/45)).
+- **Open gaps** — questions the document opened and did not close, stated so someone could
+  pick one up. Often the most valuable thing a survey produces.
+- **Load-bearing ifs** — the claims whose falsity would move the verdict. This is the document
+  writing its own falsifier, and it is what lets a later reader attack it cheaply instead of
+  re-deriving the whole argument first.
+
+## 3. Citations
+
+**Inline at the claim site, and a full appendix.** Both, not either: inline because borrowed
+frames are cited where they are borrowed and a reader checking one paragraph should not have
+to bounce; the appendix because a verifier discharging debt works down a list. Footnotes are
+not used — they put the citation one jump away while looking like they didn't.
+
+A **primary source** is the thing itself, read directly: the paper, the publisher record, the
+first-party documentation page, the scan of the original edition. Not an abstract, not another
+survey's description of it, not a model's recollection. Where a primary source cannot be
+reached, the verdict is **Unresolved** and says so — the precedent is
+[#13](https://github.com/NGL321/mosaic/issues/13).
+
+## 4. Verdicts, and why there are no tier badges here
+
+A claim's verdict comes from a closed set: **Supported**, **Refuted**, **Loose**,
+**Unresolved**, **Established**, **Contested**, **Open**.
+
+**One tier, in the front matter, for the whole document. No per-claim tier badges.**
+[#5](https://github.com/NGL321/mosaic/issues/5) settled that an agent's reading is evidence
+attached to a claim and does not move its tier. An agent-written document is therefore T3 in
+every claim it contains, by construction — a per-claim badge would be the same three
+characters on every line, which is not a tiering but a watermark. What varies claim to claim,
+and so what is annotated claim by claim, is the **verdict**.
+
+The badge `⟦T3 · #33⟧` belongs at the **destination**: the `CONTEXT.md` line where the claim
+lands. A research document is where a claim is *argued*; the badge records what the researcher
+can *defend*. An agent may draft the exact badge text in *Proposals*, and Noah applies it —
+§5 is explicit that custody is over the decision, not the keystrokes, so what the rule requires
+is that he has read and accepted the badge, not that he composed its wording.
+
+## 5. Acceptance
+
+Fourteen checks. Twelve are in `tools/check_research_doc.py`; two are not, and are listed here
+anyway so that a green run is not mistaken for a merge decision.
+
+| | Check | Severity | By |
+|---|---|---|---|
+| R1 | Front matter present and complete, `kind` in the closed set | blocking | CI |
+| R2 | `session:` is `sha256:<digest>` or `unrecorded` | blocking | CI |
+| R3 | First section is the verdict, with a table or a stated one-liner | blocking | CI |
+| R4 | Every verdict-table row carries a verdict from the closed set | blocking | CI |
+| R5 | `What this does not establish`, with all three subsections | blocking | CI |
+| R6 | Every debt item names a filed `debt:open` issue, mirrored in front matter | blocking | CI |
+| R7 | No debt/tier/provenance content inside HTML comments | blocking | CI |
+| R8 | `Proposals` section present, `None.` if empty | blocking | CI |
+| R9 | Appendix present, count matches front matter, every entry linked | blocking | CI |
+| R12 | Every verdict row names the section that argues it | blocking | CI |
+| R10 | Volatile sources carry a retrieval date | advisory | CI |
+| R13 | No substantial evidence section without an inline citation | advisory | CI |
+| R14 | **The argument survives an adversarial read** | blocking | human |
+| R15 | **The recommendation is actionable** | blocking | human |
+
+R14 and R15 are where the merge decision lives. Everything above them exists so a reviewer
+spends their attention there instead of on shape. A document that concludes *"more research is
+needed"* passes every mechanical check on this list.
+
+Numbering is the prototype's and is not contiguous: R11 forbade inline tier badges and was
+retired for having nothing to bite on — no document had ever carried one — and its reasoning
+survives as §4 above. The ids are kept stable so the reasoning on
+[#26](https://github.com/NGL321/mosaic/issues/26) still refers to something.
+
+## The three documents here predate this
+
+All three fail the contract, mostly on §4 and on debt filed only in prose. Retrofitting them
+is [#50](https://github.com/NGL321/mosaic/issues/50), which blocks the charter and nothing
+else — `0.x` is where process mistakes are allowed to accumulate and be swept once, rather
+than fixed one at a time as they appear ([`PROTOCOL.md` §2](../../PROTOCOL.md)). The checker is
+deliberately **not** wired into CI until that sweep lands; wiring it now would put the
+repository in permanent red, which teaches everyone to ignore it. CI wiring goes with the
+other gates in [#24](https://github.com/NGL321/mosaic/issues/24).
