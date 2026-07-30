@@ -66,6 +66,74 @@ the programme-health review, not the whole of it.
 
 Tooling-track versions are ordinary: `feat:` bumps minor, `fix:` bumps patch.
 
+### The scaffolding era — `0.x`
+
+`0.x` is **pre-charter**, and §5's custody obligations are suspended inside it. Bounded
+three ways, because a grace whose expiry its beneficiary controls is a rule that was never
+written:
+
+1. **It defers, never excuses.** A suspended obligation is filed as an issue labelled
+   **`custody:deferred`**, and no such issue may be open when `1.0.0` is tagged. Nothing is
+   forgiven; it is rescheduled, in the open, where a stranger can read the list and watch it
+   fail to shrink.
+
+   **A deferred obligation is not Verification Debt**, in exactly the sense §5 already
+   distinguishes. Verification Debt (`debt:open`) is a derivation step the *programme* has
+   not checked; it is discharged by learning and outlives the charter by construction. A
+   deferred custody obligation is a *record-keeping* gap — a missing defence or session
+   citation on an authored file — and it dies at the charter. Both live in issues; only the
+   second blocks `1.0.0`.
+2. **It covers only the unrecordable.** If the machinery to discharge an obligation existed
+   when the commit landed, the obligation was *skipped*, not impossible, and the grace does
+   not reach it. The grace is for the scaffolding era's missing mechanisms, not for haste.
+3. **It never covers an agent deciding.** An agent identity committing an authored file is a
+   violation in every era. No grace reaches §5's first sentence.
+
+**Worked example.** The `record:` commits that landed Mosaic's vocabulary carry agent
+co-authorship and a session trailer, but no defence — because the defence mechanism did not
+exist when they landed, while the trailer already did. So the grace reaches the defence and
+not the citation, which is bullet 2 doing its work: what the machinery could record, it
+recorded. Each owes a defence pass before the charter can be ratified, and each is a
+`custody:deferred` issue until it gets one (#37, #38, #39).
+
+### Ratifying the charter — `1.0.0`
+
+Ratification is the moment every deferred obligation comes due, which makes the end of `0.x`
+load-bearing. So the tag is **computed, not chosen**.
+
+> **The first experiment is the gate.** `1.0.0` may be tagged when there is a Protective Belt
+> rung the programme intends to test, an experiment designed to test it, and every tool and
+> protocol that experiment needs already present in the repository.
+
+| | Criterion | Discharged by |
+|---|---|---|
+| 1 | **A closed Hard Core** | the Hard Core stated as a finite list, with the Negative Heuristic binding on it from that point. Closed, not complete: it may be *wrong*, but it may not be *pending*. |
+| 2 | **A thin Protective Belt** | at least one rung, carrying its falsifier in Noah's own words (§5). Not the whole belt — one rung worth testing. |
+| 3 | **Restatement-level grasp of every part** | the **competence floor** (§5), declared: an unaided, intuitive restatement of every aspect of the programme. **Rigour is not required here.** What is missing below is Verification Debt (`debt:open`), scheduled through the Curriculum, which by construction outlives the charter. Open debt does not block the charter; open `custody:deferred` does. |
+| 4 | **An operational repository** | a restore path demonstrated **by restoring**, not by existing; and the programme's routine tasks runnable without improvisation. Nothing wider than those two things. |
+| 5 | **A first experiment, designed and executable** | the experiment names the rung it tests, and the toolchain runs it end to end at least once, on trivial input if need be. Its **results are not required**. |
+| 6 | **A public work product** | not new: §5's warrant table puts a public, human-authored deliverable on every MAJOR, and ratification is `core:`. An essay stating the programme and the direction intended for it satisfies this. |
+
+**Why the experiment and not a checklist.** A checklist of intentions is satisfiable by
+ceremony, and §5 argues at length that such a gate is worse than none — in the record it is
+indistinguishable from the real thing. An experiment is not: it either exists as a runnable
+design or it does not. It is also **diagnostic**, which a checklist is not. A Hard Core still
+pending, a belt with no testable rung, a toolchain that cannot carry a run — all three
+surface as *"I cannot state the experiment."* This is the falsifier argument of §5 applied to
+the programme as a whole: demand the artifact whose vagueness is visible on the page.
+
+**Why results are not required.** A charter that waits on nature's answer is not a
+scaffolding gate; it is a research result, and it could be years or never. `1.0.0` claims the
+programme is *equipped*, not that it is *right*. Executing the experiment once proves the
+equipment. The answer belongs to the belt.
+
+Criteria 1, 2, 5 and 6 are artifacts a reader can find; 3 and 4 are Noah's to assert. The
+deferred set is mechanical:
+
+```console
+gh issue list --label custody:deferred --state open   →  empty
+```
+
 ---
 
 ## 3. Commit types
@@ -141,23 +209,90 @@ Two rules, stated together because each is hollow alone.
 
 ### Custody — whose hand
 
-- **Authored files** (`CONTEXT.md`, the charter): **human only.** Agents propose exact
-  replacement text in a ticket or pull request; the human applies it.
+- **Authored files** — `CONTEXT.md` and the charter, which lands at `CHARTER.md` in the
+  repository root: **human only.** Agents propose exact replacement text in a ticket or
+  pull request; the human applies it. The charter's path is named here, before it is
+  written, because the custody check keys on paths: a charter under any other name would
+  leave that check green and covering nothing.
 - **Record files** (research documents, notebook entries, ledger rows, experiment
   output): agent-writable.
 - **Gate artifacts are record, not belief.** A checker agent's critique of a falsifier
   draft, and a teach-cycle transcript, are agent-written and land in the record even
   though their *subject* is belief. **Custody follows the file, never the topic.**
 
-This makes one claim mechanically checkable:
+> **Custody is over the decision, not the keystrokes.**
 
-```console
-git log --format='%an' -- CONTEXT.md   →  one name
-```
+Which term, which carving, which departure gets marked is Noah's. The prose that renders
+that decision may be drafted with an agent holding the pen — that is what the first bullet
+above already prescribes, and it is how most of the vocabulary was in fact written. An agent
+**deciding** the vocabulary is the breach. An agent **wording** a decision Noah made is the
+sanctioned pipeline, and forbidding it would forbid the protocol's own instruction.
+
+A `Co-Authored-By:` trailer on an authored file is therefore **not a violation**. It is a
+routing signal: it triggers obligations rather than convicting the commit. Three obligations,
+each checked where it can be:
+
+| | Obligation | Checked by |
+|---|---|---|
+| **Identity** | an authored file is committed under a human identity | CI, in one command, once agents commit under their own identity |
+| **Citation** | an agent co-author on an authored file carries a `Session:` trailer resolving in the Transcript Archive | CI, **for presence only** — resolution is not checkable from a public runner against a private archive, and is unmechanised |
+| **Defence** | a meaning-changing commit to an authored file carries a defence artifact — what changed, why, in Noah's own words | a checker agent, on the pull request, as the §5 gate below already works |
+
+An obligation the scaffolding era defers (§2) is not dropped — it is filed as a
+`custody:deferred` issue and blocks `1.0.0` until discharged.
+
+The de minimis exception (§6) carries over unchanged, and is what keeps the defence
+obligation affordable: a change that cannot alter meaning owes nothing further.
+
+**The session trailer's spelling is pinned here**, because a document and a checker that
+disagree about a key produce a check that convicts correctly cited commits — which is
+exactly what happened on the first draft of this section's CI.
+
+> The canonical key is **`Session:`**. A tool-specific prefix is equally valid — the
+> trailer `Claude-Session:` that Claude Code emits is what every agent-co-authored commit
+> in this repository actually carries. The check accepts `Session:` and any
+> `<Tool>-Session:`, and nothing else.
+
+**This file is not an authored file, and that is a decision, not an omission.** `PROTOCOL.md`
+is agent-writable, and this section was drafted by an agent — the rule about who may decide
+was worded by the party it constrains. That is tolerable only because the protocol is
+*procedure*, reviewable line by line against whether it works, and because every change to it
+lands through a pull request Noah merges. The vocabulary is not like that: a definition cannot
+be checked against anything outside the belief it encodes, which is why `CONTEXT.md` and the
+charter are human-only and this file is not. If that argument ever stops holding, the fix is
+to move `PROTOCOL.md` into the authored set and re-derive it under custody, not to leave the
+question unasked.
+
+**Why not simply forbid the trailer.** Because typing is not the claim worth making. Noah can
+type every character of a definition and still only be reciting it, and a rule that passes
+that commit while convicting a monitored, cited, defended one is measuring the wrong thing —
+strictly, it is *wrong in both directions at once*. Custody can only ever answer **whose
+hand**; whether the text can be defended is warrant's question, and the table above is where
+the two rules meet.
 
 *"The vocabulary was written by the model"* is the form the credibility objection takes
-against an openly LLM-accelerated programme. Under this rule it has a verifiable answer,
-produced as a side effect rather than asserted in prose.
+against an openly LLM-accelerated programme. The honest answer is not that no model touched
+it — it did — but that every place one did is recorded, traceable to a session, and
+accompanied by a defence Noah wrote. That answer is stronger than a denial, and unlike a
+denial it is true.
+
+### The competence floor — where defence stops
+
+Defence is unbounded until the programme says where it bottoms out. The **competence floor**
+is Noah's declared statement of what he can defend unaided; it is an authored file's content
+and so must be written by him, unassisted, which is the one place custody's strictest reading
+belongs. An agent co-authoring a root assertion about Noah is circular.
+
+- Defence terminates **at the floor**, not at first principles.
+- Whatever a derivation needs from below the floor is **Verification Debt** — filed as a
+  `debt:open` issue and discharged the way #5 settled it: a document in `docs/research/`
+  plus the commit promoting the tier. It is not a custody failure, and it does not block the
+  charter.
+- Until the floor is declared, the defence obligation is **undecidable rather than
+  satisfied**. The deficiency reports itself instead of being papered over.
+
+Verification Debt has always presupposed a floor: *"a logged step Noah cannot yet defend
+unaided"* is measured against one. Declaring it gives the ledger its zero point.
 
 ### Warrant — whose understanding
 
@@ -194,11 +329,17 @@ carry. Different deficits, both scheduled.
 
 ### Why both
 
-Custody without warrant is **transcription** — the human pastes agent text, `git log`
-returns one name, and the claim is true and empty. Warrant without custody leaves the
+Custody without warrant is **transcription** — the human pastes agent text, the identity
+check returns one name, and the claim is true and empty. Warrant without custody leaves the
 vocabulary agent-owned with a human signature on top. Custody governs vocabulary;
 warrant governs claims. Neither category is ungoverned, and neither gate is applied
 where it has nothing to bite on.
+
+This is why custody's third obligation is a *defence* and not an attendance claim. An
+attendance trailer would be asserted by the one party whose attendance is in question —
+free to write, indistinguishable from the truth, and so exactly the ceremony this section
+argues against. A defence is asserted by the same party, but it cannot be produced without
+the comprehension it claims, and its vagueness is visible on the page.
 
 ---
 
@@ -222,6 +363,10 @@ and repair its own work. It cannot independently assess reasoning it generated.
   checker agent grills it there, and the teach cycle, if it fires, happens in that
   thread — which makes the human–machine boundary **visible in the record** rather than
   advertised in a README.
+- **Any pull request touching an authored file**, at whatever level: the defence artifact
+  (§5) goes on the thread and is grilled there, by an agent that did not draft the text. A
+  `record:` change to `CONTEXT.md` is PATCH by §3 and still carries this, because the
+  obligation follows the *file*, not the bump.
 
 **Never rebase a pushed branch.** `inquiry/` branches take `main` by merging it in. This
 produces uglier history, and the ugliness is correct: rebase rewrites *when* something
@@ -246,9 +391,10 @@ with no reviewer benefit. The test is strict:
 Bounded three ways:
 
 - It runs **one direction only** — the human writing on an agent's branch, never the
-  reverse. Agents do not acquire de minimis access to authored files. Custody (§5) has no
-  exceptions, because a single exception makes `git log -- CONTEXT.md` stop being an
-  answer to anything.
+  reverse. Agents do not acquire de minimis access to authored files. Custody's identity
+  obligation (§5) has no exceptions, because a single exception makes the check stop being
+  an answer to anything. What de minimis exempts is the *defence* obligation, and only
+  because the test above already establishes that nothing was claimed.
 - The change is a **separate commit**, never amended into the author's work, so
   authorship in the log stays truthful about who wrote what.
 - Anything failing the test goes back to the owner as a request, however small it looks.

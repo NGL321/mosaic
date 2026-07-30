@@ -1,0 +1,45 @@
+name: custody
+
+# §5's mechanical obligations, over the commits a pull request adds. What CI can
+# decide, it decides; what it cannot — the defence artifact — it reports for the
+# reviewer. See .github/scripts/custody_check.py.
+#
+# The `paths:` filter below and the script's AUTHORED set must agree; the script
+# cross-checks them and exits 2 if they have drifted, because a file in one but
+# not the other is either unchecked or never triggers.
+#
+# Note before making this a required check: a path-filtered workflow never runs
+# on pull requests that touch nothing in `paths:`, and a required check that
+# never runs sits *expected* forever and blocks the merge. Either keep it
+# advisory, or split it into an always-running job that skips internally.
+
+on:
+  pull_request:
+    paths:
+      - CONTEXT.md
+      - CHARTER.md
+
+# The script only reads git history.
+permissions:
+  contents: read
+
+jobs:
+  custody:
+    runs-on: ubuntu-latest
+    steps:
+      # Pinned by digest: an action referenced by a floating tag can change
+      # under a check whose whole purpose is being trustworthy about history.
+      # actions/checkout@v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          # The check resolves a merge base; a shallow clone has none.
+          fetch-depth: 0
+      # actions/setup-python@v7.0.0
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.x'
+      - name: Check custody obligations
+        run: |
+          python .github/scripts/custody_check.py \
+            "${{ github.event.pull_request.base.sha }}" \
+            "${{ github.event.pull_request.head.sha }}"
