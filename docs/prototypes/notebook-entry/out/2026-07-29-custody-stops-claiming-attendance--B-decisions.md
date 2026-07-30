@@ -22,7 +22,7 @@ The grace should extend to almost all the rules until 1.0, and 1.0 should really
 </details>
 
 <details>
-<summary>Ledger — 7 line(s) the history already carries</summary>
+<summary>Ledger — 8 line(s) the history already carries</summary>
 
 | | | |
 |---|---|---|
@@ -33,15 +33,16 @@ The grace should extend to almost all the rules until 1.0, and 1.0 should really
 | landed | Scaffold the record's directory tree and the debt snapshot (#5) | [`2626c45`](https://github.com/NGL321/mosaic/commit/2626c45) |
 | landed | Decide what custody claims, and mechanise what can be checked (#23) | [`2611689`](https://github.com/NGL321/mosaic/commit/2611689) |
 | landed | Write down the storage discipline the record already cites (#35) | [`0449c40`](https://github.com/NGL321/mosaic/commit/0449c40) |
+| landed | Prototype the research-output document contract for #26 | [`ca006bf`](https://github.com/NGL321/mosaic/commit/ca006bf) |
 
 </details>
 
 ## Sessions
 
-Cited by content hash; the Transcript Archive is private and the `Index` manifest resolves hash → path.
+Cited by content hash; the Transcript Archive is private and the `Index` manifest resolves hash → path. A session ends after an hour without work and belongs to the day it ended, so the window selects which part of the file this entry covers.
 
-| session | window | size | branch |
-|---|---|---|---|
-| `sha256:6c69d0f604dd…` | 2026-07-29T23:16Z → 2026-07-30T03:35Z | 8 prompts / 505 events | `tooling/custody-and-charter-gate` |
+| session | window | segment | size | branch |
+|---|---|---|---|---|
+| `sha256:6c69d0f604dd…` | 2026-07-29T16:16 → 2026-07-29T20:35 | 2 of 2 segment(s) | 8 prompts / 505 events | `tooling/custody-and-charter-gate` |
 
 <sub>`⟦T1⟧` derived unaided · `⟦T3⟧` machine-produced, unverified</sub>

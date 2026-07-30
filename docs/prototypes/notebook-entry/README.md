@@ -80,7 +80,7 @@ structural claim here worth keeping whichever rendering wins.
 | **C** | ledger table | table rows, `◆` where annotated | its own `## Noah's notes` section |
 | **D** | raw (control) | everything | *none* |
 
-**B is the one to argue about.** It inverts the emphasis: what a reader meets is Noah's
+**B was chosen.** It inverts the emphasis: what a reader meets is Noah's
 reading of the day, and the generated record is one click away. It is also the only variant
 where an unannotated entry looks visibly unfinished — it says *"Unannotated. Nothing here has
 been read back."* — which turns the annotation debt into something a stranger can see.
@@ -144,23 +144,52 @@ Two things are worth doing deliberately:
    to itself. `annotated lines n/m` is on screen for that reason, and B renders the deficit
    rather than hiding it.
 
-## Still to settle
+## Settled — Noah, 2026-07-30, after driving this
 
-1. **Does annotating a line promote its tier?** The prototype says **no** — an annotation is
-   an adjacent T1 claim, and the generated line stays T3 forever. The alternative is that
-   Noah's annotation is exactly the personal verification T2 means, in which case an
-   annotated line should be promoted and the badge should move. This decides whether the
-   notebook is a source of tier promotions or merely a place they are reported.
-2. **Which day does a session that crosses midnight belong to?** This entry is dated
-   `2026-07-29` because that is when the commits landed locally, while the session's UTC
-   window ends on the 30th. The rule needs stating; it is arbitrary but it must be fixed.
-3. **Where does the narrative pass actually run?** #3 §4 puts scheduled generation on the
-   Pi 5. Something has to read the transcript and write `pass-*.json`, which means an agent
-   with archive access on a machine that never publishes it.
-4. **Is the annotated entry canonical?** #3 §6 asks the regeneration question directly. Once
-   annotated, the entry is not reproducible from the transcript, so the file is canonical and
-   the generator must never overwrite it — which is an argument for keeping the annotation
-   layer in a form that survives regeneration.
+1. **Nothing in the notebook promotes a Provenance Tier.** Annotating a line does not lift
+   it: the annotation is a T1 claim sitting beside a T3 one, and the T3 line stays T3.
+   Promotion requires Noah restating the thing himself, which is the gate the tiers exist to
+   impose — most generated content lives at T3 until it is bumped, and T1 is his thinking.
+   *So the notebook reports tiers and never issues them.*
+2. **A session ends after an hour without work, and belongs to the day it ended.** Only one
+   day can own it, and the end is the side that is actually defined.
+3. **The narrative pass runs on Google Apps Script**, not the Pi 5 — source in this repo,
+   execution on Google's infrastructure with direct Drive access, so failure requires Google
+   failing. The Pi is data-sovereignty backup and moves house.
+4. **Annotations are not canonical.** Anything worth making canon earns its own entry and
+   its own work — a tier promotion for the idea, not a louder note. Regeneration is
+   therefore permitted; `reanchor()` re-applies the layer by anchor and **reports orphans
+   rather than dropping them**, because not canonical is not the same as disposable.
+5. **Rendering B is the format.** *"This is my research project. It just happens to be
+   AI-accelerated. Tool output shouldn't be the first thing anyone sees."* A, C and D stay in
+   the code as the comparison that produced the choice.
+
+### What (2) turned out to mean
+
+The idle rule is not cosmetic, and this is the prototype earning its keep: **a transcript
+file is not a session.** `b1243c96` splits into four segments across two days, one of them
+straddling midnight; the entry's own source file splits into two, both landing on the 29th.
+
+So a file's hash cannot cite a day's work on its own, and the Sessions table now carries
+**hash plus window plus segment count** — the hash identifies the file, the window says
+which part of it this day owns. Windows are printed in local time, because a UTC window
+under a locally-dated heading contradicts itself on the page: this entry's session would
+read as ending on the 30th beneath a heading dated the 29th.
+
+### What (3) changes about the tool contract
+
+Apps Script is V8, not Python, and cannot run `git` or `gh` — so the harvest half moves to
+the GitHub REST API over `UrlFetchApp`, and the four-line contract (#3 §6) reads: **reads**
+Drive archive + GitHub API; **writes** a notebook entry by API commit; **auth** Drive OAuth
+plus a token in Script Properties, never in source; **safe to regenerate from scratch?**
+yes for the generated record, and per (4) that is now the whole answer, with orphaned
+annotations reported.
+
+## Still open
+
+- **Which repository does the generator commit through, and as whom?** §5's identity
+  obligation applies: notebook entries are record files and agent-writable, but the Apps
+  Script identity still has to be a named one.
 
 ## Not in scope
 

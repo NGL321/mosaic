@@ -19,7 +19,7 @@
 | debt | Three commits that landed the vocabulary owe a defence pass on `CONTEXT.md` — filed as deferred custody obligations, which block `1.0.0` and are not Verification Debt | [#37](https://github.com/NGL321/mosaic/issues/37) · [#38](https://github.com/NGL321/mosaic/issues/38) · [#39](https://github.com/NGL321/mosaic/issues/39) | `⟦T3⟧` |
 
 <details>
-<summary>Ledger — 15 line(s) the history already carries</summary>
+<summary>Ledger — 16 line(s) the history already carries</summary>
 
 | | | |
 |---|---|---|
@@ -30,6 +30,7 @@
 | landed | Scaffold the record's directory tree and the debt snapshot (#5) | [`2626c45`](https://github.com/NGL321/mosaic/commit/2626c45) |
 | landed | Decide what custody claims, and mechanise what can be checked (#23) | [`2611689`](https://github.com/NGL321/mosaic/commit/2611689) |
 | landed | Write down the storage discipline the record already cites (#35) | [`0449c40`](https://github.com/NGL321/mosaic/commit/0449c40) |
+| landed | Prototype the research-output document contract for #26 | [`ca006bf`](https://github.com/NGL321/mosaic/commit/ca006bf) |
 | debt | Filed: [custody] 1889b61 owes a defence pass on CONTEXT.md | [#39](https://github.com/NGL321/mosaic/issues/39) |
 | debt | Filed: [custody] 2ec5194 owes a defence pass on CONTEXT.md | [#38](https://github.com/NGL321/mosaic/issues/38) |
 | debt | Filed: [custody] 7f501d1 owes a defence pass on CONTEXT.md | [#37](https://github.com/NGL321/mosaic/issues/37) |
@@ -51,10 +52,10 @@
 
 ## Sessions
 
-Cited by content hash; the Transcript Archive is private and the `Index` manifest resolves hash → path.
+Cited by content hash; the Transcript Archive is private and the `Index` manifest resolves hash → path. A session ends after an hour without work and belongs to the day it ended, so the window selects which part of the file this entry covers.
 
-| session | window | size | branch |
-|---|---|---|---|
-| `sha256:6c69d0f604dd…` | 2026-07-29T23:16Z → 2026-07-30T03:35Z | 8 prompts / 505 events | `tooling/custody-and-charter-gate` |
+| session | window | segment | size | branch |
+|---|---|---|---|---|
+| `sha256:6c69d0f604dd…` | 2026-07-29T16:16 → 2026-07-29T20:35 | 2 of 2 segment(s) | 8 prompts / 505 events | `tooling/custody-and-charter-gate` |
 
 <sub>`⟦T1⟧` derived unaided · `⟦T3⟧` machine-produced, unverified · debt: `#40`</sub>

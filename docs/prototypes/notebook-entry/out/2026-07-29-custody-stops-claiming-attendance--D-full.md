@@ -10,6 +10,8 @@
 - [activity] Align debt discharge with the mechanism #5 settled (#23) [`5ff0ee9`](https://github.com/NGL321/mosaic/commit/5ff0ee9)
 - [activity] Apply review feedback to the debt snapshot generator (#34) [`203a234`](https://github.com/NGL321/mosaic/commit/203a234)
 - [activity] Make the custody check bite on what §5 actually says (#23) [`47ba7d0`](https://github.com/NGL321/mosaic/commit/47ba7d0)
+- [activity] Prototype notebook entry generation from a real session (#11) [`14f126b`](https://github.com/NGL321/mosaic/commit/14f126b)
+- [activity] Filed: Build `publish.sh`: the missing path from a run's output to Drive [#42](https://github.com/NGL321/mosaic/issues/42)
 - [activity] Filed: Declare the competence floor [#40](https://github.com/NGL321/mosaic/issues/40)
 - [activity] Filed: Recover the missing SYSTEM-BRIEF.md storage protocol [#35](https://github.com/NGL321/mosaic/issues/35)
 - [activity] Filed: Establish the real cost and quota basis for automating async agent work [#27](https://github.com/NGL321/mosaic/issues/27)
@@ -43,6 +45,7 @@
 - [landed] Scaffold the record's directory tree and the debt snapshot (#5) [`2626c45`](https://github.com/NGL321/mosaic/commit/2626c45)
 - [landed] Decide what custody claims, and mechanise what can be checked (#23) [`2611689`](https://github.com/NGL321/mosaic/commit/2611689)
 - [landed] Write down the storage discipline the record already cites (#35) [`0449c40`](https://github.com/NGL321/mosaic/commit/0449c40)
+- [landed] Prototype the research-output document contract for #26 [`ca006bf`](https://github.com/NGL321/mosaic/commit/ca006bf)
 - [landed] Custody was split into three obligations — identity, citation, defence — each checked where it can actually be checked, and an agent co-author trailer became a routing signal rather than a conviction [`2611689`](https://github.com/NGL321/mosaic/commit/2611689) · [PR #36](https://github.com/NGL321/mosaic/pull/36)
 - [landed] `1.0.0` is now computed rather than chosen: the first designed, runnable experiment is the gate that ends the scaffolding era, with results explicitly not required [`703b21d`](https://github.com/NGL321/mosaic/commit/703b21d) · [`f3746a7`](https://github.com/NGL321/mosaic/commit/f3746a7)
 - [landed] The pre-charter grace was added and bounded three ways — it defers rather than excuses, covers only what the era could not record, and never covers an agent deciding [`2d5b974`](https://github.com/NGL321/mosaic/commit/2d5b974)
@@ -52,8 +55,8 @@
 
 ## Sessions
 
-Cited by content hash; the Transcript Archive is private and the `Index` manifest resolves hash → path.
+Cited by content hash; the Transcript Archive is private and the `Index` manifest resolves hash → path. A session ends after an hour without work and belongs to the day it ended, so the window selects which part of the file this entry covers.
 
-| session | window | size | branch |
-|---|---|---|---|
-| `sha256:6c69d0f604dd…` | 2026-07-29T23:16Z → 2026-07-30T03:35Z | 8 prompts / 505 events | `tooling/custody-and-charter-gate` |
+| session | window | segment | size | branch |
+|---|---|---|---|---|
+| `sha256:6c69d0f604dd…` | 2026-07-29T16:16 → 2026-07-29T20:35 | 2 of 2 segment(s) | 8 prompts / 505 events | `tooling/custody-and-charter-gate` |
