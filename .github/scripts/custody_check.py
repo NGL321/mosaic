@@ -93,7 +93,9 @@ def main() -> int:
 
         # 3. DEFENCE — reported, never judged here.
         obligations.append(f"{short}\n    owes a defence artifact on this pull request, "
-                           f"grilled by an agent that did not draft the text (§5, §6)")
+                           f"grilled by an agent that did not draft the text (§5, §6). "
+                           f"If the scaffolding era defers it, file it as a "
+                           f"custody:deferred issue rather than dropping it (§2)")
 
     if undecidable:
         print("UNDECIDABLE — recorded, not failed:")

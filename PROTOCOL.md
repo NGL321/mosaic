@@ -72,9 +72,17 @@ Tooling-track versions are ordinary: `feat:` bumps minor, `fix:` bumps patch.
 three ways, because a grace whose expiry its beneficiary controls is a rule that was never
 written:
 
-1. **It defers, never excuses.** A suspended obligation becomes **Verification Debt**, and
-   the debt blocks `1.0.0`. Nothing is forgiven; it is rescheduled, in the open, where a
-   stranger can watch the list fail to shrink.
+1. **It defers, never excuses.** A suspended obligation is filed as an issue labelled
+   **`custody:deferred`**, and no such issue may be open when `1.0.0` is tagged. Nothing is
+   forgiven; it is rescheduled, in the open, where a stranger can read the list and watch it
+   fail to shrink.
+
+   **A deferred obligation is not Verification Debt**, in exactly the sense §5 already
+   distinguishes. Verification Debt (`debt:open`) is a derivation step the *programme* has
+   not checked; it is discharged by learning and outlives the charter by construction. A
+   deferred custody obligation is a *record-keeping* gap — a missing defence or session
+   citation on an authored file — and it dies at the charter. Both live in issues; only the
+   second blocks `1.0.0`.
 2. **It covers only the unrecordable.** If the machinery to discharge an obligation existed
    when the commit landed, the obligation was *skipped*, not impossible, and the grace does
    not reach it. The grace is for the scaffolding era's missing mechanisms, not for haste.
@@ -84,7 +92,8 @@ written:
 **Worked example.** The two `record:` commits that landed Mosaic's vocabulary carry agent
 co-authorship, and neither a session citation nor a defence — because neither mechanism
 existed. They are deferred, not excused: each owes a defence pass, and the co-authored ones
-a retroactive session citation, before the charter can be ratified.
+a retroactive session citation, before the charter can be ratified. Each is a
+`custody:deferred` issue until it is.
 
 ### Ratifying the charter — `1.0.0`
 
@@ -99,7 +108,7 @@ load-bearing. So the tag is **computed, not chosen**.
 |---|---|---|
 | 1 | **A closed Hard Core** | the Hard Core stated as a finite list, with the Negative Heuristic binding on it from that point. Closed, not complete: it may be *wrong*, but it may not be *pending*. |
 | 2 | **A thin Protective Belt** | at least one rung, carrying its falsifier in Noah's own words (§5). Not the whole belt — one rung worth testing. |
-| 3 | **Restatement-level grasp of every part** | the **competence floor** (§5), declared: an unaided, intuitive restatement of every aspect of the programme. **Rigour is not required here.** What is missing below is Verification Debt, scheduled through the Curriculum, which by construction outlives the charter. |
+| 3 | **Restatement-level grasp of every part** | the **competence floor** (§5), declared: an unaided, intuitive restatement of every aspect of the programme. **Rigour is not required here.** What is missing below is Verification Debt (`debt:open`), scheduled through the Curriculum, which by construction outlives the charter. Open debt does not block the charter; open `custody:deferred` does. |
 | 4 | **An operational repository** | a restore path demonstrated **by restoring**, not by existing; and the programme's routine tasks runnable without improvisation. Nothing wider than those two things. |
 | 5 | **A first experiment, designed and executable** | the experiment names the rung it tests, and the toolchain runs it end to end at least once, on trivial input if need be. Its **results are not required**. |
 | 6 | **A public work product** | not new: §5's warrant table puts a public, human-authored deliverable on every MAJOR, and ratification is `core:`. An essay stating the programme and the direction intended for it satisfies this. |
@@ -116,6 +125,13 @@ the programme as a whole: demand the artifact whose vagueness is visible on the 
 scaffolding gate; it is a research result, and it could be years or never. `1.0.0` claims the
 programme is *equipped*, not that it is *right*. Executing the experiment once proves the
 equipment. The answer belongs to the belt.
+
+Criteria 1, 2, 5 and 6 are artifacts a reader can find; 3 and 4 are Noah's to assert. The
+deferred set is mechanical:
+
+```console
+gh issue list --label custody:deferred --state open   →  empty
+```
 
 ---
 
@@ -218,6 +234,9 @@ each checked where it can be:
 | **Citation** | an agent co-author on an authored file carries a `Session:` trailer resolving in the Transcript Archive | CI, for presence and resolution |
 | **Defence** | a meaning-changing commit to an authored file carries a defence artifact — what changed, why, in Noah's own words | a checker agent, on the pull request, as the §5 gate below already works |
 
+An obligation the scaffolding era defers (§2) is not dropped — it is filed as a
+`custody:deferred` issue and blocks `1.0.0` until discharged.
+
 The de minimis exception (§6) carries over unchanged, and is what keeps the defence
 obligation affordable: a change that cannot alter meaning owes nothing further.
 
@@ -242,8 +261,9 @@ and so must be written by him, unassisted, which is the one place custody's stri
 belongs. An agent co-authoring a root assertion about Noah is circular.
 
 - Defence terminates **at the floor**, not at first principles.
-- Whatever a derivation needs from below the floor is **Verification Debt** — logged, and
-  discharged by learning through the Curriculum. It is not a custody failure.
+- Whatever a derivation needs from below the floor is **Verification Debt** — filed as a
+  `debt:open` issue, discharged by learning through the Curriculum. It is not a custody
+  failure, and it does not block the charter.
 - Until the floor is declared, the defence obligation is **undecidable rather than
   satisfied**. The deficiency reports itself instead of being papered over.
 
