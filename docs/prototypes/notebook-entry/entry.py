@@ -222,8 +222,21 @@ def reanchor(annotations: list[Annotation], notes: tuple[Note, ...]
 
     Annotations are not canonical, so a regenerated entry does not have to preserve
     them — but it must not lose them *silently*. An orphan is a note the regeneration
-    no longer produces, and the honest thing is to report it rather than drop it."""
-    ids = {n.id for n in notes} | {"@lede"}
+    no longer produces, and the honest thing is to report it rather than drop it.
+
+    **Membership is tested against the annotatable layer, not against every note.** Two
+    ways this set was wrong, both of which made an orphan report as applied:
+
+    - *Namespace* — spine and prose count ordinals separately, so both layers could mint
+      `2611689`. Unioning them meant membership stopped saying *the annotated line still
+      exists* and started saying *some line citing that commit still exists*. The
+      `ledger:` prefix on spine anchors closes it; testing `not n.spine` closes it
+      explicitly, rather than leaving the guarantee resting on a naming convention.
+    - *Admissibility* — an uncited line still gets a placeholder anchor, and `anchor()`
+      calls that harmless because `admissible()` drops the line before anything can
+      render it. True of rendering, and it was not true here: an annotation on a dropped
+      line reported applied while appearing on no page at all."""
+    ids = {n.id for n in notes if not n.spine and admissible(n)} | {"@lede"}
     applied = [a for a in annotations if a.anchor in ids]
     return applied, [a for a in annotations if a.anchor not in ids]
 

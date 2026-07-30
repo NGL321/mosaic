@@ -11,6 +11,7 @@
 - [activity] Apply review feedback to the debt snapshot generator (#34) [`203a234`](https://github.com/NGL321/mosaic/commit/203a234)
 - [activity] Make the custody check bite on what §5 actually says (#23) [`47ba7d0`](https://github.com/NGL321/mosaic/commit/47ba7d0)
 - [activity] Prototype notebook entry generation from a real session (#11) [`14f126b`](https://github.com/NGL321/mosaic/commit/14f126b)
+- [activity] Filed: Harden check_research_doc.py: two checks pass falsely, four misfire [#53](https://github.com/NGL321/mosaic/issues/53)
 - [activity] Filed: Land the #4 survey: discharge its debt, then merge it under the output contract [#51](https://github.com/NGL321/mosaic/issues/51)
 - [activity] Filed: Retrofit the existing research documents to the output contract [#50](https://github.com/NGL321/mosaic/issues/50)
 - [activity] Filed: Build `publish.sh`: the missing path from a run's output to Drive [#42](https://github.com/NGL321/mosaic/issues/42)

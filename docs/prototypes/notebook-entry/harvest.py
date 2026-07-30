@@ -97,7 +97,12 @@ def owning_day(segment: tuple[datetime, datetime]) -> str:
 class ScrubBlocked(Exception):
     """A candidate secret reached the public boundary. #3 §3.2 is a prohibition, so the
     entry is not emitted at all — the count surfaces here and generation stops. Counting
-    without blocking would publish the secret and note underneath that it had."""
+    without blocking would publish the secret and note underneath that it had.
+
+    Scope is the **file**, not the requested day: the scan runs before segmentation,
+    because a transcript is one artifact and a partial scrub is not a scrub. Every day
+    this file feeds is therefore blocked, and the message says so — a reader debugging
+    Wednesday needs to know Tuesday stopped too."""
 
 
 class NoSessionForDay(Exception):
@@ -129,7 +134,8 @@ def read_session(session_id: str, day: str | None = None) -> tuple[Session, dict
     if hits:
         raise ScrubBlocked(
             f"{len(hits)} candidate secret(s) in {path.name} at line(s) "
-            f"{', '.join(map(str, hits[:10]))} — no entry emitted for {day or 'this day'}"
+            f"{', '.join(map(str, hits[:10]))} — no entry emitted for any day this "
+            f"transcript feeds"
         )
 
     stamps = [datetime.fromisoformat(d["timestamp"].replace("Z", "+00:00"))
