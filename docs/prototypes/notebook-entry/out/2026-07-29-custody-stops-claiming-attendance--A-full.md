@@ -1,6 +1,5 @@
 <!-- GENERATED from the Transcript Archive and this repository's history.
-     Generated lines are plain; every > **Noah —** block is Noah's, written by hand.
-     Regenerate with: python tools/notebook_entry.py --date 2026-07-29 -->
+     Generated lines are plain; every > **Noah —** block is Noah's, written by hand. -->
 
 # 2026-07-29 — custody stops claiming attendance, and 1.0.0 becomes computed
 
@@ -25,18 +24,23 @@
 - Three commits that landed the vocabulary owe a defence pass on `CONTEXT.md` — filed as deferred custody obligations, which block `1.0.0` and are not Verification Debt [#37](https://github.com/NGL321/mosaic/issues/37) · [#38](https://github.com/NGL321/mosaic/issues/38) · [#39](https://github.com/NGL321/mosaic/issues/39) `⟦T3⟧`
 
 <details>
-<summary>Ledger — 16 line(s) the history already carries</summary>
+<summary>Ledger — 21 line(s) the history already carries</summary>
 
 | | | |
 |---|---|---|
 | landed | Reconcile the individuation findings with #19, #20 and #21 | [`8a81a73`](https://github.com/NGL321/mosaic/commit/8a81a73) |
-| landed | Apply pr #25 review feedback | [`c4ca66b`](https://github.com/NGL321/mosaic/commit/c4ca66b) |
+| landed | Apply PR #25 review feedback | [`c4ca66b`](https://github.com/NGL321/mosaic/commit/c4ca66b) |
 | landed | Prototype the record's physical form for #5 | [`83fa2be`](https://github.com/NGL321/mosaic/commit/83fa2be) |
 | landed | Establish the cost and quota basis for automating async agent work | [`82ab062`](https://github.com/NGL321/mosaic/commit/82ab062) |
 | landed | Scaffold the record's directory tree and the debt snapshot (#5) | [`2626c45`](https://github.com/NGL321/mosaic/commit/2626c45) |
 | landed | Decide what custody claims, and mechanise what can be checked (#23) | [`2611689`](https://github.com/NGL321/mosaic/commit/2611689) |
 | landed | Write down the storage discipline the record already cites (#35) | [`0449c40`](https://github.com/NGL321/mosaic/commit/0449c40) |
 | landed | Prototype the research-output document contract for #26 | [`ca006bf`](https://github.com/NGL321/mosaic/commit/ca006bf) |
+| debt | Filed: [debt] Tang et al. (2026) correlations are quoted, not recomputed | [#49](https://github.com/NGL321/mosaic/issues/49) |
+| debt | Filed: [debt] Žunkovič & Ilievski (2024) critical exponents are taken on the paper's authority | [#48](https://github.com/NGL321/mosaic/issues/48) |
+| debt | Filed: [debt] Damrich et al. (2024) failure thresholds are read off figures, not reproduced | [#47](https://github.com/NGL321/mosaic/issues/47) |
+| debt | Filed: [debt] Hiraoka et al. (2026) HDLSS asymptotics were read at theorem-statement depth | [#46](https://github.com/NGL321/mosaic/issues/46) |
+| debt | Filed: [debt] Culík & Yu (1988) undecidability proof has not been read | [#45](https://github.com/NGL321/mosaic/issues/45) |
 | debt | Filed: [custody] 1889b61 owes a defence pass on CONTEXT.md | [#39](https://github.com/NGL321/mosaic/issues/39) |
 | debt | Filed: [custody] 2ec5194 owes a defence pass on CONTEXT.md | [#38](https://github.com/NGL321/mosaic/issues/38) |
 | debt | Filed: [custody] 7f501d1 owes a defence pass on CONTEXT.md | [#37](https://github.com/NGL321/mosaic/issues/37) |
@@ -54,6 +58,6 @@ Cited by content hash; the Transcript Archive is private and the `Index` manifes
 
 | session | window | segment | size | branch |
 |---|---|---|---|---|
-| `sha256:6c69d0f604dd…` | 2026-07-29T16:16 → 2026-07-29T20:35 | 2 of 2 segment(s) | 8 prompts / 505 events | `tooling/custody-and-charter-gate` |
+| `sha256:6c69d0f604dd…` | 2026-07-29T16:16 → 2026-07-29T20:35 | segment(s) 1,2 of 2 | 8 prompts / 505 events | `tooling/custody-and-charter-gate` |
 
 <sub>`⟦T1⟧` derived unaided · `⟦T3⟧` machine-produced, unverified · debt: `#40`</sub>

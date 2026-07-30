@@ -10,8 +10,9 @@ python docs/prototypes/notebook-entry/prototype_tui.py
 
 ## The question
 
-`notebook/README.md` deliberately holds no format, because writing one before the mechanism
-existed would be the revision that directory was created to avoid. So this prototype
+`notebook/README.md` held no format when this was built, because writing one before the
+mechanism existed would be the revision that directory was created to avoid. So this
+prototype
 generates **one real entry from one real session** — Transcript Archive session
 `f0900d60…`, the night §5 custody was decided (2026-07-29T23:16Z → 2026-07-30T03:35Z,
 505 events, 8 prompts) — and renders it four ways, so the format is chosen by reacting to
@@ -29,7 +30,7 @@ annotation layer can be seen rendered without anyone inventing words for him.
 | Trigger | Fires on | Kind of line it produces |
 |---|---|---|
 | **merge** | a merge commit reaching `main` | what landed, at the commit type's bump level |
-| **task** | an agent PR closing or merging | what a task concluded |
+| **task** | a pull request closing **without** merging | a direction abandoned |
 | **milestone** | `debt:discharged`, a tier promotion, a charter criterion met | Curriculum movement |
 
 **A session ending is not a trigger.** The ticket lists working sessions as a source, and
@@ -38,8 +39,10 @@ branches, it abandons things, it stops for dinner. If sessions triggered entries
 notebook's volume would track how often Noah opens a terminal, which is precisely the
 machine-exhaust failure. Sessions are **cited**, never announced.
 
-The unit is **the day**, not the session or the commit: one file, appended to as the day's
-triggers fire, dated for the entry rather than for what it describes.
+The unit is **the day**, not the session or the commit: one file per day, **regenerated in
+full** on each trigger. Not appended to — rule 3 below orders reversals ahead of wins across
+the whole entry, which an append cannot express without moving lines that may already be
+annotated.
 
 ### Volume — four mechanisms, because one is not enough
 
@@ -71,7 +74,8 @@ budgeted. Watching that column stay at 935 while the others move is the argument
 
 ### Generated versus annotated
 
-Annotations are a **separate layer keyed to a note id** — never edits to generated text.
+Annotations are a **separate layer keyed to a line's anchor** — its primary citation plus
+an ordinal, never its position, and never edits to generated text.
 That is what makes the distinction mechanical rather than a habit, and it is the one
 structural claim here worth keeping whichever rendering wins.
 
@@ -97,10 +101,14 @@ table with the window, size and branch — per [#3](https://github.com/NGL321/mo
 §2, with the `Index` manifest resolving hash → Drive path. No public URL, nothing about the
 archive's shape, and reorganising the archive never breaks the reference.
 
-`harvest.py` reads the transcript's **text** for exactly one purpose: counting anything that
-looks like a secret, at the boundary where public output is generated (#3 §3.2). The count is
-printed on screen and in the entry when non-zero. It is 0 for this session. Not a
-convention — a scrub pass with a number attached.
+`harvest.py` reads the transcript's **content** for exactly one purpose — scanning for
+anything that looks like a secret at the boundary where public output is generated — and its
+*structure* for windows, segments and the hash.
+
+The scrub **fails closed**: a candidate secret raises `ScrubBlocked` and no entry is
+produced. #3 §3.2 is a prohibition, not a reporting requirement, and counting without
+blocking would publish the secret and note underneath that it had. Nothing is on the page,
+because an entry that would carry a count is an entry that was never emitted.
 
 ### Provenance Tiers in an entry
 
@@ -149,13 +157,22 @@ Two things are worth doing deliberately:
 
 ## Settled — Noah, 2026-07-30, after driving this
 
+> The settled format lives in [`../../../notebook/README.md`](../../../notebook/README.md),
+> which is the record. This section is why it says what it says. Two of the rulings below
+> were revised in review after they were made — the day-ownership *justification* in (2),
+> and the tier reading corrected above — and this file carries the revised versions, not
+> the versions as first written.
+
 1. **Nothing in the notebook promotes a Provenance Tier.** Annotating a line does not lift
    it: the annotation is a T1 claim sitting beside a T3 one, and the T3 line stays T3.
    Promotion requires Noah restating the thing himself, which is the gate the tiers exist to
    impose — most generated content lives at T3 until it is bumped, and T1 is his thinking.
    *So the notebook reports tiers and never issues them.*
 2. **A session ends after an hour without work, and belongs to the day it ended.** Only one
-   day can own it, and the end is the side that is actually defined.
+   day can own it, and the end is the side the *generator* is standing on: an entry is
+   written when the segment closes, so the owning day is the day whose entry is being
+   generated at that moment. Dating by the start would reopen — and regenerate — a day
+   already annotated and already read, every time a session crossed midnight.
 3. **The narrative pass runs on Google Apps Script**, not the Pi 5 — source in this repo,
    execution on Google's infrastructure with direct Drive access, so failure requires Google
    failing. The Pi is data-sovereignty backup and moves house.

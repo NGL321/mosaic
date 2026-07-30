@@ -30,7 +30,7 @@ from entry import (  # noqa: E402
     select,
     should_emit,
 )
-from harvest import load  # noqa: E402
+from harvest import NoSessionForDay, ScrubBlocked, load  # noqa: E402
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
@@ -56,7 +56,7 @@ def readline(prompt: str) -> str:
 
 class App:
     def __init__(self) -> None:
-        self.entry = load(SESSION)
+        self.entry = load(SESSION)  # raises rather than emitting; see run_guarded()
         self.samples = [
             Annotation(a["anchor"], a["text"])
             for a in json.loads(
@@ -94,7 +94,7 @@ class App:
         print(f"{B}PROTOTYPE #11 — one real entry, four renderings{R}"
               f"   {D}{self.entry.path}{R}")
         print(f"{D}session{R} sha256:{s.short}…  {D}{s.prompts} prompts / {s.events} events, "
-              f"skill={s.skill or '—'}, scrubbed={s.scrubbed}{R}")
+              f"skill={s.skill or '—'}, {s.segment}, scrub passed{R}")
         print("─" * min(cols, 110))
 
         chosen = f" {G}◀ chosen{R}" if self.variant_name == CHOSEN else ""
@@ -198,5 +198,19 @@ class App:
         print()
 
 
+def run_guarded() -> None:
+    """The fail-closed paths, made visible. Neither fires on this session — the scrub is
+    clean and the day owns both segments — but a prototype that documents blocking and
+    then swallows it would be the thing review objected to in the first place."""
+    try:
+        App().run()
+    except ScrubBlocked as exc:
+        print(f"[31mBLOCKED — no entry emitted.[0m {exc}")
+        sys.exit(2)
+    except NoSessionForDay as exc:
+        print(f"[33mNo session for that day.[0m {exc}")
+        sys.exit(3)
+
+
 if __name__ == "__main__":
-    App().run()
+    run_guarded()

@@ -6,11 +6,13 @@
 - [activity] Add the pre-charter grace, and make 1.0.0 computed rather than chosen (#23) [`2d5b974`](https://github.com/NGL321/mosaic/commit/2d5b974)
 - [activity] Draft the charter gate — the first experiment ends scaffolding (#23) [`703b21d`](https://github.com/NGL321/mosaic/commit/703b21d)
 - [activity] Settle the two open readings in the charter-gate draft (#23) [`f3746a7`](https://github.com/NGL321/mosaic/commit/f3746a7)
-- [activity] Point the deferred set at github issues, and split it from verification debt (#23) [`53e0e32`](https://github.com/NGL321/mosaic/commit/53e0e32)
+- [activity] Point the deferred set at GitHub issues, and split it from Verification Debt (#23) [`53e0e32`](https://github.com/NGL321/mosaic/commit/53e0e32)
 - [activity] Align debt discharge with the mechanism #5 settled (#23) [`5ff0ee9`](https://github.com/NGL321/mosaic/commit/5ff0ee9)
 - [activity] Apply review feedback to the debt snapshot generator (#34) [`203a234`](https://github.com/NGL321/mosaic/commit/203a234)
 - [activity] Make the custody check bite on what §5 actually says (#23) [`47ba7d0`](https://github.com/NGL321/mosaic/commit/47ba7d0)
 - [activity] Prototype notebook entry generation from a real session (#11) [`14f126b`](https://github.com/NGL321/mosaic/commit/14f126b)
+- [activity] Filed: Land the #4 survey: discharge its debt, then merge it under the output contract [#51](https://github.com/NGL321/mosaic/issues/51)
+- [activity] Filed: Retrofit the existing research documents to the output contract [#50](https://github.com/NGL321/mosaic/issues/50)
 - [activity] Filed: Build `publish.sh`: the missing path from a run's output to Drive [#42](https://github.com/NGL321/mosaic/issues/42)
 - [activity] Filed: Declare the competence floor [#40](https://github.com/NGL321/mosaic/issues/40)
 - [activity] Filed: Recover the missing SYSTEM-BRIEF.md storage protocol [#35](https://github.com/NGL321/mosaic/issues/35)
@@ -28,6 +30,11 @@
 - [activity] A throwaway prototype of the custody predicate was built and driven case by case before any protocol text was written [`53fac57`](https://github.com/NGL321/mosaic/commit/53fac57)
 - [deadend] The three readings the ticket set up — typed, attended, endorsed — were driven against 15 cases and all three failed: A convicts legitimate assisted work, B is fooled by an attendance claim it cannot check, C declines to rule at all. The trichotomy dissolved rather than resolved, and a fourth reading was drafted after the failure, not before [`6680d66`](https://github.com/NGL321/mosaic/commit/6680d66) · [#23](https://github.com/NGL321/mosaic/issues/23)
 - [deadend] The first CI draft of the §5 check convicted commits that were correctly cited, because the checker and the protocol disagreed about the trailer key. The trailer's spelling is now pinned in the protocol text itself [`47ba7d0`](https://github.com/NGL321/mosaic/commit/47ba7d0)
+- [debt] Filed: [debt] Tang et al. (2026) correlations are quoted, not recomputed [#49](https://github.com/NGL321/mosaic/issues/49)
+- [debt] Filed: [debt] Žunkovič & Ilievski (2024) critical exponents are taken on the paper's authority [#48](https://github.com/NGL321/mosaic/issues/48)
+- [debt] Filed: [debt] Damrich et al. (2024) failure thresholds are read off figures, not reproduced [#47](https://github.com/NGL321/mosaic/issues/47)
+- [debt] Filed: [debt] Hiraoka et al. (2026) HDLSS asymptotics were read at theorem-statement depth [#46](https://github.com/NGL321/mosaic/issues/46)
+- [debt] Filed: [debt] Culík & Yu (1988) undecidability proof has not been read [#45](https://github.com/NGL321/mosaic/issues/45)
 - [debt] Filed: [custody] 1889b61 owes a defence pass on CONTEXT.md [#39](https://github.com/NGL321/mosaic/issues/39)
 - [debt] Filed: [custody] 2ec5194 owes a defence pass on CONTEXT.md [#38](https://github.com/NGL321/mosaic/issues/38)
 - [debt] Filed: [custody] 7f501d1 owes a defence pass on CONTEXT.md [#37](https://github.com/NGL321/mosaic/issues/37)
@@ -39,7 +46,7 @@
 - [debt] Until the competence floor is declared, the defence obligation returns undecidable rather than satisfied — the deficiency reports itself instead of being papered over [#40](https://github.com/NGL321/mosaic/issues/40)
 - [debt] Three commits that landed the vocabulary owe a defence pass on `CONTEXT.md` — filed as deferred custody obligations, which block `1.0.0` and are not Verification Debt [#37](https://github.com/NGL321/mosaic/issues/37) · [#38](https://github.com/NGL321/mosaic/issues/38) · [#39](https://github.com/NGL321/mosaic/issues/39)
 - [landed] Reconcile the individuation findings with #19, #20 and #21 [`8a81a73`](https://github.com/NGL321/mosaic/commit/8a81a73)
-- [landed] Apply pr #25 review feedback [`c4ca66b`](https://github.com/NGL321/mosaic/commit/c4ca66b)
+- [landed] Apply PR #25 review feedback [`c4ca66b`](https://github.com/NGL321/mosaic/commit/c4ca66b)
 - [landed] Prototype the record's physical form for #5 [`83fa2be`](https://github.com/NGL321/mosaic/commit/83fa2be)
 - [landed] Establish the cost and quota basis for automating async agent work [`82ab062`](https://github.com/NGL321/mosaic/commit/82ab062)
 - [landed] Scaffold the record's directory tree and the debt snapshot (#5) [`2626c45`](https://github.com/NGL321/mosaic/commit/2626c45)
@@ -59,4 +66,4 @@ Cited by content hash; the Transcript Archive is private and the `Index` manifes
 
 | session | window | segment | size | branch |
 |---|---|---|---|---|
-| `sha256:6c69d0f604dd…` | 2026-07-29T16:16 → 2026-07-29T20:35 | 2 of 2 segment(s) | 8 prompts / 505 events | `tooling/custody-and-charter-gate` |
+| `sha256:6c69d0f604dd…` | 2026-07-29T16:16 → 2026-07-29T20:35 | segment(s) 1,2 of 2 | 8 prompts / 505 events | `tooling/custody-and-charter-gate` |

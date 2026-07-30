@@ -16,7 +16,10 @@ sources; `prototype_tui.py` drives it. Nothing flows back into here.
    the thing himself, which is the gate the tiers exist to impose. Most generated content
    lives at T3 until it is bumped, and T1 is his own thinking.
 2. **A session ends after an hour without work, and belongs to the day it ended.** Only
-   one day can own it, and end is the side that is actually defined.
+   one day can own it, and the end is the side the *generator* is standing on: the entry
+   being written when the segment closes is that day's. (The first draft justified this
+   by claiming the end is "the side that is actually defined", which review correctly
+   rejected — the idle rule cuts both edges with the same threshold.)
 3. **Annotations are not canonical.** Anything worth making canon earns its own entry and
    its own work — a promotion for the idea, not a louder annotation. `reanchor()` is what
    that buys: regeneration is permitted, orphans are reported rather than dropped.
@@ -33,8 +36,9 @@ Three things are load-bearing and are the bits worth lifting out if the design h
    Mechanically restated history (`Note.spine`) never competes for that budget, and
    nothing over budget is dropped silently — it collapses into a table that is cheap
    to skip and still auditable.
-3. Annotations are a separate layer keyed to a note id, never edits to generated
-   text. That is what makes the visual distinction mechanical rather than a habit.
+3. Annotations are a separate layer keyed to a line's **anchor** — its primary
+   citation, never its position — and never edits to generated text. That is what makes
+   the visual distinction mechanical rather than a habit.
 """
 
 from __future__ import annotations
@@ -98,6 +102,23 @@ class Cite:
         return f"[{label}]({self.url})" if self.url else label
 
 
+def anchor(cites: "tuple[Cite, ...]", used: dict[str, int]) -> str:
+    """Derive a line's anchor from its primary citation, with an ordinal for collisions.
+
+    Stable under both of the things that move a line: rewording by the narrative pass,
+    and reordering by `select()`. `used` carries the counts across one generation pass;
+    the caller owns it, so this stays pure.
+
+    An uncited line gets a positional placeholder, which is harmless because
+    `admissible()` drops it before it can be rendered or annotated."""
+    if not cites:
+        n = used["uncited"] = used.get("uncited", 0) + 1
+        return f"uncited#{n}"
+    base = cites[0].ref
+    n = used[base] = used.get(base, 0) + 1
+    return base if n == 1 else f"{base}#{n}"
+
+
 @dataclass(frozen=True)
 class Note:
     """One generated line. `tier` is the Provenance Tier of the *line*, not of the
@@ -109,6 +130,12 @@ class Note:
     rides `spine`, not the tier ladder."""
 
     id: str
+    """The line's **anchor**: its primary citation plus an ordinal when one artifact
+    yields several lines — `a598221`, `a598221#2`, `#40`. Never positional. An index
+    survives neither `select()`'s reordering nor a regeneration that adds an earlier
+    commit, and the failure is silent: the index still resolves, so an annotation is
+    re-attached to a different claim rather than orphaned. See `anchor()`."""
+
     kind: Kind
     text: str
     cites: tuple[Cite, ...] = ()
@@ -143,7 +170,6 @@ class Session:
     prompts: int
     branch: str
     skill: str = ""
-    scrubbed: int = 0  # candidate secrets removed at the public boundary (#3 §3.2)
     segment: str = ""  # e.g. "1 of 4" — which segments of the file this day owns
 
     @property
@@ -162,7 +188,8 @@ class Trigger:
 
 @dataclass(frozen=True)
 class Annotation:
-    """Noah's layer. Keyed to a note id, or `@lede` for the entry as a whole. Never an
+    """Noah's layer. Keyed to a line's **anchor**, or `@lede` for the entry as a whole,
+    and never an
     edit to generated text — the separation is what makes the rendering distinction real.
 
     **Not canonical.** An annotation is commentary for the record; anything Noah wants
@@ -280,9 +307,17 @@ def should_emit(entry: Entry, sel: Selection) -> tuple[bool, str]:
 
 HEADER = (
     "<!-- GENERATED from the Transcript Archive and this repository's history.\n"
-    "     Generated lines are plain; every {marker} block is Noah's, written by hand.\n"
-    "     Regenerate with: python tools/notebook_entry.py --date {date} -->"
+    "     Generated lines are plain; every {marker} block is Noah's, written by hand. -->"
 )
+"""Kept for A and C **only**, and deliberately: those two are preserved exactly as they
+were driven, and the banner is part of what was compared. The chosen rendering does not
+emit it — a page whose thesis is that the top level is Noah's cannot open with a machine's
+front matter, which `notebook/README.md` now states as a decision.
+
+The banner also no longer names a regeneration command. It named `tools/notebook_entry.py`,
+which does not exist and never will: the generator is unbuilt and destined for Apps Script,
+so a committed artifact telling a reader to run it was a broken promise in a record whose
+value is that its references resolve."""
 
 
 def _cites(note: Note) -> str:
@@ -298,15 +333,17 @@ def _sessions_block(entry: Entry) -> str:
         f"{s.prompts} prompts / {s.events} events | `{s.branch}` |"
         for s in entry.sessions
     )
-    scrubbed = sum(s.scrubbed for s in entry.sessions)
-    note = f"\n\n{scrubbed} candidate secret(s) scrubbed at the public boundary." if scrubbed else ""
+    # No scrub count on the page, deliberately: an entry whose transcript held a
+    # candidate secret is never emitted at all (`harvest.ScrubBlocked`), so a count here
+    # could only ever read zero — and a number that can only read zero is decoration
+    # impersonating a control.
     return (
         "## Sessions\n\n"
         "Cited by content hash; the Transcript Archive is private and the `Index` "
         "manifest resolves hash → path. A session ends after an hour without work and "
         "belongs to the day it ended, so the window selects which part of the file this "
         "entry covers.\n\n"
-        "| session | window | segment | size | branch |\n|---|---|---|---|---|\n" + rows + note
+        "| session | window | segment | size | branch |\n|---|---|---|---|---|\n" + rows
     )
 
 
@@ -338,7 +375,7 @@ def _triggers(entry: Entry) -> str:
 
 def render_inline(entry: Entry, sel: Selection) -> str:
     """A — generated prose, annotations as blockquotes under the line they answer."""
-    out = [HEADER.format(marker="> **Noah —**", date=entry.date), "",
+    out = [HEADER.format(marker="> **Noah —**"), "",
            f"# {entry.date} — {entry.title}", "", _triggers(entry), ""]
     for a in entry.annotated("@lede"):
         out += [f"> **Noah —** {a.text}", ""]
@@ -354,8 +391,7 @@ def render_annotation_first(entry: Entry, sel: Selection) -> str:
     """B — Noah's reading is the entry; the generated spine collapses beneath it.
     Aimed straight at the machine-exhaust failure: the human layer is what a reader
     meets first, and the generated record is one click away and skippable."""
-    out = [HEADER.format(marker="plain-prose", date=entry.date), "",
-           f"# {entry.date} — {entry.title}", ""]
+    out = [f"# {entry.date} — {entry.title}", ""]
     lede = entry.annotated("@lede")
     if lede:
         out += [a.text for a in lede] + [""]
@@ -377,7 +413,7 @@ def render_annotation_first(entry: Entry, sel: Selection) -> str:
 def render_ledger(entry: Entry, sel: Selection) -> str:
     """C — a table of what landed, annotations in their own section. Densest, and the
     one that reads most like a changelog, which `CONTEXT.md` explicitly avoids."""
-    out = [HEADER.format(marker="## Noah's notes", date=entry.date), "",
+    out = [HEADER.format(marker="## Noah's notes"), "",
            f"# {entry.date} — {entry.title}", "", _triggers(entry), "",
            "| | what | where | tier |", "|---|---|---|---|"]
     for n in sel.kept:

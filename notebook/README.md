@@ -148,10 +148,9 @@ the end is the side the generator is standing on: an entry is written when the s
 closes, so the owning day is the day whose entry is being generated at that moment. Dating
 by the start would mean reopening yesterday's entry — regenerating a day that is already
 annotated and already read — every time a session crossed midnight. One file therefore feeds
-more than one
-entry: a real transcript in the archive splits into four segments across two days, one of
-them straddling midnight. The hash alone would cite all of it, which is why the window is
-part of the citation and not decoration.
+more than one entry: a real transcript in the archive splits into four segments across two
+days, one of them straddling midnight. The hash alone would cite all of it, which is why the
+window is part of the citation and not decoration.
 
 Windows are printed in local time. A UTC window beneath a locally-dated heading contradicts
 itself on the page.

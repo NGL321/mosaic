@@ -1,7 +1,3 @@
-<!-- GENERATED from the Transcript Archive and this repository's history.
-     Generated lines are plain; every plain-prose block is Noah's, written by hand.
-     Regenerate with: python tools/notebook_entry.py --date 2026-07-29 -->
-
 # 2026-07-29 — custody stops claiming attendance, and 1.0.0 becomes computed
 
 The reframe was mine and it was the whole session: even typed runs into the same conflict, which is when I don't truly understand but am able to recite empty words. Attendance and typing are both proxies for a thing neither of them checks. What I owe before the charter is a minimal set of beliefs — the hard core, enough belt to start experimenting, and an intuitive restatement of every part. Not rigour.
@@ -27,7 +23,7 @@ The grace should extend to almost all the rules until 1.0, and 1.0 should really
 | | | |
 |---|---|---|
 | landed | Reconcile the individuation findings with #19, #20 and #21 | [`8a81a73`](https://github.com/NGL321/mosaic/commit/8a81a73) |
-| landed | Apply pr #25 review feedback | [`c4ca66b`](https://github.com/NGL321/mosaic/commit/c4ca66b) |
+| landed | Apply PR #25 review feedback | [`c4ca66b`](https://github.com/NGL321/mosaic/commit/c4ca66b) |
 | landed | Prototype the record's physical form for #5 | [`83fa2be`](https://github.com/NGL321/mosaic/commit/83fa2be) |
 | landed | Establish the cost and quota basis for automating async agent work | [`82ab062`](https://github.com/NGL321/mosaic/commit/82ab062) |
 | landed | Scaffold the record's directory tree and the debt snapshot (#5) | [`2626c45`](https://github.com/NGL321/mosaic/commit/2626c45) |
@@ -43,6 +39,6 @@ Cited by content hash; the Transcript Archive is private and the `Index` manifes
 
 | session | window | segment | size | branch |
 |---|---|---|---|---|
-| `sha256:6c69d0f604dd…` | 2026-07-29T16:16 → 2026-07-29T20:35 | 2 of 2 segment(s) | 8 prompts / 505 events | `tooling/custody-and-charter-gate` |
+| `sha256:6c69d0f604dd…` | 2026-07-29T16:16 → 2026-07-29T20:35 | segment(s) 1,2 of 2 | 8 prompts / 505 events | `tooling/custody-and-charter-gate` |
 
 <sub>`⟦T1⟧` derived unaided · `⟦T3⟧` machine-produced, unverified</sub>

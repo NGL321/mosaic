@@ -10,8 +10,10 @@ Reads, in order of trust:
    prototype degrades to git-only if `gh` is missing, and says so.
 3. **A real Transcript Archive session** — the Claude Code JSONL under
    `~/.claude/projects/`. Used for its *metadata and content hash only*: the entry
-   cites `sha256`, never quotes the transcript, and a scrub pass counts anything that
-   looks like a secret before any of it could reach a public file (#3 §3.2).
+   cites `sha256` and never quotes the transcript. A scrub pass runs before anything
+   could reach a public file and **fails closed**: a candidate secret raises
+   `ScrubBlocked` and no entry is produced (#3 §3.2 is a prohibition, not a reporting
+   requirement).
 4. **A narrative pass** — `pass-<session>.json`, the lines only a reader of the
    transcript can write: *why*, and *what was abandoned*. Emitted at `T3`
    (machine-produced, unverified) because that is exactly what they are until Noah
@@ -30,7 +32,7 @@ import subprocess
 from datetime import datetime, timedelta
 from pathlib import Path
 
-from entry import Cite, Entry, Kind, Note, Session, Trigger
+from entry import Cite, Entry, Kind, Note, Session, Trigger, anchor
 
 REPO = Path(__file__).resolve().parents[3]
 GH = "https://github.com/NGL321/mosaic"
@@ -68,6 +70,8 @@ cannot cite a day's work — the entry cites hash **plus segment window**."""
 
 
 def segments(stamps: list[datetime]) -> list[tuple[datetime, datetime]]:
+    if not stamps:
+        return []  # a truncated or in-progress transcript has no segments, not one empty one
     stamps = sorted(stamps)
     out = [[stamps[0], stamps[0]]]
     for t in stamps[1:]:
@@ -79,15 +83,33 @@ def segments(stamps: list[datetime]) -> list[tuple[datetime, datetime]]:
 
 
 def owning_day(segment: tuple[datetime, datetime]) -> str:
-    """The day a session belongs to is the local day it **ended** on. Only one day can
-    own it, and end is the side that is actually defined — start is ambiguous once the
-    idle rule is doing the splitting."""
+    """The day a session belongs to is the local day it **ended** on.
+
+    Only one day can own it, and the end is the side the generator is standing on: an
+    entry is written when the segment closes, so the owning day is the day whose entry is
+    being generated at that moment. Dating by the start would mean reopening — and
+    regenerating — a day already annotated and already read, every time a session crossed
+    midnight. (Not, as the first draft claimed, because the end is "the side that is
+    actually defined": the idle rule cuts both edges with the same threshold.)"""
     return segment[1].astimezone().date().isoformat()
+
+
+class ScrubBlocked(Exception):
+    """A candidate secret reached the public boundary. #3 §3.2 is a prohibition, so the
+    entry is not emitted at all — the count surfaces here and generation stops. Counting
+    without blocking would publish the secret and note underneath that it had."""
+
+
+class NoSessionForDay(Exception):
+    """This day owns none of the file's segments. The honest citation is none: quietly
+    substituting the file's last segment would publish a window the day does not own,
+    which is the exact over-citation the window exists to prevent."""
 
 
 def read_session(session_id: str, day: str | None = None) -> tuple[Session, dict]:
     """Session metadata plus the content hash the entry will cite. The transcript's
-    *text* is read only to count scrub hits — none of it is carried into the entry.
+    *content* is read only for the scrub; its *structure* — timestamps, branches, skills —
+    is what the metadata comes from. Neither is carried into the entry.
 
     `day` selects the segments the idle rule assigns to that day; everything counted
     below is counted **within those segments**, so a file feeding two days does not
@@ -97,19 +119,26 @@ def read_session(session_id: str, day: str | None = None) -> tuple[Session, dict
     digest = hashlib.sha256(raw).hexdigest()
 
     records = []
-    scrubbed = 0
-    for line in raw.decode("utf-8", "replace").splitlines():
+    hits: list[int] = []
+    for n, line in enumerate(raw.decode("utf-8", "replace").splitlines(), 1):
         if not line.strip():
             continue
         records.append(json.loads(line))
-        scrubbed += sum(bool(p.search(line)) for p in SECRET_PATTERNS)
+        if any(p.search(line) for p in SECRET_PATTERNS):
+            hits.append(n)
+    if hits:
+        raise ScrubBlocked(
+            f"{len(hits)} candidate secret(s) in {path.name} at line(s) "
+            f"{', '.join(map(str, hits[:10]))} — no entry emitted for {day or 'this day'}"
+        )
 
     stamps = [datetime.fromisoformat(d["timestamp"].replace("Z", "+00:00"))
               for d in records if d.get("timestamp")]
     segs = segments(stamps)
     mine = [s for s in segs if owning_day(s) == day] if day else segs
-    if not mine:  # the day owns none of this file's segments
-        mine = segs[-1:]
+    if not mine:
+        raise NoSessionForDay(f"{path.name} has no segment ending on {day}")
+    owned = [i + 1 for i, s in enumerate(segs) if s in mine]
     window = (mine[0][0], mine[-1][1])
 
     prompts = events = 0
@@ -140,8 +169,10 @@ def read_session(session_id: str, day: str | None = None) -> tuple[Session, dict
         started=window[0].astimezone().isoformat(), ended=window[1].astimezone().isoformat(),
         events=events, prompts=prompts,
         branch=sorted(branches)[-1] if branches else "?",
-        skill=", ".join(sorted(skills)), scrubbed=scrubbed,
-        segment=f"{len(mine)} of {len(segs)} segment(s)",
+        skill=", ".join(sorted(skills)),
+        # Which segments, not how many: "2 of 4" cannot distinguish a day owning
+        # segments 1 and 2 from one owning 1 and 4, and the window only bounds them.
+        segment=f"segment(s) {','.join(map(str, owned))} of {len(segs)}",
     )
     return session, {"prs": sorted(prs), "branches": sorted(branches),
                      "segments": segs, "owning_days": sorted({owning_day(s) for s in segs})}
@@ -154,7 +185,7 @@ TYPE_KIND = {"core:": Kind.LANDED, "belt:": Kind.LANDED, "evidence:": Kind.LANDE
              "chore:": Kind.ACTIVITY}
 
 
-def commit_notes(start: str, end: str) -> list[Note]:
+def commit_notes(start: str, end: str, used: dict[str, int]) -> list[Note]:
     """Commits in the window, as the entry sees them. Note what this *cannot* produce:
     a line about why anything happened. Everything here is a fact about an artifact,
     which is why it is cheap to verify and boring to read on its own."""
@@ -163,11 +194,12 @@ def commit_notes(start: str, end: str) -> list[Note]:
                f"--format={fmt}")
     notes: list[Note] = []
     seen: set[str] = set()
-    for i, line in enumerate(reversed([x for x in out.splitlines() if x.strip()])):
+    for line in reversed([x for x in out.splitlines() if x.strip()]):
         sha, _when, subject = line.split("\x1f")
         ctype = subject.split(" ")[0] if ":" in subject.split(" ")[0] else ""
         kind = TYPE_KIND.get(ctype, Kind.ACTIVITY)
         text = subject.split(": ", 1)[1] if ": " in subject else subject
+        text = text[:1].upper() + text[1:]  # not .capitalize(): it lowercases PR, CI, T3
         # `--all` is necessary — the day's work lives on branches, not on main — and it
         # returns the same subject several times over, once per branch it was replayed
         # onto. Deduplicating on the subject is the cheap fix; the first render without
@@ -176,14 +208,15 @@ def commit_notes(start: str, end: str) -> list[Note]:
         if key in seen:
             continue
         seen.add(key)
+        cites = (Cite("commit", sha, f"{GH}/commit/{sha}"),)
         notes.append(Note(
-            id=f"c{i}", kind=kind, text=text.rstrip(".").capitalize(), tier="T3",
-            spine=True, cites=(Cite("commit", sha, f"{GH}/commit/{sha}"),),
+            id=anchor(cites, used), kind=kind, text=text.rstrip("."), tier="T3",
+            spine=True, cites=cites,
         ))
     return notes
 
 
-def issue_notes(day: str) -> list[Note]:
+def issue_notes(day: str, used: dict[str, int]) -> list[Note]:
     """Issue and label transitions — the Curriculum-milestone and debt triggers. `gh`
     is optional here; without it the prototype runs on git alone and says so on screen."""
     data = _gh("issue", "list", "--state", "all", "--limit", "80", "--json",
@@ -199,11 +232,9 @@ def issue_notes(day: str) -> list[Note]:
         kind = Kind.DEBT if ("custody:deferred" in labels or "debt:open" in labels) else Kind.ACTIVITY
         if "debt:discharged" in labels:
             kind = Kind.MILESTONE
-        notes.append(Note(
-            id=f"i{it['number']}", kind=kind, tier="T3", spine=True,
-            text=f"Filed: {it['title']}",
-            cites=(Cite("issue", f"#{it['number']}", f"{GH}/issues/{it['number']}"),),
-        ))
+        cites = (Cite("issue", f"#{it['number']}", f"{GH}/issues/{it['number']}"),)
+        notes.append(Note(id=anchor(cites, used), kind=kind, tier="T3", spine=True,
+                          text=f"Filed: {it['title']}", cites=cites))
     return notes
 
 
@@ -230,15 +261,24 @@ def load(session_id: str) -> Entry:
     session, meta = read_session(session_id, day)
     start, end = f"{day}T00:00:00-07:00", f"{_next_day(day)}T04:00:00-07:00"
 
-    notes = commit_notes(start, end) + issue_notes(day)
+    # Two counters, one per layer. Annotations only ever attach to prose lines, so
+    # ordinals are counted *within* the annotatable layer: otherwise a ledger line
+    # citing the same commit would push a narrative line from `a598221` to `a598221#2`,
+    # and an anchor that moves when the ledger changes is the positional bug again in
+    # a different costume.
+    spine_used: dict[str, int] = {}
+    used: dict[str, int] = {}
+    notes = commit_notes(start, end, spine_used) + issue_notes(day, spine_used)
     seen = {n.text.lower() for n in notes}
     for raw in narrative["notes"]:
         if raw["text"].lower() in seen:
             continue
+        cites = tuple(Cite(c["kind"], c["ref"], _url(c)) for c in raw.get("cites", []))
+        # The pass file does not name anchors: they are derived, so that a reworded
+        # narrative line keeps its annotation and a recited one cannot steal it.
         notes.append(Note(
-            id=raw["id"], kind=Kind(raw["kind"]), text=raw["text"],
-            tier=raw.get("tier", "T3"), debt=raw.get("debt", ""),
-            cites=tuple(Cite(c["kind"], c["ref"], _url(c)) for c in raw.get("cites", [])),
+            id=anchor(cites, used), kind=Kind(raw["kind"]), text=raw["text"],
+            tier=raw.get("tier", "T3"), debt=raw.get("debt", ""), cites=cites,
         ))
 
     triggers = [Trigger("merge", s, s) for s in narrative.get("merge_triggers", [])]
