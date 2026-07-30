@@ -70,15 +70,15 @@ Plus the deferred obligations the prototype finds: **5 commits touching `CONTEXT
 owing a defence pass, and the two carrying agent co-authorship also owing a retroactive
 session citation.
 
-## Two places this draft goes past what was said
+## Two readings, confirmed by the researcher 2026-07-29
 
-1. **"Results are not required"** is a sharpening, not a quotation. The statement was that
-   the experiment is one you *are trying to conduct*, and the tools to conduct it exist. I
-   read that as designed-and-runnable, and made the smoke execution the proof of criterion 4
-   rather than requiring an outcome. If ratification should instead wait on a first result,
-   criterion 5 changes and the charter's date becomes unpredictable by design.
-2. **Criterion 4 is an interpretation.** "Seamless", "autonomous", and "no accidental
-   deletion without restore" do not mechanise as stated, so they are rendered as two
-   testable things: a restore demonstrated by performing one, and routine tasks runnable
-   without improvisation. That is narrower than the intent. Anything else meant by
-   *seamless* needs naming, or it will not survive into the check.
+Both began as the draft going past what was said. Both were confirmed as intended, so they
+are settled rather than open.
+
+1. **Results are not required.** The experiment must be designed and executable; a single
+   end-to-end run, on trivial input, is what proves criterion 4. Ratification does not wait
+   on an outcome — the charter claims the programme is *equipped*, not that it is *right*.
+2. **Criterion 4 means exactly two things.** A restore path demonstrated by performing a
+   restore, and the programme's routine tasks runnable without improvisation. Narrower than
+   "seamless and autonomous" as spoken, and deliberately so: what does not mechanise does
+   not survive into the check.
