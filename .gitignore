@@ -1,2 +1,6 @@
 # Agent worktrees — checkouts of this repo, never content
 .claude/worktrees/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
