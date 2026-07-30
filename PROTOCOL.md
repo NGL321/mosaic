@@ -89,11 +89,12 @@ written:
 3. **It never covers an agent deciding.** An agent identity committing an authored file is a
    violation in every era. No grace reaches §5's first sentence.
 
-**Worked example.** The two `record:` commits that landed Mosaic's vocabulary carry agent
-co-authorship, and neither a session citation nor a defence — because neither mechanism
-existed. They are deferred, not excused: each owes a defence pass, and the co-authored ones
-a retroactive session citation, before the charter can be ratified. Each is a
-`custody:deferred` issue until it is.
+**Worked example.** The `record:` commits that landed Mosaic's vocabulary carry agent
+co-authorship and a session trailer, but no defence — because the defence mechanism did not
+exist when they landed, while the trailer already did. So the grace reaches the defence and
+not the citation, which is bullet 2 doing its work: what the machinery could record, it
+recorded. Each owes a defence pass before the charter can be ratified, and each is a
+`custody:deferred` issue until it gets one (#37, #38, #39).
 
 ### Ratifying the charter — `1.0.0`
 
@@ -208,8 +209,11 @@ Two rules, stated together because each is hollow alone.
 
 ### Custody — whose hand
 
-- **Authored files** (`CONTEXT.md`, the charter): **human only.** Agents propose exact
-  replacement text in a ticket or pull request; the human applies it.
+- **Authored files** — `CONTEXT.md` and the charter, which lands at `CHARTER.md` in the
+  repository root: **human only.** Agents propose exact replacement text in a ticket or
+  pull request; the human applies it. The charter's path is named here, before it is
+  written, because the custody check keys on paths: a charter under any other name would
+  leave that check green and covering nothing.
 - **Record files** (research documents, notebook entries, ledger rows, experiment
   output): agent-writable.
 - **Gate artifacts are record, not belief.** A checker agent's critique of a falsifier
@@ -231,7 +235,7 @@ each checked where it can be:
 | | Obligation | Checked by |
 |---|---|---|
 | **Identity** | an authored file is committed under a human identity | CI, in one command, once agents commit under their own identity |
-| **Citation** | an agent co-author on an authored file carries a `Session:` trailer resolving in the Transcript Archive | CI, for presence and resolution |
+| **Citation** | an agent co-author on an authored file carries a `Session:` trailer resolving in the Transcript Archive | CI, **for presence only** — resolution is not checkable from a public runner against a private archive, and is unmechanised |
 | **Defence** | a meaning-changing commit to an authored file carries a defence artifact — what changed, why, in Noah's own words | a checker agent, on the pull request, as the §5 gate below already works |
 
 An obligation the scaffolding era defers (§2) is not dropped — it is filed as a
@@ -239,6 +243,25 @@ An obligation the scaffolding era defers (§2) is not dropped — it is filed as
 
 The de minimis exception (§6) carries over unchanged, and is what keeps the defence
 obligation affordable: a change that cannot alter meaning owes nothing further.
+
+**The session trailer's spelling is pinned here**, because a document and a checker that
+disagree about a key produce a check that convicts correctly cited commits — which is
+exactly what happened on the first draft of this section's CI.
+
+> The canonical key is **`Session:`**. A tool-specific prefix is equally valid — the
+> trailer `Claude-Session:` that Claude Code emits is what every agent-co-authored commit
+> in this repository actually carries. The check accepts `Session:` and any
+> `<Tool>-Session:`, and nothing else.
+
+**This file is not an authored file, and that is a decision, not an omission.** `PROTOCOL.md`
+is agent-writable, and this section was drafted by an agent — the rule about who may decide
+was worded by the party it constrains. That is tolerable only because the protocol is
+*procedure*, reviewable line by line against whether it works, and because every change to it
+lands through a pull request Noah merges. The vocabulary is not like that: a definition cannot
+be checked against anything outside the belief it encodes, which is why `CONTEXT.md` and the
+charter are human-only and this file is not. If that argument ever stops holding, the fix is
+to move `PROTOCOL.md` into the authored set and re-derive it under custody, not to leave the
+question unasked.
 
 **Why not simply forbid the trailer.** Because typing is not the claim worth making. Noah can
 type every character of a definition and still only be reciting it, and a rule that passes
