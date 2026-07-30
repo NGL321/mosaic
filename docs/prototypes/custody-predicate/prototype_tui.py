@@ -29,6 +29,7 @@ from custody import (  # noqa: E402
     Endorsement,
     FileClass,
     Identity,
+    SCAFFOLDING,
     Session,
     Verdict,
     may_ratify,
@@ -209,9 +210,12 @@ def render(cases, idx, c, history):
     print(f"{B}FLOOR{R} {floor}   {B}ERA{R} {era}")
 
     gate = may_ratify(cases)
-    print(f"{B}CHARTER GATE{R} may tag research-v1.0.0? "
-          f"{COLOUR[gate.verdict]}{'yes' if gate.verdict is Verdict.PASS else 'no'}{R}"
-          f" {D}— {gate.reason}{R}")
+    ticks = " ".join(
+        (f"\x1b[32m{k}✓{R}" if v else f"\x1b[31m{k}✗{R}") for k, v in SCAFFOLDING.items()
+    )
+    print(f"{B}CHARTER GATE{R} research-v1.0.0? "
+          f"{COLOUR[gate.verdict]}{'yes' if gate.verdict is Verdict.PASS else 'NO':<4}{R}{ticks}")
+    print(f"  {D}{gate.reason}{R}")
 
     print(f"\n{B}CHECKABLE BY A STRANGER{R}")
     for _, name, _ in POLICIES:
@@ -220,7 +224,7 @@ def render(cases, idx, c, history):
     print(f"\n{D}[n/p] case  [f] file  [c] type  [i] identity  [t] trailer  [s] session"
           f"  [x] citation  [d] defence  [m] de minimis  [e] endorsement{R}")
     print(f"{D}[1] attended  [2] defensible  [3] mechanism  [F] floor  [G] ratify charter"
-          f"  [r] reset  [q] quit{R}")
+          f"  [4] scaffolding criterion  [r] reset  [q] quit{R}")
 
 
 # --------------------------------------------------------------------- driver
@@ -290,6 +294,13 @@ def main() -> None:
             current = current.with_(truly_defensible=not current.truly_defensible)
         elif k == "3":
             current = current.with_(mechanism_available=not current.mechanism_available)
+        elif k == "4":
+            # tick the first unmet criterion, or clear them all once complete
+            unmet = [key for key, v in SCAFFOLDING.items() if not v]
+            if unmet:
+                SCAFFOLDING[unmet[0]] = True
+            else:
+                SCAFFOLDING.update({key: False for key in SCAFFOLDING})
 
 
 if __name__ == "__main__":

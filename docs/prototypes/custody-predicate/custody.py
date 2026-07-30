@@ -319,20 +319,41 @@ POLICIES = (
 )
 
 
+# What `0.x` owes, per the researcher, 2026-07-29. Ordered as stated, though only
+# the last is a forcing function — see may_ratify().
+SCAFFOLDING = {
+    "core": False,  # a closed Hard Core
+    "belt": False,  # a thin belt: at least one rung carrying a falsifier
+    "grasp": False,  # restatement-level comprehension of every part (the floor)
+    "ops": False,  # restore path demonstrated by restoring; routine tasks run
+    "experiment": False,  # a first experiment designed, and executable in-repo
+    "deliverable": False,  # §5 MAJOR: a public, human-authored work product
+}
+
+
 def may_ratify(commits) -> Ruling:
     """§2's `1.0.0` gate: the end of scaffolding, computed rather than declared.
 
     This is the forcing condition the grace needs. Without it, staying at `0.x`
     keeps every obligation suspended, so the programme acquires a standing
     incentive never to finish scaffolding — the grace's expiry being the one
-    thing its beneficiary controls."""
+    thing its beneficiary controls.
+
+    Note what `experiment` does to the other criteria: an experiment that cannot
+    be designed reports *which* of them is missing. A belt with no testable rung
+    and a toolchain that cannot carry a run both surface as "I cannot write the
+    experiment down" — the same instrument §5 already uses, where the falsifier
+    is demanded because vagueness in it is visible on the page."""
     if not FLOOR["declared"]:
         return Ruling(Verdict.VIOLATION, "the competence floor is the charter's zero point")
+    unmet = [k for k, v in SCAFFOLDING.items() if not v]
+    if unmet:
+        return Ruling(Verdict.VIOLATION, f"scaffolding incomplete: {', '.join(unmet)}")
     outstanding = [c for c in commits if pre_charter_grace(c).verdict is Verdict.DEFERRED]
     if outstanding:
         return Ruling(
             Verdict.VIOLATION,
-            f"{len(outstanding)} scaffolding obligation(s) outstanding — 0.x cannot end",
+            f"{len(outstanding)} deferred obligation(s) outstanding — 0.x cannot end",
         )
     return Ruling(Verdict.PASS, "scaffolding complete; the charter may be ratified")
 
