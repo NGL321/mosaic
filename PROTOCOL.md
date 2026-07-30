@@ -262,8 +262,9 @@ belongs. An agent co-authoring a root assertion about Noah is circular.
 
 - Defence terminates **at the floor**, not at first principles.
 - Whatever a derivation needs from below the floor is **Verification Debt** — filed as a
-  `debt:open` issue, discharged by learning through the Curriculum. It is not a custody
-  failure, and it does not block the charter.
+  `debt:open` issue and discharged the way #5 settled it: a document in `docs/research/`
+  plus the commit promoting the tier. It is not a custody failure, and it does not block the
+  charter.
 - Until the floor is declared, the defence obligation is **undecidable rather than
   satisfied**. The deficiency reports itself instead of being papered over.
 
