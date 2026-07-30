@@ -11,45 +11,96 @@ python docs/prototypes/custody-predicate/prototype_tui.py
 `PROTOCOL.md` §5 claims authored files (`CONTEXT.md`, the charter) are human-only, and
 offers one mechanical check: `git log --format='%an' -- CONTEXT.md → one name`. The command
 does not work today, and [#24](https://github.com/NGL321/mosaic/issues/24) will make it
-*work* without deciding *what it should say*. Three readings are on the table, and they are
-**not nested** — each convicts commits the others acquit:
+*work* without deciding *what it should say*.
 
 | | Reading | Violation is… |
 |---|---|---|
 | **A** | the human **typed** it | an agent co-author trailer on an authored file |
 | **B** | the human **authored** it, agent as amanuensis | an *unattended* session committing an authored file |
-| **C** | the human **understood and endorsed** it | nothing, at the file level — custody collapses into warrant |
+| **C** | the human **understood and endorsed** it | nothing, at file level — custody collapses into warrant |
+| **D** | **amanuensis + warrant** | a hollow or untraceable edit, whoever's fingers moved |
 
-`custody.py` is the decision procedure for all three, as pure predicates over one commit.
-It is the bit worth keeping: whichever reading wins becomes the CI check, and the TUI is
-thrown away.
+D was drafted after driving A–C, on the observation that **A and B share a failure neither
+can see: the human can type every character and still only be reciting.** Typing and
+attendance are both proxies for a thing neither of them checks. So D keeps custody
+answering the only question custody *can* answer — whose hand — and hands *whose
+understanding* to warrant, at file scope rather than commit-type scope. Three obligations:
+
+1. **Identity** (kept from A) — an authored file is committed under a human identity. One
+   git command, adversarially meaningful, survives #24 without further machinery.
+2. **Citation** (kept from B) — an agent co-author on an authored file obliges a `Session:`
+   trailer resolving in the Transcript Archive. The trailer stops being a verdict and
+   becomes a *routing signal*: it triggers obligations instead of convicting the commit.
+   This is the amanuensis capability, made traceable rather than forbidden.
+3. **Defence** (borrowed from C, rescoped) — a meaning-changing commit to an authored file
+   obliges a defence artifact, agent trailer or not. §6's de minimis exception carries over
+   unchanged, which is what keeps the obligation affordable.
+
+## The competence floor
+
+"Defend" is unbounded until the repository says where defence bottoms out — the baseline
+assertion. Without one, D returns **UNDECIDABLE** rather than PASS: the deficiency reports
+itself instead of being papered over. Press `[F]` to watch every authored-file verdict
+change on that one declaration.
+
+Two things fall out of taking the floor seriously:
+
+- **Verification Debt has always presupposed it.** "A logged step Noah cannot yet defend
+  unaided" is measured against a floor the vocabulary never states. Declaring it gives the
+  ledger its zero point, and makes below-the-floor dependencies *debt* rather than a
+  custody failure.
+- **The floor is the one thing that must be typed unaided.** It is a root assertion about
+  Noah, so an agent cannot co-author it without circularity — which is exactly where
+  reading A's strictness belongs, and the only place it belongs.
 
 ## How to drive it
 
 `[n]`/`[p]` walk the case library — first this repository's **real** `CONTEXT.md` history
-(loaded from `git log` at startup, read-only), then synthetic hard cases. The toggles mutate
-whichever case is on screen, so any case can be pushed into any corner; `[r]` restores it.
+(read out of `git log --all` at startup; the vocabulary commits are still on
+`grilling/research-vocabulary`), then synthetic hard cases. The toggles mutate whichever
+case is on screen; `[r]` restores it.
 
-Watch for the disagreements. The ones that matter:
+Two cases are the whole argument, and they sit next to each other:
 
-- **The two `record:` commits that landed the vocabulary.** A convicts them, B cannot rule
-  on them at all, C never looks. This is the ticket's uncomfortable consequence, on screen.
-- **Human types the vocabulary unaided but cannot defend a word of it.** A passes it, C
-  convicts it. The readings are not a strictness ordering.
-- **Agent writes a research document.** All three acquit — custody follows the file, never
-  the topic (§5), and this is the case that keeps that rule visible.
+- **THE ONE TO PROTECT** — a convoluted idea made concrete with an agent, monitored, cited,
+  and defended. A convicts it. B and D pass it.
+- **THE ONE TO CATCH** — the human typed every character and can only recite it. A passes
+  it. D convicts it. B never looks.
 
-## Two verdicts beyond pass/fail, which turned out to be the point
+Then `[t]` on that second case: adding an agent trailer makes A convict it, for a reason
+that has nothing to do with why it is bad.
 
-`UNDECIDABLE` means the policy needs a fact git does not carry. `VACUOUS` means the policy
-applies and demands nothing. Both are failures of the thing §5 exists to provide — an
-unverifiable authorship claim is what a sceptical reader discounts — so the frame's last
-block asks the question directly: **can a stranger check this with one command?** A can.
-B needs an attendance trailer that does not exist. C's artifact lives on a PR thread,
-outside the history.
+## The ground-truth column
+
+`truly_attended` and `truly_defensible` are what actually happened; **no checker can read
+them.** They exist so each verdict can be scored against reality, in the right-hand column:
+
+- **FOOLED** — passed something illegitimate. A gate satisfiable by ceremony, which §5
+  already argues is worse than no gate.
+- **OVERSTRICT** — convicted legitimate work. The cost of A, and the reason the amanuensis
+  capability needs protecting.
+- **SILENT** — declined to rule. No protection either way.
+
+The sharpest case here is *the ceremony test*: `attended` asserted by the one party whose
+attendance is at issue. B is FOOLED by it, because B's evidence is a claim the human makes
+about himself. A's evidence is generated by the agent's own tooling as a side effect, which
+is why A is credible despite being wrong — and what D has to reproduce.
+
+## Two things to settle before this leaves the prototype
+
+1. **Is attendance load-bearing on its own, or only a proxy?** `legitimate` currently means
+   `truly_attended and truly_defensible`. Toggle `[1]` on a defended case and D reads
+   FOOLED — because a human who reads, understands, defends, and commits text an unattended
+   agent drafted earlier is *unattended* by this definition, and §5's warrant table already
+   calls verbatim transcription fine at `record:` level. If attendance is only a proxy,
+   drop the first conjunct and D becomes sound across the library. **If it is not, D needs a
+   fourth obligation, and B's ceremony problem comes back with it.**
+2. **What happens to the two existing vocabulary commits?** Under A they are a permanent
+   VIOLATION, unfixable without rewriting history the programme forbids rewriting. Under D
+   they are UNDECIDABLE — an *obligation*, dischargeable by a one-time defence pass and a
+   retroactive session citation. Whether that is a virtue or a loophole is the call.
 
 ## Not in scope
 
 No persistence, no tests, no CI wiring. The prototype does not decide anything — it makes
-the three readings disagree out loud so the decision can be made against cases rather than
-against prose.
+the readings disagree out loud, so the decision is made against cases rather than prose.

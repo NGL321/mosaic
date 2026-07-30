@@ -4,7 +4,8 @@ PROTOTYPE (ticket #23) — throwaway TUI shell over custody.py.
 Run:  python docs/prototypes/custody-predicate/prototype_tui.py
 
 Flip through cases with [n]/[p], mutate the current case with the toggles at the
-bottom, and watch which of §5's three candidate readings convicts it. Real cases
+bottom, and watch which of §5's candidate readings convicts it — and, in the
+right-hand column, whether that verdict actually tracks what happened. Real cases
 are loaded from this repository's own CONTEXT.md history at startup (read-only);
 everything else is in memory and nothing is written anywhere.
 """
@@ -19,14 +20,17 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 from custody import (  # noqa: E402
+    FLOOR,
     POLICIES,
     STRANGER_CHECK,
     Commit,
+    Defence,
     Endorsement,
     FileClass,
     Identity,
     Session,
     Verdict,
+    soundness,
 )
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")  # § and ─ on Windows
@@ -38,17 +42,26 @@ COLOUR = {
     Verdict.UNDECIDABLE: "\x1b[33m",
     Verdict.VACUOUS: "\x1b[2m",
 }
+SCORE_COLOUR = {
+    "SOUND": "\x1b[32m",
+    "FOOLED": "\x1b[31;1m",
+    "OVERSTRICT": "\x1b[35m",
+    "SILENT": "\x1b[2m",
+}
 
 
 # ---------------------------------------------------------------- real history
 
 def real_cases() -> list[Commit]:
-    """Every commit that has ever touched CONTEXT.md, as the checker would see
-    it *today* — human name, agent trailer or not, no attendance signal."""
+    """Every commit that has touched CONTEXT.md, as a checker sees it today —
+    human name, agent trailer or not, no attendance signal, no defence on file.
+
+    `--all`, not `main`: the two record: commits that landed the vocabulary are
+    still on grilling/research-vocabulary, and they are the cases in question."""
     repo = Path(__file__).resolve().parents[3]
     fmt = "%h%x1f%s%x1f%(trailers:key=Co-Authored-By,valueonly,separator=%x2C)"
     out = subprocess.run(
-        ["git", "log", f"--format={fmt}", "--", "CONTEXT.md"],
+        ["git", "log", "--all", f"--format={fmt}", "--", "CONTEXT.md"],
         cwd=repo, capture_output=True, text=True, check=True,
     ).stdout
     cases = []
@@ -70,25 +83,52 @@ def real_cases() -> list[Commit]:
 SYNTHETIC = [
     Commit("the case everyone agrees is a breach: unattended agent edits the vocabulary",
            "record:", FileClass.AUTHORED, Identity.AGENT_BOT, True,
-           Session.UNATTENDED, Endorsement.ABSENT),
-    Commit("the two record: commits, replayed post-#24 as they actually happened",
+           Session.UNATTENDED, Endorsement.ABSENT, Defence.ABSENT,
+           truly_attended=False, truly_defensible=False),
+
+    Commit("THE ONE TO PROTECT: convoluted idea made concrete, monitored, cited, defended",
            "record:", FileClass.AUTHORED, Identity.HUMAN, True,
-           Session.ATTENDED, Endorsement.PRESENT),
-    Commit("§6 de minimis: human fixes a typo in CONTEXT.md, no agent involved",
+           Session.ATTENDED, Endorsement.PRESENT, Defence.DEFENDED,
+           session_cited=True),
+
+    Commit("THE ONE TO CATCH: human typed every character and can only recite it",
            "record:", FileClass.AUTHORED, Identity.HUMAN, False,
-           Session.ATTENDED, Endorsement.UNKNOWN),
-    Commit("human types the vocabulary unaided but could not defend a word of it",
+           Session.ATTENDED, Endorsement.UNKNOWN, Defence.RECITED,
+           truly_defensible=False),
+
+    Commit("same, but co-authored — identical hollowness, different trailer",
+           "record:", FileClass.AUTHORED, Identity.HUMAN, True,
+           Session.ATTENDED, Endorsement.UNKNOWN, Defence.RECITED,
+           session_cited=True, truly_defensible=False),
+
+    Commit("Extraction / Closure: landed with Verification Debt logged against them",
+           "record:", FileClass.AUTHORED, Identity.HUMAN, True,
+           Session.ATTENDED, Endorsement.UNKNOWN, Defence.UNKNOWN,
+           session_cited=True, truly_defensible=False),
+
+    Commit("the ceremony test: 'attended' asserted by the one party whose attendance is at issue",
+           "record:", FileClass.AUTHORED, Identity.HUMAN, True,
+           Session.ATTENDED, Endorsement.PRESENT, Defence.DEFENDED,
+           session_cited=True, truly_attended=False),
+
+    Commit("§6 de minimis: human fixes a misspelt name in CONTEXT.md",
            "record:", FileClass.AUTHORED, Identity.HUMAN, False,
-           Session.ATTENDED, Endorsement.ABSENT),
+           Session.ATTENDED, Endorsement.UNKNOWN, Defence.ABSENT,
+           de_minimis=True),
+
     Commit("agent writes a research document — custody follows the file, not the topic",
            "evidence:", FileClass.RECORD, Identity.AGENT_BOT, True,
-           Session.UNATTENDED, Endorsement.ABSENT),
+           Session.UNATTENDED, Endorsement.ABSENT, Defence.ABSENT),
+
     Commit("a belt rung with no falsifier drafted",
            "belt:", FileClass.RECORD, Identity.HUMAN, True,
-           Session.ATTENDED, Endorsement.ABSENT),
-    Commit("agent commits the charter from an attended session, under its own identity",
-           "core:", FileClass.AUTHORED, Identity.AGENT_BOT, True,
-           Session.ATTENDED, Endorsement.PRESENT),
+           Session.ATTENDED, Endorsement.ABSENT, Defence.ABSENT,
+           truly_defensible=False),
+
+    Commit("amanuensis edit with no Session: trailer — nothing to trace the influence to",
+           "record:", FileClass.AUTHORED, Identity.HUMAN, True,
+           Session.ATTENDED, Endorsement.PRESENT, Defence.DEFENDED,
+           session_cited=False),
 ]
 
 
@@ -99,6 +139,10 @@ def cycle(seq, current, step=1):
     return items[(items.index(current) + step) % len(items)]
 
 
+def clip(s, n):
+    return s if len(s) <= n else s[: n - 1] + "…"
+
+
 def tally(policy, cases):
     counts = {v: 0 for v in Verdict}
     for c in cases:
@@ -106,53 +150,65 @@ def tally(policy, cases):
     return counts
 
 
-def render(cases, idx, current, history):
+def render(cases, idx, c, history):
     os.system("")  # enable ANSI on Windows terminals
     print("\x1b[2J\x1b[H", end="")
-    c = current
     origin = f"real {c.sha}" if c.sha else "synthetic"
 
     print(f"{B}PROTOTYPE #23{R} {D}— what does §5 custody claim, and what checks it?{R}"
           f"{D}   case {idx + 1}/{len(cases)}{R}")
-    print(D + "─" * 92 + R)
-    print(f"{B}CASE{R}  {c.subject}  {D}[{origin}]{R}")
-    for label, value, note in (
+    print(D + "─" * 96 + R)
+    print(f"{B}CASE{R} {clip(c.subject, 78)} {D}[{origin}]{R}")
+
+    fields = [
         ("file class", c.file_class.value, "CONTEXT.md / the charter"
             if c.file_class is FileClass.AUTHORED else ""),
         ("commit type", c.ctype, ""),
-        ("author identity", c.identity.value,
-            "agent worktrees inherit NGL321 (pre-#24)"
+        ("identity", c.identity.value, "agent worktrees inherit NGL321 (pre-#24)"
             if c.identity is Identity.HUMAN_UNVERIFIED else ""),
         ("agent co-author", "present" if c.agent_co_author else "absent", ""),
-        ("session", c.session.value,
-            "git carries no attendance signal" if c.session is Session.UNKNOWN else ""),
-        ("endorsement", c.endorsement.value,
-            "lives on the PR, not the commit" if c.endorsement is Endorsement.UNKNOWN else ""),
-    ):
-        print(f"      {label:<17}{B}{value:<20}{R}{D}{note}{R}")
+        ("session", c.session.value, "no attendance signal in git"
+            if c.session is Session.UNKNOWN else ""),
+        ("session cited", "yes" if c.session_cited else "no", ""),
+        ("defence", c.defence.value, "recitation is invisible to CI"
+            if c.defence is Defence.RECITED else ""),
+        ("de minimis", "yes" if c.de_minimis else "no", ""),
+    ]
+    for label, value, note in fields:
+        print(f"     {label:<16}{B}{value:<18}{R}{D}{note}{R}")
 
-    print(f"\n{B}VERDICTS{R}")
+    verdict = "LEGITIMATE" if c.legitimate else "ILLEGITIMATE"
+    col = "\x1b[32m" if c.legitimate else "\x1b[31m"
+    print(f"     {D}ground truth     {R}attended {B}{'yes' if c.truly_attended else 'no':<4}{R}"
+          f" defensible {B}{'yes' if c.truly_defensible else 'no':<4}{R} → {col}{verdict}{R}"
+          f" {D}(unreadable by any checker){R}")
+
+    print(f"\n{B}VERDICTS{R}{D}{'vs ground truth':>88}{R}")
     for key, name, policy in POLICIES:
         r = policy(c)
-        col = COLOUR[r.verdict]
-        print(f"  {B}{key}{R} {name:<12}{col}{r.verdict.value:<14}{R}{D}{r.reason}{R}")
+        score, _ = soundness(policy, c)
+        print(f"  {B}{key}{R} {name:<14}{COLOUR[r.verdict]}{r.verdict.value:<13}{R}"
+              f"{D}{clip(r.reason, 55):<56}{R}{SCORE_COLOUR[score]}{score}{R}")
 
     print(f"\n{B}REAL HISTORY{R} {D}— every commit that has touched CONTEXT.md "
           f"({len(history)}){R}")
     for key, name, policy in POLICIES:
         counts = tally(policy, history)
-        line = "  ".join(
-            f"{COLOUR[v]}{counts[v]} {v.value.lower()}{R}"
-            for v in Verdict if counts[v]
-        )
-        print(f"  {B}{key}{R} {name:<12}{line}")
+        line = "  ".join(f"{COLOUR[v]}{counts[v]} {v.value.lower()}{R}"
+                         for v in Verdict if counts[v])
+        print(f"  {B}{key}{R} {name:<14}{line}")
 
-    print(f"\n{B}CHECKABLE BY A STRANGER IN ONE COMMAND{R}")
+    floor = (f"{B}declared{R}" if FLOOR["declared"]
+             else "\x1b[33mnot declared — D cannot rule until it is\x1b[0m")
+    print(f"\n{B}COMPETENCE FLOOR{R}  {floor}")
+
+    print(f"\n{B}CHECKABLE BY A STRANGER{R}")
     for _, name, _ in POLICIES:
-        print(f"  {name:<12}{D}{STRANGER_CHECK[name]}{R}")
+        print(f"  {name:<14}{D}{STRANGER_CHECK[name]}{R}")
 
-    print(f"\n{D}[n/p] case  [f] file  [c] type  [i] identity  [t] trailer  "
-          f"[s] session  [e] endorsement  [r] reset  [q] quit{R}")
+    print(f"\n{D}[n/p] case  [f] file  [c] type  [i] identity  [t] trailer  [s] session"
+          f"  [x] citation  [d] defence  [m] de minimis  [e] endorsement{R}")
+    print(f"{D}[1] attended  [2] defensible  [F] floor  [r] reset  [q] quit{R}")
 
 
 # --------------------------------------------------------------------- driver
@@ -160,14 +216,14 @@ def render(cases, idx, current, history):
 def getkey() -> str:
     if os.name == "nt":
         import msvcrt
-        return msvcrt.getwch().lower()
+        return msvcrt.getwch()
     import termios
     import tty
     fd = sys.stdin.fileno()
     old = termios.tcgetattr(fd)
     try:
         tty.setraw(fd)
-        return sys.stdin.read(1).lower()
+        return sys.stdin.read(1)
     finally:
         termios.tcsetattr(fd, termios.TCSADRAIN, old)
 
@@ -183,9 +239,13 @@ def main() -> None:
     while True:
         render(cases, idx, current, history)
         k = getkey()
-        if k == "q":
+        if k in "qQ":
             print()
             return
+        if k == "F":
+            FLOOR["declared"] = not FLOOR["declared"]
+            continue
+        k = k.lower()
         if k in "np":
             idx = (idx + (1 if k == "n" else -1)) % len(cases)
             current = cases[idx]
@@ -201,8 +261,18 @@ def main() -> None:
             current = current.with_(agent_co_author=not current.agent_co_author)
         elif k == "s":
             current = current.with_(session=cycle(Session, current.session))
+        elif k == "x":
+            current = current.with_(session_cited=not current.session_cited)
+        elif k == "d":
+            current = current.with_(defence=cycle(Defence, current.defence))
+        elif k == "m":
+            current = current.with_(de_minimis=not current.de_minimis)
         elif k == "e":
             current = current.with_(endorsement=cycle(Endorsement, current.endorsement))
+        elif k == "1":
+            current = current.with_(truly_attended=not current.truly_attended)
+        elif k == "2":
+            current = current.with_(truly_defensible=not current.truly_defensible)
 
 
 if __name__ == "__main__":
