@@ -323,6 +323,12 @@ All items **unfiled** — the `debt:open` tracker convention was settled by #5 f
 document was written, and these were never retro-filed. That is itself the finding
 [#5](https://github.com/NGL321/mosaic/issues/5) made: debt asserted in prose and logged nowhere.
 
+**The contract blocks this document on exactly that, and the block is correct.** R6 accepts no
+word in place of an issue number, so this rewrite fails CI until the five items below are filed
+as `debt:open` issues and their numbers appear here and in the front matter's `debt:` key. That
+is the one thing this prototype deliberately leaves undone, because filing them is a decision
+about whether the #4 survey lands at all — see `VERDICT.md`.
+
 1. **Culík & Yu (1988) undecidability proof — unfiled.** Read the *Complex Systems* original and follow the reduction. §2.3's second finding depends on it and it was reached only through a secondary record. Requires: computability theory to the level of reductions from the halting problem.
 2. **Hiraoka et al. (2026) HDLSS asymptotics — unfiled.** Follow the proof, and check that the regime it describes is the regime a Mosaic ECA study occupies. §3.2(c) makes that inference; the paper does not. Requires: high-dimensional probability, persistence-diagram stability.
 3. **Damrich et al. (2024) failure thresholds — unfiled.** The d ≳ 30 / σ = 0.25 numbers are read off the paper's figures as reported. Verify against the released code. Requires: only running the code, so this is the cheapest item here.

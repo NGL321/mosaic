@@ -22,7 +22,7 @@ python docs/prototypes/research-contract/prototype_tui.py
 
 Keys: `[g]rid` every rule against every document · `[d]<n>` one document in detail ·
 `[w]hy` the rationale for each rule · `[b]ite` which constraints discriminate ·
-`[1-9a-f]` toggle a rule off and watch which documents flip · `[r]eset` · `[q]uit`.
+`[1-9a-e]` toggle a rule off and watch which documents flip · `[r]eset` · `[q]uit`.
 
 The toggle is the point. A rule no document fails is describing the corpus rather than
 constraining it; a rule every document fails is either the finding or an overreach. Only

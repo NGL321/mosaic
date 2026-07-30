@@ -214,17 +214,27 @@ def _verdict_first(d: Doc) -> tuple[bool, str]:
 
 
 def _per_claim_verdicts(d: Doc) -> tuple[bool, str]:
-    """Every evidence section argues something, and says what."""
-    skip = ("verdict", "summary", "conclud", "appendix", "primary sources", "debt", "proposal",
-            "does not establish", "revision log")
-    ev = [s for s in d.top_sections if not any(k in s.slug for k in skip)]
-    if not ev:
-        return False, "no evidence sections"
-    bare = [s.title for s in ev if not s.verdicts]
+    """
+    Every sub-question carries a verdict from the closed set.
+
+    The first draft of this rule required a verdict token on every top-level *section*, and
+    the rewrite showed why that is wrong: a section is not always answering a yes/no
+    sub-question, so the rule produced headings like "Computational cost — **Refuted** as a
+    binding constraint", which is a verdict wrapped around a sub-clause to satisfy a
+    checker. The sub-question is the unit that has a verdict. The section is where it is
+    argued, and R12 is what ties the two together.
+    """
+    tops = d.top_sections
+    if not tops:
+        return False, "no sections"
+    rows = [ln for ln in tops[0].body.split("\n") if ln.strip().startswith("|")]
+    rows = [r for r in rows if "---" not in r and not re.search(r"\|\s*Verdict\s*\|", r)]
+    if not rows:
+        return False, "no verdict table — the sub-questions and their verdicts are not stated"
+    bare = [r for r in rows if not RE_VERDICT.search(r)]
     if bare:
-        return False, f"{len(bare)}/{len(ev)} evidence sections carry no verdict token: " + \
-            "; ".join(t[:44] for t in bare[:3])
-    return True, f"all {len(ev)} evidence sections carry a verdict"
+        return False, f"{len(bare)}/{len(rows)} verdict rows carry no closed-set verdict"
+    return True, f"all {len(rows)} sub-questions carry a verdict from the closed set"
 
 
 def _negative_space(d: Doc) -> tuple[bool, str]:
@@ -245,16 +255,32 @@ def _negative_space(d: Doc) -> tuple[bool, str]:
 
 
 def _debt_itemised(d: Doc) -> tuple[bool, str]:
+    """
+    Every debt item is a `debt:open` issue, and the front matter mirrors the numbers.
+
+    The first draft accepted the word `unfiled`, and the rewrite passed by writing it five
+    times — which is the ceremony gate PROTOCOL.md §5 argues is worse than none. There is no
+    escape hatch now: an agent that finds debt can open the issue, so a document that
+    reports debt without filing it has left the work undone, not hit a limitation.
+
+    This is also what makes the tracker the only place debt has to be checked. The front
+    matter mirrors; it never adds. If the two disagree, the tracker is right.
+    """
     s = d.section_like("verification debt", "debt")
     if s is None:
         return False, "no Verification Debt section"
     items = [ln for ln in s.body.split("\n") if re.match(r"^\s*(\d+\.|[-*])\s+\S", ln)]
     if not items:
         return False, "debt section present but nothing itemised"
-    unfiled = [ln for ln in items if not RE_ISSUE.search(ln) and "unfiled" not in ln.lower()]
+    unfiled = [ln for ln in items if not RE_ISSUE.search(ln)]
     if unfiled:
-        return False, f"{len(unfiled)}/{len(items)} debt items cite neither an issue nor `unfiled`"
-    return True, f"{len(items)} items, all filed or explicitly unfiled"
+        return False, f"{len(unfiled)}/{len(items)} debt items name no issue — file them first"
+
+    cited = sorted({int(n) for ln in items for n in RE_ISSUE.findall(ln)})
+    declared = sorted(int(n) for n in re.findall(r"\d+", d.front.get("debt", "")))
+    if declared != cited:
+        return False, f"front matter debt={declared or '[]'} does not mirror the section {cited}"
+    return True, f"{len(items)} items, all filed: {cited}"
 
 
 def _no_hidden_record(d: Doc) -> tuple[bool, str]:
@@ -305,20 +331,6 @@ def _volatile_dated(d: Doc) -> tuple[bool, str]:
     return False, "no `retrieved YYYY-MM-DD` on a document citing volatile sources"
 
 
-def _no_inline_tier_badges(d: Doc) -> tuple[bool, str]:
-    """
-    The finding this prototype was built to test.
-
-    #5 settled that an agent's reading never promotes a tier. So every claim in an
-    agent-written document is T3 by construction, and a per-claim badge inside one
-    carries zero bits. The badge belongs where the claim lands — CONTEXT.md — and is
-    typed by Noah. A document that badges its own claims is either lying or padding.
-    """
-    if d.badges:
-        return False, f"{len(d.badges)} inline tier badge(s) — all necessarily T3, so 0 bits"
-    return True, "tier declared once in front matter, badges left to the destination"
-
-
 def _claims_traceable(d: Doc) -> tuple[bool, str]:
     """Every row of the verdict table points at the section that argues it."""
     tops = d.top_sections
@@ -327,12 +339,19 @@ def _claims_traceable(d: Doc) -> tuple[bool, str]:
     rows = [ln for ln in tops[0].body.split("\n") if ln.strip().startswith("|")]
     rows = [r for r in rows if "---" not in r and not re.search(r"\|\s*Verdict\s*\|", r)]
     if not rows:
-        return True, "no verdict table to trace (blockquote verdict only)"
+        return True, "no verdict table — R4 blocks on that, so nothing to add here"
+
     def traced(row: str) -> bool:
         cells = [c.strip() for c in row.strip().strip("|").split("|")]
-        # A section reference is either an explicit § or a cell that is nothing but a
-        # section number. Ranges and sub-labels (§1.2–1.3, §3.2(c)) count.
-        return any(c.startswith("§") or re.fullmatch(r"\d+(\.\d+)*", c) for c in cells)
+        # A section reference is an explicit §, a cell that is nothing but a section
+        # number, or a cell that opens with one — #27 writes `**1.1** Does a Google…`,
+        # which names its section perfectly well. Ranges and sub-labels count.
+        return any(
+            c.startswith("§")
+            or re.fullmatch(r"\d+(\.\d+)*", c)
+            or re.match(r"\**\d+(\.\d+)*\**\s", c)
+            for c in cells
+        )
 
     untraced = [r for r in rows if not traced(r)]
     if untraced:
@@ -371,17 +390,19 @@ RULES: list[Rule] = [
          "Every one of the four existing documents opens with its answer. The convention "
          "already exists; the contract only has to stop it being optional.",
          _verdict_first),
-    Rule("R4", "Every evidence section carries a verdict", "blocking", "ci",
+    Rule("R4", "Every sub-question carries a verdict", "blocking", "ci",
          "This is the per-claim annotation that actually carries information, and it is "
-         "what the tier badge cannot be inside an agent-written document.",
+         "what the tier badge cannot be inside an agent-written document. Attached to the "
+         "sub-question, not the section — see the docstring for why that moved.",
          _per_claim_verdicts),
     Rule("R5", "What this does not establish", "blocking", "ci",
          "The survey's most valuable output was a negative result plus a named gap. "
          "Required, not left to a good agent's instincts.",
          _negative_space),
-    Rule("R6", "Verification Debt itemised and filed", "blocking", "ci",
+    Rule("R6", "Every debt item is a filed issue", "blocking", "ci",
          "The survey said its debt was 'logged against the Curriculum'. It was logged "
-         "nowhere. An item names its issue or says `unfiled`.",
+         "nowhere. Every item names a `debt:open` issue and the front matter mirrors the "
+         "numbers, so the tracker is the only place debt ever has to be checked.",
          _debt_itemised),
     Rule("R7", "No record content in HTML comments", "blocking", "ci",
          "#5 found Mosaic's entire debt load inside comments in CONTEXT.md, invisible in "
@@ -398,12 +419,13 @@ RULES: list[Rule] = [
     Rule("R10", "Volatile sources carry a retrieval date", "advisory", "ci",
          "#27's figures were six weeks old and had already changed twice that year.",
          _volatile_dated),
-    Rule("R11", "No inline tier badges", "advisory", "ci",
-         "Agent verification is not verification (#5), so every claim here is T3 and a "
-         "per-claim badge is noise. The badge belongs at the destination.",
-         _no_inline_tier_badges),
-    Rule("R12", "Verdict rows name their section", "advisory", "ci",
-         "A summary table that cannot be walked back into the argument is a press release.",
+    # R11 retired. It forbade inline tier badges, and no document has ever carried one —
+    # a check with nothing to bite on is the bookkeeping-by-accretion #5 warned against.
+    # The reasoning survives as prose in TEMPLATE.md §4, which is where it belonged.
+    Rule("R12", "Verdict rows name their section", "blocking", "ci",
+         "A summary table that cannot be walked back into the argument is a press release. "
+         "Blocking since R4 moved to the table: this is now the only thing tying a verdict "
+         "to the argument that earns it.",
          _claims_traceable),
     Rule("R13", "Citations in place, not only in the appendix", "advisory", "ci",
          "The map's standing preference: borrowed frames are cited where they are borrowed.",

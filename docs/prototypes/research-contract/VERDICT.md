@@ -48,28 +48,46 @@ flagged. Two rules converging on one weak citation is the checker working.
 
 ---
 
-## Not earned
+## Not earned — and what was done about it
 
-**R11 — "no inline tier badges" is a rule with nothing to bite on.** Zero of five documents
-carry one, because nobody was ever going to. It is a note in the template, not a CI check,
-and shipping it as a check is the bookkeeping-by-accretion failure #5 warned against.
+All three were reviewed by Noah on the ticket. Two rules were dropped or rewritten; one was
+hardened instead of dropped, over an objection recorded below.
 
-**R6 is satisfiable by ceremony, and the rewrite proves it.** Every one of the five debt items
-is marked `unfiled` — and R6 passes. `PROTOCOL.md` §5 argues at length that a gate satisfiable
-by ceremony is *worse than none*, because in the record it is indistinguishable from the real
-thing. The fix is not to forbid `unfiled` (the survey genuinely predates the tracker) but to
-make it visible: `unfiled` items should be counted in the front matter's `debt:` field so a
-document declaring five unfiled items reads as a document with five unfiled items, at the top,
-where a reviewer sees it. **Not fixed in this prototype.**
+**R11 — "no inline tier badges" had nothing to bite on. Retired.** Zero of five documents
+carry one, because nobody was ever going to. It survives as prose in `TEMPLATE.md` §4, which
+is what it always was; shipping it as a CI check was the bookkeeping-by-accretion #5 warned
+against.
 
-**R4 — the closed verdict vocabulary fits verification and strains on surveys.** `Supported /
-Refuted / Loose / Unresolved` was born in #13, where every section adjudicates one attribution,
-and it is perfect there. On the survey it produced §3.2(f) *"Computational cost — **Refuted**
-as a binding constraint"*, which is a section verdict wrapped around a sub-clause because the
-rule demanded a token. Several of the rewrite's section verdicts are that shape — §2.2's
-*"**Established**, and thinner than assumed"* is another. The
-vocabulary is right; requiring it *per top-level section* rather than *per sub-question in the
-verdict table* is the overreach.
+**R4 — the closed verdict vocabulary fits verification and strains on surveys. Moved.**
+`Supported / Refuted / Loose / Unresolved` was born in #13, where every section adjudicates
+one attribution, and it is perfect there. On the survey it produced §3.2(f) *"Computational
+cost — **Refuted** as a binding constraint"*, a verdict wrapped around a sub-clause because
+the rule demanded a token; §2.2's *"**Established**, and thinner than assumed"* is another.
+The vocabulary was right and the attachment point was wrong. R4 now applies to **verdict-table
+rows**, not sections — a sub-question has a verdict, a section is where one is argued — and
+R12 (*every row names its section*) is promoted to blocking, because it is now the only thing
+tying a verdict to the argument that earns it.
+
+**R6 was satisfiable by ceremony. Hardened, not dropped — and this one is a disagreement
+worth recording.** Every one of the five debt items in the rewrite was marked `unfiled`, and
+R6 passed. That is the gate `PROTOCOL.md` §5 argues is *worse than none*, because in the
+record it is indistinguishable from the real thing.
+
+The obvious response is to drop the rule. That would be wrong: R6 is the check that catches
+the survey's original failure — *"logged against the Curriculum"* when no Curriculum existed
+and the debt was logged nowhere. The requirement was never the problem; the escape hatch was.
+
+So `unfiled` is gone. Every debt item names a filed `debt:open` issue, and the front matter's
+`debt:` key mirrors those numbers so a clone can answer *what did this document owe* without
+an API call. An agent that finds debt can open the issue, so a document reporting unfiled debt
+has left work undone rather than hit a limitation.
+
+**The consequence is that the rewrite now fails CI, and the failure is true.** No research
+document in Mosaic has ever filed its debt as an issue — R6 fails on all five documents in the
+corpus, including the rewrite. That is not the rule overreaching; it is the rule reporting a
+real, uniform gap that the `unfiled` version was papering over. Filing the survey's five items
+is left undone here deliberately: it is a decision about whether the #4 survey lands at all,
+which is not this prototype's to make.
 
 ---
 
@@ -100,12 +118,14 @@ verdict token added.
    construction, and a per-claim badge is the same three characters on every line. #26 asks for
    per-claim tiering on the premise that a document whose every claim carries the same tier is
    not tiered; the resolution is that **the axis that varies inside an evidence document is the
-   verdict, not the tier.** The badge belongs at the destination — the `CONTEXT.md` line, typed
-   by Noah. Argued in `TEMPLATE.md` §4.
+   verdict, not the tier.** The badge belongs at the destination — the `CONTEXT.md` line, which
+   an agent may draft in *Proposals* and Noah applies. §5 is explicit that custody is over the
+   decision and not the keystrokes: what the rule requires is that he has read and accepted the
+   badge, not that he composed its wording. Argued in `TEMPLATE.md` §4.
 4. **Citation form.** Inline *and* appendix, both mandatory, no footnotes. Primary source =
    the thing itself, read directly; unreachable → verdict `Unresolved`, per #13's precedent.
 5. **Declaring what was not established.** Required section, three subsections. See *Earned*.
-6. **Acceptance criteria.** Fifteen checks; thirteen mechanical, two human. The two human ones
+6. **Acceptance criteria.** Fourteen checks; twelve mechanical, two human. The two human ones
    are listed *in the same table* so that a green CI run cannot be mistaken for a merge
    decision — R14 and R15 are where the merge actually lives.
 7. **Does one contract cover verification, review and revision?** Yes. All four documents fit
@@ -114,8 +134,26 @@ verdict token added.
 
 ## Not settled here
 
-- Whether `unfiled` debt should be counted in the front matter (above).
-- Whether R4 should attach to sub-questions rather than sections (above).
-- Whether `docs/adr/` and #11's notebook entries share any of this. Assumed not; untested.
+Two of these need Noah; the rest are decided.
+
+- **Does the contract apply retroactively?** The three documents on `main` all fail it, mostly
+  on `What this does not establish` and on unfiled debt. Retrofitting is real work and the
+  negative-space section is the one part an agent cannot honestly write alone — only the author
+  knows which sources they failed to reach. Options: apply to new documents only and leave the
+  three as they are; retrofit them as a follow-up ticket; or retrofit only the front matter,
+  which is mechanical, and leave the prose.
+- **Does the #4 survey land?** It has never reached `main` — it lives on
+  `research/grokking-eca-tda-survey`, which is why this prototype had to vendor it. The rewrite
+  is a merge-ready version of the programme's first substantial artifact, and its five debt
+  items are real debt nobody has filed. Filing them and landing the survey is one decision, not
+  two, and it is not a prototype's to make.
+
+Decided, and open to being overruled:
+
+- `docs/adr/` and #11's notebook entries do **not** share this template. ADRs have a format
+  already (`.agents/skills/domain-modeling/ADR-FORMAT.md`) and the notebook is the narrative
+  layer with a different reader. Untested here — asserted, on the scope boundary #26 drew.
+- `session: unrecorded` is permitted. An absent key and an unrecordable session are different
+  facts, and only one of them is anybody's fault.
 - The rewrite is a rewrite, not a re-verification. Its §1–§4 claims carry the original's
   provenance, and this prototype adds no reading of its own.

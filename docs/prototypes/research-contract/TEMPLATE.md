@@ -24,10 +24,17 @@ kind: survey                 # survey | verification | question | revision
 tier: T3                     # the document's floor — see §4
 session: sha256:9f2c…        # Transcript Archive session id, or `unrecorded`
 sources: 47                  # primary sources in the appendix; must match the count
-debt: [29, 30]               # issues this document opened; [] if none
+debt: [29, 30]               # `debt:open` issues this document filed; [] if none
 supersedes: null             # path of the document this replaces, if any
 ---
 ```
+
+**`debt:` mirrors the tracker and never adds to it.** Every number here is an open
+`debt:open` issue that already exists, and the same numbers appear in the document's
+*Verification Debt* section; CI checks the two agree. #5 settled that the ledger *is* the
+issue tracker, and this key does not reopen that — it exists so the debt a document created
+is greppable from a clone without an API call, the same read-through-cache argument that
+justifies `curriculum/open.md`. If the two ever disagree, the tracker is right.
 
 `session:` accepts the literal `unrecorded`. A document that cannot cite its transcript
 should say so rather than omit the key, because an absent key and an unrecordable session
@@ -97,12 +104,23 @@ What varies claim to claim, and therefore what the contract requires per claim, 
 only fixes it as a closed set and makes it mandatory per section.
 
 The tier badge `⟦T3 · #33⟧` belongs at the **destination** — the `CONTEXT.md` line where the
-claim lands, typed by Noah, per #5. The research document is where a claim is *argued*; the
-badge records what the researcher can *defend*. Different questions, different files.
+claim lands. The research document is where a claim is *argued*; the badge records what the
+researcher can *defend*. Different questions, different files.
+
+**An agent may propose the badge; Noah applies it.** That is [`PROTOCOL.md` §5]'s standing
+arrangement for authored files, and the section is explicit that *custody is over the
+decision, not the keystrokes* — the wording of a tier annotation is not the thing custody is
+protecting. What the rule requires is that Noah has read the badge and accepted it, not that
+he composed it. So a document's *Proposals* section may carry the exact badge text; the
+commit that applies it is his.
+
+**No tier badges inside the research document itself.** Not a CI check — an earlier draft
+made it one and no document in the corpus had ever carried a badge, so the check had nothing
+to bite on and was retired. It is a note here because that is what it always was.
 
 ## 5. Acceptance criteria
 
-Fifteen checks. Thirteen are mechanical and belong in CI; two are not, and are listed anyway
+Fourteen checks. Twelve are mechanical and belong in CI; two are not, and are listed anyway
 so the checklist does not imply CI covers them.
 
 | | Check | Severity | By |
@@ -110,21 +128,33 @@ so the checklist does not imply CI covers them.
 | R1 | Front matter present and complete, `kind` in the closed set | blocking | CI |
 | R2 | `session:` is `sha256:<digest>` or `unrecorded` | blocking | CI |
 | R3 | First section is the verdict, with a table or a stated one-liner | blocking | CI |
-| R4 | Every evidence section carries a verdict token | blocking | CI |
+| R4 | Every verdict-table row carries a verdict from the closed set | blocking | CI |
 | R5 | `What this does not establish`, with all three subsections | blocking | CI |
-| R6 | Every debt item names an issue or is marked `unfiled` | blocking | CI |
+| R6 | Every debt item names a filed `debt:open` issue, mirrored in front matter | blocking | CI |
 | R7 | No debt/tier/provenance content inside HTML comments | blocking | CI |
 | R8 | `Proposals` section present, `None.` if empty | blocking | CI |
 | R9 | Appendix present, count matches front matter, every entry linked | blocking | CI |
 | R10 | Volatile sources carry a retrieval date | advisory | CI |
-| R11 | No inline tier badges | advisory | CI |
-| R12 | Every verdict row names the section that argues it | advisory | CI |
+| R12 | Every verdict row names the section that argues it | blocking | CI |
 | R13 | No substantial evidence section without an inline citation | advisory | CI |
 | R14 | The argument survives an adversarial read | blocking | human |
 | R15 | The recommendation is actionable | blocking | human |
 
-R14 and R15 are where the merge decision actually lives. R1–R13 exist to make sure a reviewer
-spends their attention there instead of on shape.
+R14 and R15 are where the merge decision actually lives. The rest exist to make sure a
+reviewer spends their attention there instead of on shape.
+
+Two revisions from the first draft, both made because the rewrite exposed them:
+
+- **R4 moved from the section to the sub-question.** Requiring a verdict token on every
+  top-level section produced headings like *"Computational cost — **Refuted** as a binding
+  constraint"* — a verdict wrapped around a sub-clause to satisfy a checker. A sub-question
+  has a verdict; a section is where one is argued. R12 ties the two together, and is blocking
+  for that reason.
+- **R6 lost its `unfiled` escape hatch.** The first draft let a document pass by writing the
+  word `unfiled` against every debt item, which is precisely the gate-satisfiable-by-ceremony
+  that [`PROTOCOL.md` §5] argues is worse than none. An agent that finds debt can open the
+  issue, so a document reporting unfiled debt has left work undone rather than hit a limit.
+  R11 was retired outright; see §4.
 
 ## 6. What this contract covers
 
