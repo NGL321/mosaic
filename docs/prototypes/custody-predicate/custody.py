@@ -128,9 +128,15 @@ class Commit:
 
     @property
     def legitimate(self) -> bool:
-        """What a truthful custody rule ought to conclude. Both conjuncts are
-        load-bearing: dropping the second is what makes A and B ceremony."""
-        return self.truly_attended and self.truly_defensible
+        """What a truthful custody rule ought to conclude.
+
+        SETTLED (Noah, 2026-07-29): attendance was a proxy, not the claim. It is
+        deliberately *not* a conjunct here — requiring it made the programme less
+        defensible than the amanuensis capability it was meant to protect, which
+        defeats §5's own purpose. `truly_attended` stays on the record as a field
+        so a false attendance claim is still visible; it just no longer decides
+        legitimacy. Defensibility is the whole of it."""
+        return self.truly_defensible
 
 
 @dataclass(frozen=True)
