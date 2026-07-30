@@ -22,6 +22,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from custody import (  # noqa: E402
     FLOOR,
     POLICIES,
+    PROGRAMME,
     STRANGER_CHECK,
     Commit,
     Defence,
@@ -30,6 +31,7 @@ from custody import (  # noqa: E402
     Identity,
     Session,
     Verdict,
+    may_ratify,
     soundness,
 )
 
@@ -41,12 +43,14 @@ COLOUR = {
     Verdict.VIOLATION: "\x1b[31m",
     Verdict.UNDECIDABLE: "\x1b[33m",
     Verdict.VACUOUS: "\x1b[2m",
+    Verdict.DEFERRED: "\x1b[36m",
 }
 SCORE_COLOUR = {
     "SOUND": "\x1b[32m",
     "FOOLED": "\x1b[31;1m",
     "OVERSTRICT": "\x1b[35m",
     "SILENT": "\x1b[2m",
+    "DEFERRED": "\x1b[36m",
 }
 
 
@@ -73,6 +77,7 @@ def real_cases() -> list[Commit]:
             file_class=FileClass.AUTHORED,
             identity=Identity.HUMAN_UNVERIFIED,
             agent_co_author=bool(trailers.strip()),
+            mechanism_available=False,  # pre-#24, pre-archive-citation: unrecordable
             sha=sha,
         ))
     return cases
@@ -160,22 +165,21 @@ def render(cases, idx, c, history):
     print(D + "─" * 96 + R)
     print(f"{B}CASE{R} {clip(c.subject, 78)} {D}[{origin}]{R}")
 
-    fields = [
-        ("file class", c.file_class.value, "CONTEXT.md / the charter"
-            if c.file_class is FileClass.AUTHORED else ""),
-        ("commit type", c.ctype, ""),
-        ("identity", c.identity.value, "agent worktrees inherit NGL321 (pre-#24)"
-            if c.identity is Identity.HUMAN_UNVERIFIED else ""),
-        ("agent co-author", "present" if c.agent_co_author else "absent", ""),
-        ("session", c.session.value, "no attendance signal in git"
-            if c.session is Session.UNKNOWN else ""),
-        ("session cited", "yes" if c.session_cited else "no", ""),
-        ("defence", c.defence.value, "recitation is invisible to CI"
-            if c.defence is Defence.RECITED else ""),
-        ("de minimis", "yes" if c.de_minimis else "no", ""),
+    left = [
+        ("file class", c.file_class.value),
+        ("commit type", c.ctype),
+        ("identity", c.identity.value),
+        ("agent co-author", "present" if c.agent_co_author else "absent"),
     ]
-    for label, value, note in fields:
-        print(f"     {label:<16}{B}{value:<18}{R}{D}{note}{R}")
+    right = [
+        ("session", c.session.value),
+        ("session cited", "yes" if c.session_cited else "no"),
+        ("defence", c.defence.value),
+        ("de minimis / mech", f"{'yes' if c.de_minimis else 'no'}"
+            f" / {'available' if c.mechanism_available else 'ABSENT'}"),
+    ]
+    for (ll, lv), (rl, rv) in zip(left, right):
+        print(f"     {ll:<16}{B}{lv:<19}{R}{ll and ''}{rl:<18}{B}{rv}{R}")
 
     verdict = "LEGITIMATE" if c.legitimate else "ILLEGITIMATE"
     col = "\x1b[32m" if c.legitimate else "\x1b[31m"
@@ -190,7 +194,7 @@ def render(cases, idx, c, history):
         print(f"  {B}{key}{R} {name:<14}{COLOUR[r.verdict]}{r.verdict.value:<13}{R}"
               f"{D}{clip(r.reason, 55):<56}{R}{SCORE_COLOUR[score]}{score}{R}")
 
-    print(f"\n{B}REAL HISTORY{R} {D}— every commit that has touched CONTEXT.md "
+    print(f"{B}REAL HISTORY{R} {D}— every commit that has touched CONTEXT.md "
           f"({len(history)}){R}")
     for key, name, policy in POLICIES:
         counts = tally(policy, history)
@@ -200,15 +204,23 @@ def render(cases, idx, c, history):
 
     floor = (f"{B}declared{R}" if FLOOR["declared"]
              else "\x1b[33mnot declared — D cannot rule until it is\x1b[0m")
-    print(f"\n{B}COMPETENCE FLOOR{R}  {floor}")
+    era = ("\x1b[36mpre-charter (0.x) — grace live\x1b[0m" if PROGRAMME["pre_charter"]
+           else f"{B}charter ratified — grace spent{R}")
+    print(f"{B}FLOOR{R} {floor}   {B}ERA{R} {era}")
+
+    gate = may_ratify(cases)
+    print(f"{B}CHARTER GATE{R} may tag research-v1.0.0? "
+          f"{COLOUR[gate.verdict]}{'yes' if gate.verdict is Verdict.PASS else 'no'}{R}"
+          f" {D}— {gate.reason}{R}")
 
     print(f"\n{B}CHECKABLE BY A STRANGER{R}")
     for _, name, _ in POLICIES:
-        print(f"  {name:<14}{D}{STRANGER_CHECK[name]}{R}")
+        print(f"  {name:<14}{D}{clip(STRANGER_CHECK[name], 88)}{R}")
 
     print(f"\n{D}[n/p] case  [f] file  [c] type  [i] identity  [t] trailer  [s] session"
           f"  [x] citation  [d] defence  [m] de minimis  [e] endorsement{R}")
-    print(f"{D}[1] attended  [2] defensible  [F] floor  [r] reset  [q] quit{R}")
+    print(f"{D}[1] attended  [2] defensible  [3] mechanism  [F] floor  [G] ratify charter"
+          f"  [r] reset  [q] quit{R}")
 
 
 # --------------------------------------------------------------------- driver
@@ -245,6 +257,9 @@ def main() -> None:
         if k == "F":
             FLOOR["declared"] = not FLOOR["declared"]
             continue
+        if k == "G":
+            PROGRAMME["pre_charter"] = not PROGRAMME["pre_charter"]
+            continue
         k = k.lower()
         if k in "np":
             idx = (idx + (1 if k == "n" else -1)) % len(cases)
@@ -273,6 +288,8 @@ def main() -> None:
             current = current.with_(truly_attended=not current.truly_attended)
         elif k == "2":
             current = current.with_(truly_defensible=not current.truly_defensible)
+        elif k == "3":
+            current = current.with_(mechanism_available=not current.mechanism_available)
 
 
 if __name__ == "__main__":

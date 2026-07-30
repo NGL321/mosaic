@@ -54,6 +54,10 @@ from enum import Enum
 # custody failure. Toggle it in the TUI to see what D is worth without one.
 FLOOR = {"declared": False}
 
+# Whether the programme is still pre-charter (§2: `0.x` is pre-charter, and
+# ratifying the charter is `1.0.0`). Policy E suspends obligations while true.
+PROGRAMME = {"pre_charter": True}
+
 
 class FileClass(Enum):
     """§5's custody categories. Custody follows the file, never the topic."""
@@ -102,6 +106,7 @@ class Verdict(Enum):
     VIOLATION = "VIOLATION"
     UNDECIDABLE = "UNDECIDABLE"  # the policy needs a fact the record lacks
     VACUOUS = "VACUOUS"  # the policy applies but demands nothing
+    DEFERRED = "DEFERRED"  # obligation survives as debt, and blocks 1.0.0
 
 
 @dataclass(frozen=True)
@@ -116,6 +121,10 @@ class Commit:
     defence: Defence = Defence.UNKNOWN
     session_cited: bool = False  # a Session: trailer that resolves in the archive
     de_minimis: bool = False  # §6: cannot alter meaning
+    mechanism_available: bool = True  # could this obligation have been recorded
+    #                                   at the time, or did the machinery not
+    #                                   yet exist? Grace turns on this, not on
+    #                                   whether discharging it was inconvenient.
     # --- ground truth: what actually happened, as against what the record says.
     # No checker can read these. They exist so a policy's verdict can be scored
     # against reality, which is how ceremony-satisfiability becomes visible.
@@ -249,12 +258,83 @@ def amanuensis_warranted(c: Commit) -> Ruling:
     )
 
 
+# --------------------------------------------------------------------------
+# E — D, under PRE-CHARTER GRACE
+# --------------------------------------------------------------------------
+#
+# §2 already carries the boundary: `0.x` is pre-charter, ratifying the charter is
+# `1.0.0`. E suspends D's obligations below that line — but a grace whose expiry
+# is at the researcher's discretion is a grace that never expires, and §5's own
+# argument applies to it: a gate satisfiable by ceremony is worse than none. So
+# the grace is bounded three ways.
+#
+#   1. It DEFERS, never excuses. A graced obligation becomes Verification Debt —
+#      machinery the programme already has — and the debt blocks `1.0.0`. Nothing
+#      is forgiven; it is rescheduled, in the open.
+#   2. It covers only the UNRECORDABLE. If the mechanism existed at the time, the
+#      obligation was skipped rather than impossible, and grace does not apply.
+#      Grace is for the scaffolding era's missing machinery, not for haste.
+#   3. It never covers an AGENT DECIDING. An agent identity committing an
+#      authored file is the one thing no era excuses: vocabulary is human-driven
+#      by nature, and propose-then-accept is the pipeline, not agent authorship.
+#
+# Together those make `1.0.0` computed rather than chosen — see may_ratify().
+
+def never_graced(c: Commit) -> bool:
+    """The one thing no era excuses. Checked as a condition, not by matching D's
+    reason string — the first draft did that and the breach case everyone agrees
+    on came back DEFERRED."""
+    return c.file_class is FileClass.AUTHORED and c.identity is Identity.AGENT_BOT
+
+
+def pre_charter_grace(c: Commit) -> Ruling:
+    r = amanuensis_warranted(c)
+
+    if not PROGRAMME["pre_charter"]:
+        return r  # charter ratified: the grace is spent, D applies in full
+    if r.verdict in (Verdict.PASS, Verdict.VACUOUS):
+        return r
+    if never_graced(c):
+        return Ruling(Verdict.VIOLATION, "an agent may not define vocabulary in any era")
+
+    if not c.mechanism_available:
+        return Ruling(
+            Verdict.DEFERRED,
+            "the mechanism did not exist when this landed — scaffolding debt",
+        )
+    if c.defence in (Defence.ABSENT, Defence.RECITED, Defence.UNKNOWN):
+        return Ruling(
+            Verdict.DEFERRED,
+            "defence deferred into the ledger; discharged by learning, before 1.0.0",
+        )
+    return r  # a skipped obligation the machinery was there to meet
+
+
 POLICIES = (
     ("A", "typed", typed),
     ("B", "amanuensis", amanuensis),
     ("C", "endorsed", endorsed),
     ("D", "aman+warrant", amanuensis_warranted),
+    ("E", "D + grace", pre_charter_grace),
 )
+
+
+def may_ratify(commits) -> Ruling:
+    """§2's `1.0.0` gate: the end of scaffolding, computed rather than declared.
+
+    This is the forcing condition the grace needs. Without it, staying at `0.x`
+    keeps every obligation suspended, so the programme acquires a standing
+    incentive never to finish scaffolding — the grace's expiry being the one
+    thing its beneficiary controls."""
+    if not FLOOR["declared"]:
+        return Ruling(Verdict.VIOLATION, "the competence floor is the charter's zero point")
+    outstanding = [c for c in commits if pre_charter_grace(c).verdict is Verdict.DEFERRED]
+    if outstanding:
+        return Ruling(
+            Verdict.VIOLATION,
+            f"{len(outstanding)} scaffolding obligation(s) outstanding — 0.x cannot end",
+        )
+    return Ruling(Verdict.PASS, "scaffolding complete; the charter may be ratified")
 
 
 # What the sceptic §5 exists to answer can actually run.
@@ -263,12 +343,15 @@ STRANGER_CHECK = {
     "amanuensis": "no — needs an attendance trailer that does not exist yet",
     "endorsed": "no — the artifact is on a PR thread, outside the history",
     "aman+warrant": "partly — CI checks identity and citation; the grilling is on the PR, as §5's gate already is",
+    "D + grace": "yes — the deferred set is a list, and a stranger can watch it fail to shrink",
 }
 
 
 def soundness(policy, c: Commit) -> tuple[str, str]:
     """Score a verdict against ground truth the checker cannot see."""
     v = policy(c).verdict
+    if v is Verdict.DEFERRED:
+        return "DEFERRED", "not excused — carried as debt, and it blocks 1.0.0"
     if v in (Verdict.UNDECIDABLE, Verdict.VACUOUS):
         return "SILENT", "declines to rule — no protection either way"
     if v is Verdict.PASS and not c.legitimate:

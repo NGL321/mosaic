@@ -19,6 +19,7 @@ does not work today, and [#24](https://github.com/NGL321/mosaic/issues/24) will 
 | **B** | the human **authored** it, agent as amanuensis | an *unattended* session committing an authored file |
 | **C** | the human **understood and endorsed** it | nothing, at file level — custody collapses into warrant |
 | **D** | **amanuensis + warrant** | a hollow or untraceable edit, whoever's fingers moved |
+| **E** | **D under pre-charter grace** | the same, minus what the scaffolding era could not record |
 
 D was drafted after driving A–C, on the observation that **A and B share a failure neither
 can see: the human can type every character and still only be reciting.** Typing and
@@ -105,12 +106,54 @@ What that buys, across all 15 cases with the floor declared:
 D's single OVERSTRICT is by design: an amanuensis edit with no `Session:` trailer is
 legitimate work with an obligation left undischarged, and the fix is to add the trailer.
 
+## The pre-charter grace, and why it needs a lock
+
+§2 already carries the boundary — `0.x` is pre-charter, ratifying the charter is `1.0.0` —
+so the grace hangs on a line already in the record, checkable with one
+`git merge-base --is-ancestor`. "Was this scaffolding?" is arguable forever; "was this
+before the charter?" is not.
+
+But a grace whose expiry is at the beneficiary's discretion never expires, and §5's own
+argument applies to it: a gate satisfiable by ceremony is worse than none. If suspending the
+rules is what `0.x` buys, the programme acquires a standing reason never to leave `0.x`. So
+E is bounded three ways, and `may_ratify()` supplies the lock:
+
+1. **It defers, never excuses.** A graced obligation becomes Verification Debt — machinery
+   the programme already has — and **the debt blocks `1.0.0`.** Nothing is forgiven; it is
+   rescheduled, in the open, where a stranger can watch the list fail to shrink.
+2. **It covers only the unrecordable.** If the mechanism existed at the time, the obligation
+   was *skipped* rather than impossible, and grace does not apply. Press `[3]` on any case
+   to flip that and watch DEFERRED become VIOLATION. This is why the two vocabulary commits
+   are covered and a careless commit next month is not.
+3. **It never covers an agent deciding.** An agent identity committing an authored file is
+   VIOLATION in every era. Vocabulary is human-driven by nature; propose-then-accept is the
+   pipeline, not agent authorship.
+
+`[G]` ratifies the charter. E collapses exactly onto D — verified identical across all 15
+cases — so the grace leaves nothing behind when it is spent.
+
+**`1.0.0` becomes computed rather than chosen**, which is the explicit rule: the tag is
+unavailable while any scaffolding obligation is outstanding, *and* while the competence
+floor is undeclared. Right now the gate reads `no — 8 outstanding`. That is the end of
+scaffolding stated as a condition rather than as an intention.
+
+### One consequence worth staring at
+
+Under grace, *THE ONE TO CATCH* — the human who typed every character and can only recite
+it — comes back **DEFERRED**, not VIOLATION. Pre-1.0 you may land vocabulary you cannot yet
+defend, provided the gap is logged and clears before the charter. That is not a loophole
+invented here; it is what `CONTEXT.md` already does, in the Provenance Tier comment against
+*Extraction* and *Closure*. The prototype just makes it a verdict instead of a habit.
+
 ## Still to settle
 
 1. **What happens to the two existing vocabulary commits?** Under A they are a permanent
    VIOLATION, unfixable without rewriting history the programme forbids rewriting. Under D
-   they are UNDECIDABLE — an *obligation*, dischargeable by a one-time defence pass and a
-   retroactive session citation. Whether that is a virtue or a loophole is the call.
+   they are UNDECIDABLE — and under E, DEFERRED: an obligation dischargeable by a defence
+   pass and a retroactive session citation, before `1.0.0`.
+2. **What is on the scaffolding list?** The gate is only as good as the enumeration of what
+   `0.x` still owes. The prototype computes it from deferred commits; the real thing needs
+   the list to be stated somewhere a stranger can read it.
 
 ## Not in scope
 
