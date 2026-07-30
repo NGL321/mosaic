@@ -6,7 +6,7 @@ kind: survey
 tier: T3
 session: unrecorded
 sources: 44
-debt: []
+debt: [45, 46, 47, 48, 49]
 supersedes: null
 ---
 
@@ -319,21 +319,18 @@ The claims whose falsity would move the verdict. Each is cheap for a later reade
 
 ## Verification Debt
 
-All items **unfiled** — the `debt:open` tracker convention was settled by #5 four days after this
-document was written, and these were never retro-filed. That is itself the finding
-[#5](https://github.com/NGL321/mosaic/issues/5) made: debt asserted in prose and logged nowhere.
+Filed as `debt:open` issues, mirrored in the front matter's `debt:` key. None was filed when this
+document was first written — the tracker convention was settled by
+[#5](https://github.com/NGL321/mosaic/issues/5) four days later, and the original said only that
+its debt was "logged against the Curriculum", which did not exist. That is the failure #5 named:
+debt asserted in prose and logged nowhere. **These five must be discharged before this document
+merges**; they are the reason it has not.
 
-**The contract blocks this document on exactly that, and the block is correct.** R6 accepts no
-word in place of an issue number, so this rewrite fails CI until the five items below are filed
-as `debt:open` issues and their numbers appear here and in the front matter's `debt:` key. That
-is the one thing this prototype deliberately leaves undone, because filing them is a decision
-about whether the #4 survey lands at all — see `VERDICT.md`.
-
-1. **Culík & Yu (1988) undecidability proof — unfiled.** Read the *Complex Systems* original and follow the reduction. §2.3's second finding depends on it and it was reached only through a secondary record. Requires: computability theory to the level of reductions from the halting problem.
-2. **Hiraoka et al. (2026) HDLSS asymptotics — unfiled.** Follow the proof, and check that the regime it describes is the regime a Mosaic ECA study occupies. §3.2(c) makes that inference; the paper does not. Requires: high-dimensional probability, persistence-diagram stability.
-3. **Damrich et al. (2024) failure thresholds — unfiled.** The d ≳ 30 / σ = 0.25 numbers are read off the paper's figures as reported. Verify against the released code. Requires: only running the code, so this is the cheapest item here.
-4. **Žunkovič & Ilievski (2024) critical exponents — unfiled.** The analytic claims in §2.1 are taken on the paper's authority. Requires: tensor networks, MPO representations, finite-size scaling. This is the most expensive item and the one that would schedule real Curriculum work.
-5. **The Spearman correlations in §3.1 — unfiled.** ρ = 0.77 ± 0.03 etc. are quoted, not recomputed. Verifiable from the paper's released artifacts if they exist; if they do not, that is itself worth recording.
+1. **[#45](https://github.com/NGL321/mosaic/issues/45) — Culík & Yu (1988) undecidability proof.** Read the *Complex Systems* original and follow the reduction. §2.3's second finding depends on it and it was reached only through a secondary record. Requires: computability theory to the level of reductions from the halting problem.
+2. **[#46](https://github.com/NGL321/mosaic/issues/46) — Hiraoka et al. (2026) HDLSS asymptotics.** Follow the proof, and check that the regime it describes is the regime a Mosaic ECA study occupies. §3.2(c) makes that inference; the paper does not. Requires: high-dimensional probability, persistence-diagram stability.
+3. **[#47](https://github.com/NGL321/mosaic/issues/47) — Damrich et al. (2024) failure thresholds.** The d ≳ 30 / σ = 0.25 numbers are read off the paper's figures as reported. Verify against the released code. Requires: only running the code, so this is the cheapest item here.
+4. **[#48](https://github.com/NGL321/mosaic/issues/48) — Žunkovič & Ilievski (2024) critical exponents.** The analytic claims in §2.1 are taken on the paper's authority. Requires: tensor networks, MPO representations, finite-size scaling. This is the most expensive item and the one that would schedule real Curriculum work.
+5. **[#49](https://github.com/NGL321/mosaic/issues/49) — the Spearman correlations in §3.1.** ρ = 0.77 ± 0.03 etc. are quoted, not recomputed, and the "no null model" claim is an absence, which is what a careless reading misses. Verifiable from the paper's released artifacts if they exist; if they do not, that is itself worth recording.
 
 ---
 
