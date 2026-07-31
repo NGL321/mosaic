@@ -1,0 +1,86 @@
+{
+  "_what_this_is": "PROTOTYPE (ticket #11). The narrative pass over Transcript Archive session f0900d60-77d7-4a8b-ace4-6041f764656b (2026-07-29T23:16Z → 2026-07-30T03:35Z, sha256 cited in the entry). In production a generation agent writes this file by reading the transcript; this one was written the same way, from that real session. Every line is T3 — machine-produced, unverified — until Noah annotates it. The mechanical spine (commits, issues, PR) is NOT in here: harvest.py reads it from git and gh, also at T3 — verifiable is not verified.",
+  "_anchors": "Annotations name the anchor of the line they answer — its primary citation, per notebook/README.md. Notes below carry no ids: harvest.py derives every anchor from the citations so that rewording cannot orphan an annotation and reordering cannot steal one.",
+  "_sample_anchors": "Samples name `anchor_cite` — the artifact the annotated line cites — not a derived anchor. The TUI resolves it against the prose layer at load time. Hard-coding `a598221` would orphan this sample the first time another line cites that commit and pushes it to `a598221#2`, which is fine behaviour and a bad property for an artifact retained so that it still renders years from now.",
+  "_sample_annotations": "Verbatim excerpts from Noah's own prompts in that session, used so the annotation layer can be seen rendered without inventing words for him. Anything he types in the TUI is his; these are quotes, marked as such.",
+
+  "session": "f0900d60-77d7-4a8b-ace4-6041f764656b",
+  "date": "2026-07-29",
+  "slug": "custody-stops-claiming-attendance",
+  "title": "custody stops claiming attendance, and 1.0.0 becomes computed",
+  "merge_triggers": ["`main` ← tooling/custody-and-charter-gate"],
+
+  "notes": [
+    {
+      "kind": "reversed",
+      "text": "Attendance was dropped from what custody concludes. Requiring a session to be attended made the programme less defensible than the amanuensis capability the requirement existed to protect, and the claim is asserted by the one party whose attendance is in question",
+      "cites": [{"kind": "commit", "ref": "a598221"}, {"kind": "doc", "ref": "PROTOCOL.md"}]
+    },
+    {
+      "kind": "deadend",
+      "text": "The three readings the ticket set up — typed, attended, endorsed — were driven against 15 cases and all three failed: A convicts legitimate assisted work, B is fooled by an attendance claim it cannot check, C declines to rule at all. The trichotomy dissolved rather than resolved, and a fourth reading was drafted after the failure, not before",
+      "cites": [{"kind": "commit", "ref": "6680d66"}, {"kind": "issue", "ref": "#23"}]
+    },
+    {
+      "kind": "deadend",
+      "text": "The first CI draft of the §5 check convicted commits that were correctly cited, because the checker and the protocol disagreed about the trailer key. The trailer's spelling is now pinned in the protocol text itself",
+      "cites": [{"kind": "commit", "ref": "47ba7d0"}]
+    },
+    {
+      "kind": "landed",
+      "text": "Custody was split into three obligations — identity, citation, defence — each checked where it can actually be checked, and an agent co-author trailer became a routing signal rather than a conviction",
+      "cites": [{"kind": "commit", "ref": "2611689"}, {"kind": "pr", "ref": "#36"}]
+    },
+    {
+      "kind": "landed",
+      "text": "`1.0.0` is now computed rather than chosen: the first designed, runnable experiment is the gate that ends the scaffolding era, with results explicitly not required",
+      "cites": [{"kind": "commit", "ref": "703b21d"}, {"kind": "commit", "ref": "f3746a7"}]
+    },
+    {
+      "kind": "landed",
+      "text": "The pre-charter grace was added and bounded three ways — it defers rather than excuses, covers only what the era could not record, and never covers an agent deciding",
+      "cites": [{"kind": "commit", "ref": "2d5b974"}]
+    },
+    {
+      "kind": "landed",
+      "text": "The deferred set was repointed at the issue tracker after `main` moved the debt ledger there, and a record-keeping deferral was split from Verification Debt: only the first blocks the charter",
+      "cites": [{"kind": "commit", "ref": "53e0e32"}, {"kind": "commit", "ref": "5ff0ee9"}, {"kind": "issue", "ref": "#5"}]
+    },
+    {
+      "kind": "debt",
+      "text": "Until the competence floor is declared, the defence obligation returns undecidable rather than satisfied — the deficiency reports itself instead of being papered over",
+      "cites": [{"kind": "issue", "ref": "#40"}],
+      "debt": "#40"
+    },
+    {
+      "kind": "debt",
+      "text": "Three commits that landed the vocabulary owe a defence pass on `CONTEXT.md` — filed as deferred custody obligations, which block `1.0.0` and are not Verification Debt",
+      "cites": [{"kind": "issue", "ref": "#37"}, {"kind": "issue", "ref": "#38"}, {"kind": "issue", "ref": "#39"}]
+    },
+    {
+      "kind": "activity",
+      "text": "A throwaway prototype of the custody predicate was built and driven case by case before any protocol text was written",
+      "cites": [{"kind": "commit", "ref": "53fac57"}]
+    },
+    {
+      "kind": "landed",
+      "text": "How far down a derivation must be defended before it bottoms out was argued at length and is the thread the competence floor came out of",
+      "cites": []
+    }
+  ],
+
+  "sample_annotations": [
+    {
+      "anchor": "@lede",
+      "text": "The reframe was mine and it was the whole session: even typed runs into the same conflict, which is when I don't truly understand but am able to recite empty words. Attendance and typing are both proxies for a thing neither of them checks. What I owe before the charter is a minimal set of beliefs — the hard core, enough belt to start experimenting, and an intuitive restatement of every part. Not rigour."
+    },
+    {
+      "anchor_cite": "a598221",
+      "text": "Dropping the conjunct was the right call for a reason worth keeping: if a rule makes the entire programme less defensible, it is defeating its own purpose."
+    },
+    {
+      "anchor_cite": "2d5b974",
+      "text": "The grace should extend to almost all the rules until 1.0, and 1.0 should really be the end of scaffolding — I should not be able to tick up to it until scaffolding is complete."
+    }
+  ]
+}
