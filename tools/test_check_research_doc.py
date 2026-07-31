@@ -60,6 +60,20 @@ def test_front_matter_is_optional_and_its_absence_is_not_a_crash() -> None:
     assert d.top_sections[0].title == "0. Verdict"
 
 
+def test_an_inline_comment_is_not_part_of_the_value() -> None:
+    """The §1 template comments every key, so a document copying it carried the comments."""
+    d = doc("# T\n", GOOD_FRONT.replace("sources: 1", "sources: 1   # must match the count"))
+    assert d.front["sources"] == "1"
+    assert crd._session(doc("# T\n", GOOD_FRONT.replace(
+        "session: unrecorded", "session: unrecorded          # no transcript")))[0]
+
+
+def test_a_hash_inside_a_value_survives() -> None:
+    """`#` only opens a comment after whitespace; a path anchor is not a comment."""
+    d = doc("# T\n", GOOD_FRONT.replace("supersedes: null", "supersedes: docs/x.md#section"))
+    assert d.front["supersedes"] == "docs/x.md#section"
+
+
 # --- front matter ----------------------------------------------------------
 
 
@@ -79,6 +93,26 @@ def test_session_accepts_unrecorded_but_not_a_freeform_excuse() -> None:
     assert crd._session(doc("# T\n"))[0]
     d = doc("# T\n", GOOD_FRONT.replace("session: unrecorded", "session: lost, sorry"))
     assert not crd._session(d)[0]
+
+
+DIGEST = "9f2c" + "0" * 60
+
+
+def test_session_wants_a_whole_digest_in_either_case() -> None:
+    """Half a hash does not identify a session; hex case does not change what it identifies."""
+    def sessions(v: str) -> bool:
+        return crd._session(doc("# T\n", GOOD_FRONT.replace("session: unrecorded", f"session: {v}")))[0]
+
+    assert sessions(f"sha256:{DIGEST}")
+    assert sessions(f"sha256:{DIGEST.upper()}")
+    assert not sessions("sha256:9f2c1234")
+
+
+def test_the_session_message_says_what_is_wrong_with_a_truncated_digest() -> None:
+    """The README showed `sha256:9f2c…` until #53, so this is the reader who will hit it."""
+    d = doc("# T\n", GOOD_FRONT.replace("session: unrecorded", "session: sha256:9f2c1234"))
+    ok, why = crd._session(d)
+    assert not ok and "64 hex" in why
 
 
 # --- the negative-space section -------------------------------------------
@@ -110,6 +144,34 @@ def test_negative_space_rejects_a_heading_with_nothing_under_it() -> None:
     assert "sources not reached" in why
 
 
+def test_negative_space_is_not_satisfiable_by_one_sentence() -> None:
+    """
+    The keyword version passed on this sentence, which is the ceremony the section exists to
+    prevent: needles as loose as `gap` over the lowercased body, all three hit at once.
+    """
+    body = ("# T\n\n## What this does not establish\n\nWe could not reach the original; that "
+            "gap is open, and if false it would change the verdict.\n")
+    ok, why = crd._negative_space(doc(body))
+    assert not ok
+    assert "open gaps" in why and "load-bearing ifs" in why
+
+
+def test_one_heading_cannot_satisfy_two_of_the_three() -> None:
+    """§4 says three subsections. Two headings covering three requirements is the same
+    ceremony the keyword version allowed, in a smaller size."""
+    body = ("# T\n\n## What this does not establish\n\n"
+            "### Sources not reached\n\nEvery source in the appendix was opened.\n\n"
+            "### Open gaps and load-bearing ifs\n\nOne heading, two requirements.\n")
+    ok, why = crd._negative_space(doc(body))
+    assert not ok and "load-bearing ifs" in why
+
+
+def test_negative_space_rejects_a_subsection_with_a_token_under_it() -> None:
+    thin = NEGATIVE.replace("An open gap worth naming.", "None.")
+    ok, why = crd._negative_space(doc(thin))
+    assert not ok and "open gaps" in why
+
+
 # --- debt ------------------------------------------------------------------
 
 
@@ -131,6 +193,33 @@ def test_debt_passes_when_the_two_agree() -> None:
     assert crd._debt_filed(doc(body))[0]
 
 
+def test_a_documents_own_ticket_does_not_count_as_filed_debt() -> None:
+    """`unfiled` closed one hatch; `#4` in a document resolving #4 was the same hatch open."""
+    body = "# T\n\n## Verification Debt\n\n1. Someone should re-read the #4 survey.\n"
+    front = GOOD_FRONT.replace("debt: [45]", "debt: [4]")  # ticket: 4
+    ok, why = crd._debt_filed(doc(body, front))
+    assert not ok and "own ticket" in why
+
+
+def test_a_sub_bullet_is_not_a_second_debt_item() -> None:
+    body = ("# T\n\n## Verification Debt\n\n1. [#45](u) — read the proof.\n"
+            "   - it is paywalled\n   - the preprint differs\n")
+    ok, why = crd._debt_filed(doc(body))
+    assert ok, why
+
+
+def test_the_debt_message_names_the_cause_it_found() -> None:
+    """#50 retrofits three documents that cite no issue at all; they must not be told about a
+    ticket they never mentioned."""
+    none_at_all = "# T\n\n## Verification Debt\n\n1. Someone should read the original.\n"
+    ok, why = crd._debt_filed(doc(none_at_all))
+    assert not ok and "name no issue" in why and "own ticket" not in why
+
+    own_only = "# T\n\n## Verification Debt\n\n1. Someone should re-read the #4 survey.\n"
+    ok, why = crd._debt_filed(doc(own_only, GOOD_FRONT.replace("debt: [45]", "debt: [4]")))
+    assert not ok and "own ticket (#4)" in why
+
+
 def test_a_document_may_declare_no_debt() -> None:
     front = GOOD_FRONT.replace("debt: [45]", "debt: []")
     ok, _ = crd._debt_filed(doc("# T\n\n## Verification Debt\n\nNone.\n", front))
@@ -147,6 +236,38 @@ def test_record_content_in_an_html_comment_is_caught() -> None:
 
 def test_an_ordinary_comment_is_not_caught() -> None:
     assert crd._no_hidden_record(doc("# T\n\n<!-- prettier-ignore -->\n"))[0]
+
+
+def test_a_comment_quoted_in_a_fenced_block_is_not_a_finding() -> None:
+    """A document documenting R7 was flagging itself; only `README.md` being name-excluded hid it."""
+    body = "# T\n\nR7 catches this:\n\n```markdown\n<!-- debt: unverified, see later -->\n```\n"
+    assert crd._no_hidden_record(doc(body))[0]
+
+
+def test_an_unterminated_fence_does_not_switch_r7_off() -> None:
+    """
+    A stray ``` made everything after it invisible to R7, in silence — the same shape as the
+    commented `sources:` that turned R9's count comparison off, reintroduced by the fix for it.
+    """
+    body = "# T\n\n```\nx\n\n<!-- todo: file this debt -->\n"
+    ok, why = crd._no_hidden_record(doc(body))
+    assert not ok, why
+
+
+def test_a_longer_fence_wraps_a_shorter_one() -> None:
+    """CommonMark: a closing fence is the same character and at least as long as the opener.
+
+    This is how Markdown is documented in Markdown, which is the case the stripping exists to
+    serve — and matching on the character alone inverted the parity and scrambled both sides.
+    """
+    quoted = "# T\n\n````markdown\n```\ncode\n```\n<!-- debt: hidden -->\n````\n\nProse survives.\n"
+    assert crd._no_hidden_record(doc(quoted))[0]
+    assert "Prose survives." in crd.strip_fenced_code(quoted)
+
+
+def test_a_tilde_fence_is_a_fence() -> None:
+    body = "# T\n\n~~~\n<!-- debt: quoted -->\n~~~\n"
+    assert crd._no_hidden_record(doc(body))[0]
 
 
 # --- verdicts and traceability --------------------------------------------
@@ -176,6 +297,30 @@ def test_a_verdict_row_must_name_its_section() -> None:
     assert not ok
 
 
+def test_a_sub_question_may_contain_a_triple_dash() -> None:
+    """Shedding rows that contain `---` shed the content rows too, and the table with them."""
+    t = TABLE.replace("Does it hold?", "Is A --- B?")
+    ok, why = crd._sub_question_verdicts(doc(t))
+    assert ok, why
+
+
+def test_the_verdict_column_may_be_called_something_else() -> None:
+    """The header is the first row. It is not the row with the word `Verdict` in it."""
+    t = TABLE.replace("| Sub-question | Verdict | Argued in |", "| Sub-question | Finding | Where |")
+    ok, why = crd._sub_question_verdicts(doc(t))
+    assert ok, why
+
+
+def test_a_second_table_does_not_leak_its_header_into_the_rows() -> None:
+    """The first row of a Markdown *table* is its header — which is not the same as the first
+    `|` line in the section."""
+    t = TABLE + ("\nAnd the revision's own table:\n\n"
+                 "| What moved | Where |\n|---|---|\n| **Supported** — §1 rewritten | §1 |\n")
+    ok, why = crd._sub_question_verdicts(doc(t))
+    assert ok, why
+    assert len(doc(t).verdict_rows) == 2
+
+
 def test_a_leading_section_number_counts_as_naming_it() -> None:
     """#27 writes `**1.1** Does a Google…`, which names its section perfectly well."""
     t = TABLE.replace("| Does it hold? | **Refuted** | §2.3 |",
@@ -198,12 +343,37 @@ def test_appendix_entries_must_be_linked() -> None:
     assert not ok and "no link" in why
 
 
-def test_surveys_are_exempt_from_the_retrieval_date() -> None:
-    """A paper does not move. A pricing page does."""
+def test_a_numbered_appendix_is_an_appendix() -> None:
+    """`_debt_filed` accepted both markers; this one accepted only dashes and read `1.` as empty."""
+    body = "# T\n\n## Appendix: primary sources\n\n1. A. https://x.invalid\n"
+    ok, why = crd._appendix_sources(doc(body))
+    assert ok, why
+
+
+def test_an_unreadable_source_count_fails_rather_than_skipping_the_comparison() -> None:
     body = "# T\n\n## Appendix: primary sources\n\n- A. https://x.invalid\n"
+    ok, why = crd._appendix_sources(doc(body, GOOD_FRONT.replace("sources: 1", "sources: many")))
+    assert not ok and "not a count" in why
+
+
+def test_the_retrieval_date_follows_the_source_not_the_kind() -> None:
+    """A paper does not move. A pricing page does, and a survey may cite one — #27 does."""
+    paper = "# T\n\n## Appendix: primary sources\n\n- Culík & Yu. https://doi.invalid/10.1\n"
+    assert crd._volatile_dated(doc(paper))[0], "a survey citing a paper needs no date"
+    for kind in ("survey", "verification"):
+        front = GOOD_FRONT.replace("kind: survey", f"kind: {kind}")
+        live = "# T\n\n## Appendix: primary sources\n\n- Gemini API pricing — https://x.invalid/docs/pricing\n"
+        ok, why = crd._volatile_dated(doc(live, front))
+        assert not ok, f"kind: {kind} — {why}"
+        dated = live.rstrip("\n") + " (retrieved 2026-07-29)\n"
+        assert crd._volatile_dated(doc(dated, front))[0]
+
+
+def test_one_date_on_the_appendix_heading_covers_it() -> None:
+    """How #27 writes it, and it is not worse for being written once."""
+    body = ("# T\n\n## Appendix: primary sources, all retrieved 2026-07-29\n\n"
+            "- Gemini API pricing — https://x.invalid/docs/pricing\n")
     assert crd._volatile_dated(doc(body))[0]
-    front = GOOD_FRONT.replace("kind: survey", "kind: verification")
-    assert not crd._volatile_dated(doc(body, front))[0]
 
 
 if __name__ == "__main__":
@@ -216,5 +386,8 @@ if __name__ == "__main__":
             except AssertionError as e:
                 failures += 1
                 print(f"  FAIL {name}  {e}")
+            except Exception as e:  # noqa: BLE001 — one broken test must not eat the summary
+                failures += 1
+                print(f"  ERROR {name}  {type(e).__name__}: {e}")
     print(f"\n{failures} failure(s)")
     sys.exit(1 if failures else 0)
