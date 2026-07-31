@@ -8,7 +8,7 @@ The grace should extend to almost all the rules until 1.0, and 1.0 should really
 
 
 <details>
-<summary>Generated record — 9 line(s), 303 words</summary>
+<summary>Generated record — 9 line(s), 303 words — merge `main` ← tooling/custody-and-charter-gate</summary>
 
 - Attendance was dropped from what custody concludes. Requiring a session to be attended made the programme less defensible than the amanuensis capability the requirement existed to protect, and the claim is asserted by the one party whose attendance is in question [`a598221`](https://github.com/NGL321/mosaic/commit/a598221) · [`PROTOCOL.md`](https://github.com/NGL321/mosaic/blob/main/PROTOCOL.md) `⟦T3⟧`
 - The three readings the ticket set up — typed, attended, endorsed — were driven against 15 cases and all three failed: A convicts legitimate assisted work, B is fooled by an attendance claim it cannot check, C declines to rule at all. The trichotomy dissolved rather than resolved, and a fourth reading was drafted after the failure, not before [`6680d66`](https://github.com/NGL321/mosaic/commit/6680d66) · [#23](https://github.com/NGL321/mosaic/issues/23) `⟦T3⟧`
@@ -57,6 +57,6 @@ Cited by content hash; the Transcript Archive is private and the `Index` manifes
 
 | session | window | segment | size | branch |
 |---|---|---|---|---|
-| `sha256:6c69d0f604dd…` | 2026-07-29T16:16 → 2026-07-29T20:35 | segment(s) 1,2 of 2 | 8 prompts / 505 events | `tooling/custody-and-charter-gate` |
+| `sha256:6c69d0f604dd…` | 2026-07-29T16:16 → 2026-07-29T20:35 | segment(s) 1,2 of 2 | 8 prompts / 351 events | `tooling/custody-and-charter-gate` |
 
 <sub>`⟦T1⟧` derived unaided · `⟦T3⟧` machine-produced, unverified · debt: `#40`</sub>

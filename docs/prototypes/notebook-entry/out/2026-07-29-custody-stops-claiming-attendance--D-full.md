@@ -67,4 +67,4 @@ Cited by content hash; the Transcript Archive is private and the `Index` manifes
 
 | session | window | segment | size | branch |
 |---|---|---|---|---|
-| `sha256:6c69d0f604dd…` | 2026-07-29T16:16 → 2026-07-29T20:35 | segment(s) 1,2 of 2 | 8 prompts / 505 events | `tooling/custody-and-charter-gate` |
+| `sha256:6c69d0f604dd…` | 2026-07-29T16:16 → 2026-07-29T20:35 | segment(s) 1,2 of 2 | 8 prompts / 351 events | `tooling/custody-and-charter-gate` |

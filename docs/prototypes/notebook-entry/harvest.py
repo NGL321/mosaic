@@ -126,7 +126,8 @@ def read_session(session_id: str, day: str | None = None) -> tuple[Session, dict
 
     `day` selects the segments the idle rule assigns to that day; everything counted
     below is counted **within those segments**, so a file feeding two days does not
-    report the same 505 events to both."""
+    report the same events to both. Records carrying no timestamp cannot be placed in a
+    segment and are not counted at all — see the loop below."""
     path = ARCHIVE / f"{session_id}.jsonl"
     raw = path.read_bytes()
     digest = hashlib.sha256(raw).hexdigest()
@@ -164,10 +165,18 @@ def read_session(session_id: str, day: str | None = None) -> tuple[Session, dict
         # Per segment, not across the outer window: a day owning segments 1 and 4 would
         # otherwise count 2 and 3 — the same over-reach the `segment=` field was changed
         # to stop displaying, in the half that puts a wrong number on the page.
-        if ts:
-            at = datetime.fromisoformat(ts.replace("Z", "+00:00"))
-            if not any(a <= at <= b for a, b in mine):
-                continue
+        #
+        # A record with no timestamp cannot be placed in a segment, so it is skipped
+        # rather than counted. Letting it through the filter counted it into *every* day
+        # the file feeds: 154 of this transcript's 505 records, which would have made the
+        # four-segments-across-two-days case report ~30% of the file to both days. They
+        # are all session metadata — mode, ai-title, file-history — so nothing about the
+        # work is lost by dropping them, and the published number stops double-counting.
+        if not ts:
+            continue
+        at = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+        if not any(a <= at <= b for a, b in mine):
+            continue
         events += 1
         if d.get("type") == "user" and not d.get("isMeta") and isinstance(
             (d.get("message") or {}).get("content"), str

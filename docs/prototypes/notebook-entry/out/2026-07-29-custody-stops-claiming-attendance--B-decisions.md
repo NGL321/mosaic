@@ -8,7 +8,7 @@ The grace should extend to almost all the rules until 1.0, and 1.0 should really
 
 
 <details>
-<summary>Generated record — 5 line(s), 158 words</summary>
+<summary>Generated record — 5 line(s), 158 words — merge `main` ← tooling/custody-and-charter-gate</summary>
 
 - Attendance was dropped from what custody concludes. Requiring a session to be attended made the programme less defensible than the amanuensis capability the requirement existed to protect, and the claim is asserted by the one party whose attendance is in question [`a598221`](https://github.com/NGL321/mosaic/commit/a598221) · [`PROTOCOL.md`](https://github.com/NGL321/mosaic/blob/main/PROTOCOL.md) `⟦T3⟧`
 - Custody was split into three obligations — identity, citation, defence — each checked where it can actually be checked, and an agent co-author trailer became a routing signal rather than a conviction [`2611689`](https://github.com/NGL321/mosaic/commit/2611689) · [PR #36](https://github.com/NGL321/mosaic/pull/36) `⟦T3⟧`
@@ -40,6 +40,6 @@ Cited by content hash; the Transcript Archive is private and the `Index` manifes
 
 | session | window | segment | size | branch |
 |---|---|---|---|---|
-| `sha256:6c69d0f604dd…` | 2026-07-29T16:16 → 2026-07-29T20:35 | segment(s) 1,2 of 2 | 8 prompts / 505 events | `tooling/custody-and-charter-gate` |
+| `sha256:6c69d0f604dd…` | 2026-07-29T16:16 → 2026-07-29T20:35 | segment(s) 1,2 of 2 | 8 prompts / 351 events | `tooling/custody-and-charter-gate` |
 
 <sub>`⟦T1⟧` derived unaided · `⟦T3⟧` machine-produced, unverified</sub>

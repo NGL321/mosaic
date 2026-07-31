@@ -121,6 +121,7 @@ class App:
         gate = f"{G}emit{R}" if emit else f"{Y}no entry — {why}{R}"
         print(f"{B}gate{R} {gate}"
               f"   {B}shown{R} {m.shown}  {B}ledger{R} {m.ledgered}"
+              f"  {B}pinned{R} {G if sel.pinned else D}{len(sel.pinned)}{R}"
               f"  {B}dropped{R} {m.dropped}"
               f" {D}({len(sel.dropped_uncited)} uncited, {len(sel.dropped_volume)} by volume){R}")
         print(f"{B}words{R} {m.total_words} {D}(generated {m.generated_words}, "
@@ -195,7 +196,10 @@ class App:
             self.scroll = max(0, self.scroll - 5)
         elif k == "w":
             OUT.mkdir(exist_ok=True)
-            name = self.variant_name.split(" ")[0]
+            # Variant *and* volume: without the volume the two rows the README's table
+            # compares — B at `full` and B at `decisions` — overwrite each other, and no
+            # write ever lands on a committed path.
+            name = f"{self.variant_name.split(' ')[0]}-{self.volume.value}"
             p = OUT / f"{self.entry.date}-{self.entry.slug}--{name}.md"
             p.write_text(self.rendered() + "\n", encoding="utf-8")
             print(f"\n{G}wrote{R} {p.relative_to(Path(__file__).parents[3])}  — press any key")

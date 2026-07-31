@@ -15,7 +15,7 @@ mechanism existed would be the revision that directory was created to avoid. So 
 prototype
 generates **one real entry from one real session** — Transcript Archive session
 `f0900d60…`, the night §5 custody was decided (2026-07-29T23:16Z → 2026-07-30T03:35Z,
-505 events, 8 prompts) — and renders it four ways, so the format is chosen by reacting to
+351 placeable events, 8 prompts) — and renders it four ways, so the format is chosen by reacting to
 an entry rather than to a description of one.
 
 The entry is real in both halves: the mechanical spine is read live out of `git log` and
@@ -69,11 +69,11 @@ fixed at 136 words throughout:
 |---|---|---|---|
 | D — raw generated, no rules | 1128 | ~4m 30s | 12% |
 | A — inline, `full` | 955 | ~3m 50s | 14% |
-| B — annotation-first, `full` | 953 | ~3m 50s | 14% |
-| B — annotation-first, `decisions` | 560 | **~2m 15s** | **24%** |
+| B — annotation-first, `full` | 958 | ~3m 50s | 14% |
+| B — annotation-first, `decisions` | 565 | **~2m 15s** | **24%** |
 
 **Read the third and fourth rows against the second, not the first.** A and B at the same
-volume differ by *two words*: the rendering choice is invisible to a word count, and the
+volume differ by *three words*: the rendering choice is invisible to a word count, and the
 whole measured effect belongs to the volume dial. Noah's share moves only because the
 denominator shrinks — the numerator is the same 136 words in every row.
 
