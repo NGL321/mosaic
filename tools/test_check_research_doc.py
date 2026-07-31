@@ -108,6 +108,13 @@ def test_session_wants_a_whole_digest_in_either_case() -> None:
     assert not sessions("sha256:9f2c1234")
 
 
+def test_the_session_message_says_what_is_wrong_with_a_truncated_digest() -> None:
+    """The README showed `sha256:9f2c…` until #53, so this is the reader who will hit it."""
+    d = doc("# T\n", GOOD_FRONT.replace("session: unrecorded", "session: sha256:9f2c1234"))
+    ok, why = crd._session(d)
+    assert not ok and "64 hex" in why
+
+
 # --- the negative-space section -------------------------------------------
 
 
@@ -147,6 +154,16 @@ def test_negative_space_is_not_satisfiable_by_one_sentence() -> None:
     ok, why = crd._negative_space(doc(body))
     assert not ok
     assert "open gaps" in why and "load-bearing ifs" in why
+
+
+def test_one_heading_cannot_satisfy_two_of_the_three() -> None:
+    """§4 says three subsections. Two headings covering three requirements is the same
+    ceremony the keyword version allowed, in a smaller size."""
+    body = ("# T\n\n## What this does not establish\n\n"
+            "### Sources not reached\n\nEvery source in the appendix was opened.\n\n"
+            "### Open gaps and load-bearing ifs\n\nOne heading, two requirements.\n")
+    ok, why = crd._negative_space(doc(body))
+    assert not ok and "load-bearing ifs" in why
 
 
 def test_negative_space_rejects_a_subsection_with_a_token_under_it() -> None:
@@ -191,6 +208,18 @@ def test_a_sub_bullet_is_not_a_second_debt_item() -> None:
     assert ok, why
 
 
+def test_the_debt_message_names_the_cause_it_found() -> None:
+    """#50 retrofits three documents that cite no issue at all; they must not be told about a
+    ticket they never mentioned."""
+    none_at_all = "# T\n\n## Verification Debt\n\n1. Someone should read the original.\n"
+    ok, why = crd._debt_filed(doc(none_at_all))
+    assert not ok and "name no issue" in why and "own ticket" not in why
+
+    own_only = "# T\n\n## Verification Debt\n\n1. Someone should re-read the #4 survey.\n"
+    ok, why = crd._debt_filed(doc(own_only, GOOD_FRONT.replace("debt: [45]", "debt: [4]")))
+    assert not ok and "own ticket (#4)" in why
+
+
 def test_a_document_may_declare_no_debt() -> None:
     front = GOOD_FRONT.replace("debt: [45]", "debt: []")
     ok, _ = crd._debt_filed(doc("# T\n\n## Verification Debt\n\nNone.\n", front))
@@ -212,6 +241,32 @@ def test_an_ordinary_comment_is_not_caught() -> None:
 def test_a_comment_quoted_in_a_fenced_block_is_not_a_finding() -> None:
     """A document documenting R7 was flagging itself; only `README.md` being name-excluded hid it."""
     body = "# T\n\nR7 catches this:\n\n```markdown\n<!-- debt: unverified, see later -->\n```\n"
+    assert crd._no_hidden_record(doc(body))[0]
+
+
+def test_an_unterminated_fence_does_not_switch_r7_off() -> None:
+    """
+    A stray ``` made everything after it invisible to R7, in silence — the same shape as the
+    commented `sources:` that turned R9's count comparison off, reintroduced by the fix for it.
+    """
+    body = "# T\n\n```\nx\n\n<!-- todo: file this debt -->\n"
+    ok, why = crd._no_hidden_record(doc(body))
+    assert not ok, why
+
+
+def test_a_longer_fence_wraps_a_shorter_one() -> None:
+    """CommonMark: a closing fence is the same character and at least as long as the opener.
+
+    This is how Markdown is documented in Markdown, which is the case the stripping exists to
+    serve — and matching on the character alone inverted the parity and scrambled both sides.
+    """
+    quoted = "# T\n\n````markdown\n```\ncode\n```\n<!-- debt: hidden -->\n````\n\nProse survives.\n"
+    assert crd._no_hidden_record(doc(quoted))[0]
+    assert "Prose survives." in crd.strip_fenced_code(quoted)
+
+
+def test_a_tilde_fence_is_a_fence() -> None:
+    body = "# T\n\n~~~\n<!-- debt: quoted -->\n~~~\n"
     assert crd._no_hidden_record(doc(body))[0]
 
 
@@ -254,6 +309,16 @@ def test_the_verdict_column_may_be_called_something_else() -> None:
     t = TABLE.replace("| Sub-question | Verdict | Argued in |", "| Sub-question | Finding | Where |")
     ok, why = crd._sub_question_verdicts(doc(t))
     assert ok, why
+
+
+def test_a_second_table_does_not_leak_its_header_into_the_rows() -> None:
+    """The first row of a Markdown *table* is its header — which is not the same as the first
+    `|` line in the section."""
+    t = TABLE + ("\nAnd the revision's own table:\n\n"
+                 "| What moved | Where |\n|---|---|\n| **Supported** — §1 rewritten | §1 |\n")
+    ok, why = crd._sub_question_verdicts(doc(t))
+    assert ok, why
+    assert len(doc(t).verdict_rows) == 2
 
 
 def test_a_leading_section_number_counts_as_naming_it() -> None:

@@ -16,6 +16,7 @@ Usage:
     python tools/check_research_doc.py                       # every doc in docs/research/
     python tools/check_research_doc.py path/to/doc.md ...    # named documents
     python tools/check_research_doc.py --quiet               # failures only
+    python tools/check_research_doc.py --help                # this, on stdout, exit 0
 
 Exit codes (distinct so CI can tell "fix the document" from "the tool is broken"):
     0  every document satisfies the contract
@@ -146,11 +147,23 @@ class Doc:
         with a sub-question like `Is A --- B?` in it, and naming the header by its `Verdict`
         column scored the header as a body row for a table whose column is called `Finding`.
         The first row of a Markdown table is its header; the rule is a rule.
+
+        Per table, not per section: a run of `|` lines is a table, and a §0 carrying two of
+        them would otherwise leak the second one's header into R4 and R12 as a verdictless
+        row. No document does this today, which is the cheapest time to fix it.
         """
         if not self.top_sections:
             return []
-        rows = [ln for ln in self.top_sections[0].body.split("\n") if ln.strip().startswith("|")]
-        return [r for r in rows[1:] if not RE_TABLE_RULE.fullmatch(r.strip())]
+        rows: list[str] = []
+        run: list[str] = []
+        for ln in self.top_sections[0].body.split("\n"):
+            if ln.strip().startswith("|"):
+                run.append(ln)
+            else:
+                rows.extend(run[1:])
+                run = []
+        rows.extend(run[1:])
+        return [r for r in rows if not RE_TABLE_RULE.fullmatch(r.strip())]
 
 
 def split_sections(body: str) -> list[Section]:
@@ -171,16 +184,35 @@ def split_sections(body: str) -> list[Section]:
 
 
 def strip_fenced_code(text: str) -> str:
-    """Fenced blocks quote; they do not assert. A document explaining R7 is not violating it."""
+    """
+    Fenced blocks quote; they do not assert. A document explaining R7 is not violating it.
+
+    Two rules, both CommonMark's, and both load-bearing for a check that would otherwise be
+    switched off by a formatting accident — the shape of the R9 bug this file was hardened
+    against, and worth not reintroducing in the fix for it.
+
+    A closing fence is the same character and *at least as long* as the one that opened it,
+    so a four-backtick block quoting a three-backtick example — the standard way to document
+    Markdown, which is the case this function exists to serve — is one block and not three.
+
+    An unterminated fence strips nothing. Everything after a stray ``` would otherwise be
+    invisible to R7, silently, and a check that goes quiet on malformed input is worse than
+    one that complains: a document that flags a comment it did not intend to hide gets read,
+    while one that hides a comment nobody sees does not.
+    """
     out: list[str] = []
-    fence: str | None = None
+    opener: str | None = None
     for line in text.split("\n"):
         m = RE_FENCE.match(line)
-        if m and (fence is None or m.group(1)[0] == fence):
-            fence = m.group(1)[0] if fence is None else None
-            continue
-        if fence is None:
+        if opener is None:
+            if m:
+                opener = m.group(1)
+                continue
             out.append(line)
+        elif m and m.group(1)[0] == opener[0] and len(m.group(1)) >= len(opener):
+            opener = None
+    if opener is not None:
+        return text
     return "\n".join(out)
 
 
@@ -226,7 +258,11 @@ def _session(d: Doc) -> tuple[bool, str]:
     if not s:
         return False, "no session id — the work is untraceable to a transcript"
     if not RE_SESSION.match(s):
-        return False, f"session={s!r} is not sha256:<digest> or the literal `unrecorded`"
+        # Naming the rule, not the shape: the README showed `sha256:9f2c…` until #53, so the
+        # reader most likely to see this has a truncated digest and needs to be told that the
+        # length is what is wrong with it.
+        return False, (f"session={s!r} is not `sha256:` + 64 hex digits or the literal "
+                       f"`unrecorded`")
     if s == "unrecorded":
         return True, "unrecorded — declared, which is the point"
     return True, s
@@ -294,13 +330,19 @@ def _negative_space(d: Doc) -> tuple[bool, str]:
         "open gaps": ("open gap", "gaps"),
         "load-bearing ifs": ("load-bearing", "load bearing", "ifs"),
     }
-    subs = s.subsections
+    # Claimed subsections leave the pool. Searching it independently for each of the three
+    # let one heading — `### Open gaps and load-bearing ifs` — satisfy two of them, which is
+    # two subsections where §4 says three, and the ceremony this check went structural to
+    # stop, in a smaller size.
+    pool = list(s.subsections)
     missing, thin = [], []
     for name, needles in want.items():
-        found = [x for x in subs if any(n in x.slug for n in needles)]
-        if not found:
+        found = next((x for x in pool if any(n in x.slug for n in needles)), None)
+        if found is None:
             missing.append(name)
-        elif len(found[0].body.strip()) < MIN_SUBSECTION:
+            continue
+        pool.remove(found)
+        if len(found.body.strip()) < MIN_SUBSECTION:
             thin.append(name)
     if missing:
         return False, "section present but missing: " + ", ".join(missing)
@@ -342,8 +384,17 @@ def _debt_filed(d: Doc) -> tuple[bool, str]:
         return False, "debt section present but nothing itemised"
     unfiled = [ln for ln in items if not filed(ln)]
     if unfiled:
-        return False, (f"{len(unfiled)}/{len(items)} debt items name no issue other than this "
-                       f"document's own ticket — file them first")
+        # Two causes, two messages. #50 retrofits the three documents on `main`, none of
+        # which cite an issue at all, and telling their author about a ticket they never
+        # mentioned is a diagnostic that sends them looking for the wrong thing.
+        self_only = [ln for ln in unfiled if RE_ISSUE.search(ln)]
+        if not self_only:
+            why = "name no issue"
+        elif len(self_only) == len(unfiled):
+            why = f"name only this document's own ticket (#{d.front.get('ticket', '')})"
+        else:
+            why = "name no issue other than this document's own ticket"
+        return False, f"{len(unfiled)}/{len(items)} debt items {why} — file them first"
     cited = sorted(set().union(*(filed(ln) for ln in items)))
     if declared != cited:
         return False, f"front matter debt={declared or '[]'} does not mirror the section {cited}"
@@ -513,16 +564,19 @@ def main() -> None:
     flags = [a for a in sys.argv[1:] if a.startswith("-")]
 
     # `--quite` used to run verbose and say nothing about it, which is the wrong direction for
-    # a tool whose output is the point.
+    # a tool whose output is the point. Asking for help is not that failure: it is a
+    # successful invocation, so it goes to stdout and exits 0, and exit 2 keeps meaning what
+    # the docstring says it means — the tool could not run.
     unknown = [f for f in flags if f not in FLAGS]
     if unknown or "--help" in flags or "-h" in flags:
+        stream = sys.stderr if unknown else sys.stdout
         for f in unknown:
             print(f"unrecognised flag: {f}", file=sys.stderr)
         body = __doc__.split("Usage:", 1)[1].split("Exit codes")[0].strip()
-        print("usage:", file=sys.stderr)
+        print("usage:", file=stream)
         for line in body.split("\n"):
-            print("    " + line.strip(), file=sys.stderr)
-        sys.exit(EXIT_TOOL)
+            print("    " + line.strip(), file=stream)
+        sys.exit(EXIT_TOOL if unknown else EXIT_OK)
     quiet = "--quiet" in flags
 
     paths = [Path(a) for a in args] if args else sorted(DOCS.glob("*.md"))
