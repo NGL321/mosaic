@@ -168,20 +168,37 @@ itself on the page.
 
 ### The scrub fails closed
 
-Besides the narrative pass, the generator reads a transcript's **content** — as opposed to
-its structure, which it also reads, for windows, segments and the hash — for one purpose:
-scanning for anything that looks like a secret, at the boundary where public output is
-produced.
+**Two scans, because the transcript is an input and not the output.** The generator scans
+the transcript's content — the narrative pass is written from it, so a secret there can be
+paraphrased forward — and it scans **the emitted text itself**: commit subjects, issue
+titles, the narrative lines, and the annotations. That second scan is the one at the
+boundary where public output is produced. Scanning only the transcript would guard an
+artifact that never reaches the page while leaving the text that does reach it unread.
 
 #3 §3.2 is a prohibition, not a reporting requirement: secrets never reach repo, Drive
-plaintext, logs, or notebook output. So a non-zero count **blocks the entry**. Nothing is
-emitted, the count and its location surface to Noah out-of-band, and generation for that day
-stays blocked until he resolves it.
+plaintext, logs, or notebook output. So a hit **blocks the entry**. Nothing is emitted, the
+count and its location surface to Noah out-of-band, and generation stays blocked until he
+resolves it. A transcript is one artifact and a partial scrub is not a scrub, so a hit in a
+transcript blocks **every day that transcript feeds**, not only the day being generated.
 
 Counting without blocking would be worse than not counting at all: it would publish an entry
 containing a secret and helpfully note underneath that it contains one, advertising the leak
 to a reader who would otherwise have scrolled past. A count is the residue of a scrub, never
 a substitute for one.
+
+**A false positive needs a way out, or the control gets switched off.** The patterns will
+fire on a JSON field named `secret`, a pasted config, or a conversation about one — and
+under a blocking rule with no defined resolution, the only available move is to disable the
+scan, which is strictly worse than a noisy one. So the resolution is an **acknowledgement**:
+Noah records the transcript's `sha256` and the offending line number in an append-only
+allow-list, which the generator consults and which is itself part of the record. Three
+properties make it a resolution rather than a hole — it is per line and per transcript, never
+a blanket exemption; it is written by hand, so nothing clears itself; and the acknowledgement
+is auditable after the fact, so a stranger can see what was waved through and judge it.
+
+Redaction is deliberately not offered. Editing a candidate secret out of the emitted text
+would leave the generator deciding what is safe to publish, which is exactly the judgement it
+should never make.
 
 ## Provenance Tiers in an entry
 
@@ -236,6 +253,14 @@ execution on Google's infrastructure with direct Drive access to the archive, so
 requires Google to fail. That rules out `git` and `gh` at generation time: the harvest half
 goes through the GitHub REST API. Its four-line contract (#3 §6) and the identity it
 commits under are open.
+
+**So is the timezone**, and it is a real decision rather than a detail. This file says a
+session belongs to the local day it ended on and that windows print in local time; Apps
+Script runs UTC, and has no access to whichever laptop the work happened on. *Whose* local,
+read from *where*, has to be answered before the generator dates its first entry — a fixed
+declared zone for the programme is the obvious candidate, and it is not yet declared. The
+prototype hard-codes one offset and marks the seam, which is honest for a prototype and not
+an answer.
 
 Until then, this file is the format and there are no entries. The first one should be
 produced by the generator rather than written by hand, so that the mechanism is exercised

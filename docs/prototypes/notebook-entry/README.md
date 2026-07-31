@@ -61,16 +61,34 @@ annotated.
 4. **Most days get no entry at all.** `should_emit()` returns false when nothing but churn
    survives selection. Silence is the default.
 
-The measured effect, on the real entry:
+The measured effect, on the real entry — counted with this prototype's own `prose_only()`
+and `words()` over the renderings committed in [`out/`](out/), with the annotation layer
+fixed at 136 words throughout:
 
 | | words | reading | Noah's share |
 |---|---|---|---|
-| D — raw generated, no rules | 935 | ~3m 45s | 15% |
-| A — rules on, `full` volume | 818 | ~3m 15s | 17% |
-| B — rules on, `decisions` volume | 513 | **~2m** | **27%** |
+| D — raw generated, no rules | 1128 | ~4m 30s | 12% |
+| A — inline, `full` | 955 | ~3m 50s | 14% |
+| B — annotation-first, `full` | 953 | ~3m 50s | 14% |
+| B — annotation-first, `decisions` | 560 | **~2m 15s** | **24%** |
 
-D is the control, and it is what the notebook becomes if nobody annotates and nothing is
-budgeted. Watching that column stay at 935 while the others move is the argument.
+**Read the third and fourth rows against the second, not the first.** A and B at the same
+volume differ by *two words*: the rendering choice is invisible to a word count, and the
+whole measured effect belongs to the volume dial. Noah's share moves only because the
+denominator shrinks — the numerator is the same 136 words in every row.
+
+An earlier version of this table compared A at `full` against B at `decisions` and read the
+difference as evidence for B. That was a confounded comparison and review caught it. **The
+numbers argue for the rules, not for the rendering.** B's case is the prose one two sections
+down, and it needs no numbers: an unannotated entry under B admits that it is unannotated,
+and under A it looks finished.
+
+D is the control — what the notebook becomes if nobody annotates and nothing is budgeted.
+
+> These counts are pinned to the committed `out/` files. `harvest.py` reads live
+> `git log --all`, so regenerating on a repository that has moved will produce a different
+> day and different numbers. Re-measure from `out/` rather than trusting the table against
+> a fresh run.
 
 ### Generated versus annotated
 
@@ -106,9 +124,20 @@ anything that looks like a secret at the boundary where public output is generat
 *structure* for windows, segments and the hash.
 
 The scrub **fails closed**: a candidate secret raises `ScrubBlocked` and no entry is
-produced. #3 §3.2 is a prohibition, not a reporting requirement, and counting without
-blocking would publish the secret and note underneath that it had. Nothing is on the page,
-because an entry that would carry a count is an entry that was never emitted.
+produced, for the whole file rather than the requested day — a transcript is one artifact
+and a partial scrub is not a scrub. #3 §3.2 is a prohibition, not a reporting requirement,
+and counting without blocking would publish the secret and note underneath that it had.
+Nothing is on the page, because an entry that would carry a count is an entry that was never
+emitted.
+
+**Two places the prototype is narrower than the record, both deliberate.** It scans only the
+*transcript*, whose content never reaches the page; `notebook/README.md` requires the
+generator to scan **the emitted text** as well, which is the actual public boundary — commit
+subjects, issue titles, narrative lines and annotations. And the patterns here will fire on
+ordinary content (a JSON field named `secret`, a pasted config), which under a blocking rule
+needs a way out; the record answers that with a hand-written, per-line, auditable
+acknowledgement rather than a quieter scanner, because a control that cannot be satisfied
+gets switched off.
 
 ### Provenance Tiers in an entry
 
@@ -211,8 +240,25 @@ annotations reported.
   obligation applies: notebook entries are record files and agent-writable, but the Apps
   Script identity still has to be a named one.
 
+## Checks
+
+```console
+python docs/prototypes/notebook-entry/checks.py
+```
+
+**A prototype should not have tests, and this one does** — the rule is right for a
+throwaway, and this stopped being one when it landed in-tree as the cited source and its
+model became the spec the Apps Script generator will be written against.
+
+Four defects were found here by driving the TUI by hand: positional anchors that silently
+re-attributed an annotation, anchors colliding across layers, the budget suppressing an
+annotation into a fold, and `select()` disagreeing with `reanchor()` about what is
+annotatable. Each is now an assert. They cost thirty lines and they are the difference
+between the next reader finding out in a second and finding out by reading a rendering
+closely enough to notice Noah's words are missing.
+
 ## Not in scope
 
-No persistence beyond `out/`, no tests, no CI, no scheduling, nothing written to `notebook/`.
-The prototype does not decide the format — it makes four candidate formats disagree out loud
+No persistence beyond `out/`, no CI, no scheduling, nothing written to `notebook/`. The
+prototype does not decide the format — it makes four candidate formats disagree out loud
 over one real day of work.

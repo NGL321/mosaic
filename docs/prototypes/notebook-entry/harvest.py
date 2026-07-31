@@ -44,6 +44,14 @@ SECRET_PATTERNS = [
         r"-----BEGIN [A-Z ]*PRIVATE KEY-----", r"(?i)(api[_-]?key|password|secret)\s*[:=]\s*\S{8,}",
     )
 ]
+"""The last pattern fires on ordinary transcript content — a JSON field named `secret`, a
+pasted config, a conversation *about* a config — and under a fail-closed rule at file
+scope, one incidental match blocks every day that transcript feeds, with no way forward.
+
+That is left as written, and the resolution path is stated in `notebook/README.md` rather
+than fixed by loosening the pattern: a control that cannot be satisfied gets disabled, and
+a disabled scrub is worse than a noisy one. What the record owes is a way to *clear* a
+false positive, not a quieter scanner."""
 
 
 def _git(*args: str) -> str:
@@ -153,8 +161,13 @@ def read_session(session_id: str, day: str | None = None) -> tuple[Session, dict
     prs: set[int] = set()
     for d in records:
         ts = d.get("timestamp")
-        if ts and not (window[0] <= datetime.fromisoformat(ts.replace("Z", "+00:00")) <= window[1]):
-            continue
+        # Per segment, not across the outer window: a day owning segments 1 and 4 would
+        # otherwise count 2 and 3 — the same over-reach the `segment=` field was changed
+        # to stop displaying, in the half that puts a wrong number on the page.
+        if ts:
+            at = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+            if not any(a <= at <= b for a, b in mine):
+                continue
         events += 1
         if d.get("type") == "user" and not d.get("isMeta") and isinstance(
             (d.get("message") or {}).get("content"), str
@@ -267,6 +280,17 @@ def pr_trigger(number: int) -> Trigger | None:
 
 # ------------------------------------------------------------------- assembly
 
+LOCAL_OFFSET = "-07:00"
+"""**A seam, not a decision.** The git window below is pinned to one offset while
+`owning_day()` uses the machine's `astimezone()`, so the two agree only on a laptop in
+PDT; `issue_notes()` has the same seam, comparing a UTC `createdAt[:10]` against a local
+day string. Harmless for a prototype driven once on one machine, and *not* harmless for
+the Apps Script generator the record commits to, which runs UTC. `notebook/README.md`
+stakes out half of it — windows print in local time — and leaves open whose local, read
+from where. That is a real decision the generator has to make, and it is recorded there
+as open rather than papered over here."""
+
+
 def load(session_id: str) -> Entry:
     """Build the entry for the day a real session ran, from real sources."""
     here = Path(__file__).parent
@@ -274,7 +298,8 @@ def load(session_id: str) -> Entry:
 
     day = narrative["date"]
     session, meta = read_session(session_id, day)
-    start, end = f"{day}T00:00:00-07:00", f"{_next_day(day)}T04:00:00-07:00"
+    start = f"{day}T00:00:00{LOCAL_OFFSET}"
+    end = f"{_next_day(day)}T04:00:00{LOCAL_OFFSET}"
 
     # Two counters and two namespaces — see `entry.anchor`. Per-layer counters keep the
     # ledger from shifting prose ordinals; the `ledger:` prefix keeps the two layers from

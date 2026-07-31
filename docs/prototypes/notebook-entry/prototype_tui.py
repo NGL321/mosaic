@@ -6,10 +6,9 @@ Run:  python docs/prototypes/notebook-entry/prototype_tui.py
 One real entry, generated from one real session, rendered four ways. Switch the
 rendering with [1]-[4], turn the volume dial with [d], add or drop the annotation
 layer, and watch the word count and the human share move. [w] writes the current
-rendering to out/ so it can be read as GitHub renders it — that is the only thing
-this prototype puts on disk, and it is git-ignored nowhere: look at it, then delete it.
-
-Everything except that write is in memory. The entry is never written to notebook/.
+rendering to out/, which is committed and cited from `notebook/README.md` as part of the
+retained primary source — so a write there updates the record's evidence rather than
+scratch output. Everything else is in memory, and the entry is never written to notebook/.
 """
 
 from __future__ import annotations
@@ -58,7 +57,7 @@ class App:
     def __init__(self) -> None:
         self.entry = load(SESSION)  # raises rather than emitting; see run_guarded()
         self.samples = [
-            Annotation(a["anchor"], a["text"])
+            Annotation(self._resolve(a), a["text"])
             for a in json.loads(
                 (Path(__file__).parent / f"pass-{SESSION[:8]}.json").read_text(encoding="utf-8")
             )["sample_annotations"]
@@ -68,6 +67,21 @@ class App:
         self.budget = 320
         self.focus = 0
         self.scroll = 0
+
+    def _resolve(self, sample: dict) -> str:
+        """Resolve a sample's `anchor_cite` to whatever anchor the prose line carries now.
+
+        The samples are pinned to *artifacts*, not to derived anchors, so they survive the
+        ordinal shifting that a growing repository causes — `harvest` reads live
+        `git log --all`, and a future line citing the same commit would push this one to
+        `…#2` and orphan a hard-coded sample."""
+        if "anchor" in sample:
+            return sample["anchor"]
+        ref = sample["anchor_cite"]
+        for n in self.entry.notes:
+            if not n.spine and n.cites and n.cites[0].ref == ref:
+                return n.id
+        return ref  # unresolved: orphans, and says so on the page
 
     # ------------------------------------------------------------------ state
     @property

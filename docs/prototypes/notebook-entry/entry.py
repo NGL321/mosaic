@@ -216,6 +216,19 @@ class Annotation:
     text: str
 
 
+def annotatable(notes: "tuple[Note, ...]") -> set[str]:
+    """The anchors an annotation can legitimately attach to: the prose layer, minus the
+    lines `admissible()` drops.
+
+    **One definition, two callers, deliberately.** `select()` and `reanchor()` each grew
+    their own version of this predicate and disagreed — `select()` promoted an annotated
+    *ledger* line into prose while `reanchor()` called the same annotation an orphan, and
+    `select()` tested orphanhood against every note, including inadmissible ones, so an
+    annotation on a dropped line rendered nowhere and reported nowhere. Same input, two
+    answers, and the answer that reached the page was the wrong one."""
+    return {n.id for n in notes if not n.spine and admissible(n)}
+
+
 def reanchor(annotations: list[Annotation], notes: tuple[Note, ...]
              ) -> tuple[list[Annotation], list[Annotation]]:
     """Re-apply an annotation layer to a regenerated entry. Returns (applied, orphaned).
@@ -236,7 +249,7 @@ def reanchor(annotations: list[Annotation], notes: tuple[Note, ...]
       calls that harmless because `admissible()` drops the line before anything can
       render it. True of rendering, and it was not true here: an annotation on a dropped
       line reported applied while appearing on no page at all."""
-    ids = {n.id for n in notes if not n.spine and admissible(n)} | {"@lede"}
+    ids = annotatable(notes) | {"@lede"}
     applied = [a for a in annotations if a.anchor in ids]
     return applied, [a for a in annotations if a.anchor not in ids]
 
@@ -315,7 +328,10 @@ def select(entry: Entry, volume: Volume, budget: int = BUDGET_WORDS) -> Selectio
     `notebook/README.md` says it must never do, and it is the same silent-suppression
     family as the positional-anchor bug: the words were not lost, they were just no longer
     on the page. An annotation is evidence he engaged with the line, so the line stays."""
-    annotated = {a.anchor for a in entry.annotations}
+    # Pin only what an annotation may legitimately hold: an anchor naming a ledger line
+    # or a dropped line is an orphan, not a licence to promote that line into prose.
+    legit = annotatable(entry.notes)
+    annotated = {a.anchor for a in entry.annotations} & legit
     dropped_uncited = [n for n in entry.notes if not admissible(n)]
     live = [n for n in entry.notes if admissible(n)]
     dropped_volume = [n for n in live if n.kind not in KINDS_AT[volume] and n.id not in annotated]
@@ -323,11 +339,10 @@ def select(entry: Entry, volume: Volume, budget: int = BUDGET_WORDS) -> Selectio
 
     ledger = sorted((n for n in live if n.spine and n.id not in annotated),
                     key=lambda n: ORDER[n.kind])
-    prose = sorted((n for n in live if not n.spine or n.id in annotated),
-                   key=lambda n: ORDER[n.kind])
+    prose = sorted((n for n in live if not n.spine), key=lambda n: ORDER[n.kind])
     pinned = [n for n in prose if n.id in annotated]
     orphans = [a for a in entry.annotations
-               if a.anchor != "@lede" and a.anchor not in {n.id for n in entry.notes}]
+               if a.anchor != "@lede" and a.anchor not in legit]
 
     kept: list[Note] = []
     spent = 0
@@ -399,8 +414,12 @@ def _sessions_block(entry: Entry) -> str:
 
 
 def _legend(entry: Entry, sel: Selection) -> str:
-    used = sorted({n.tier for n in sel.kept} | {"T1"} if entry.annotations else {n.tier for n in sel.kept})
-    lines = [f"`⟦{t}⟧` {TIERS[t]}" for t in used if t in TIERS]
+    used = {n.tier for n in sel.kept}
+    # T1 only when an annotation actually reaches the page: an entry whose every
+    # annotation orphaned carries no ⟦T1⟧ badge, so the legend must not promise one.
+    if any(entry.annotated(n.id) for n in sel.kept) or entry.annotated("@lede"):
+        used |= {"T1"}
+    lines = [f"`⟦{t}⟧` {TIERS[t]}" for t in sorted(used) if t in TIERS]
     debts = sorted({n.debt for n in sel.kept if n.debt})
     if debts:
         lines.append("debt: " + " ".join(f"`{d}`" for d in debts))
