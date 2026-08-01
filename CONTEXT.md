@@ -83,6 +83,46 @@ Mosaic's learning track, scheduled off the Verification Debt ledger rather than 
 the mathematics the programme's own results demand, in the order they demand it.
 _Avoid_: Study plan, coursework
 
+### Delegated inquiry
+
+**Inquiry**:
+A single line of empirical investigation delegated to agents, and the unit in which the
+programme buys evidence: a frozen Question, an Adequacy Criterion, a search budget, a signed
+continue/return/retire rule, and an environment requirement. Persistent and stateful — an
+Inquiry may lie dormant for years and resume where it stopped. It is the machinery by which a
+Protective Belt claim is earned or refused, and is never itself such a claim.
+_Avoid_: Commission, experiment, study, line, direction, project, task
+
+<!-- Nine states, fixed in #56 and formalised in #62. Non-terminal: Searching, Measuring,
+     Awaiting Acknowledgement, Awaiting Decision, Awaiting Competence, Dormant. Terminal:
+     Answered, Exhausted, Retired. Answered and Exhausted are mutually unreachable — the
+     freeze between Searching and Measuring partitions them. -->
+
+**Question**:
+The empirical matter an Inquiry exists to settle. Frozen when the Inquiry opens and Noah's
+alone — agents search for instruments capable of answering it and may never alter it. A
+*hypothesis* is a falsifiable claim about a Question, committed in advance; an Inquiry may run
+without one.
+_Avoid_: Target, query, goal, objective, research question
+
+**Adequacy Criterion**:
+The machine-decidable test of whether an instrument is fit to answer an Inquiry's Question at
+all, stated without reference to any hypothesis. Passing it freezes the configuration by SHA
+and ends the Inquiry's search. An Inquiry that cannot state one cannot be delegated — a
+visible refusal, and itself a finding about the Inquiry.
+_Avoid_: Competence criterion, fitness function, validity check, baseline
+
+<!-- Distinct from the competence floor, which is a property of Noah rather than of an
+     instrument. The two were both called "competence" until #56 separated them. -->
+
+**Register**:
+Which of two modes a result was produced in. *Confirmatory* if its metric and decision rule
+are ancestors of the data they judge; *exploratory* otherwise. Exploratory results are
+first-class in the record and barred from the Protective Belt; their only route in is to
+become the committed hypothesis of a new Inquiry. A property of a result, never of an
+Inquiry — one Inquiry ordinarily produces both.
+_Avoid_: Preregistered, post-hoc, mode, class, tier
+
 ### Research substance
 
 Every term here is contested in the contemporary literature. Where Mosaic borrows one, the source
