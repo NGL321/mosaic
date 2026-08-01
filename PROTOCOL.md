@@ -457,8 +457,8 @@ which makes the contended-file collision structurally impossible for `CONTEXT.md
 on a checklist, half of it automated:
 
 > An external contribution merges when it **arrives as a fork pull request**, carries
-> **`Signed-off-by:` on every commit it adds**, **touches no authored file**, and has
-> **passed review**. Nothing else.
+> **`Signed-off-by:` on every commit it adds**, **touches neither an authored file nor
+> `.github/`**, and has **passed review**. Nothing else.
 
 ### Where the boundary is
 
@@ -498,6 +498,15 @@ pull request touching an authored file is refused on custody grounds however goo
 and the contributor proposes exact replacement text in the thread, through the identical
 channel §5 gives agents. Record files are open to them, subject to review.
 
+**A fork pull request may not modify `.github/` either — same refusal, different
+reason.** Custody reserves an authored file; `.github/` is reserved because the checks
+below are *required*, and GitHub reads a workflow definition for a `pull_request` event
+from the merge commit rather than from the base branch. A fork editing the workflow is
+therefore editing the gate that judges it. Restoring the tree cannot fix this and the
+workflow says so in its own header; the prohibition is the part CI can enforce. External
+improvements to the apparatus are welcome as a proposal in the thread or as an issue,
+and land through this repository's own branch flow.
+
 ### Review
 
 Review inherits §6's agent rule, because the paragraph above puts external work in the
@@ -532,8 +541,11 @@ the research record, not merely on `git log`.
 ### What CI enforces
 
 `.github/workflows/contribution.yml` checks the mechanical half — fork detection,
-`Signed-off-by:` on every commit the pull request adds, and the authored-file
-prohibition — so the only human step is judging the content. It **runs unconditionally
+`Signed-off-by:` on every commit the pull request adds, and the authored-file and
+`.github/` prohibitions — so the only human step is judging the content. Both
+prohibitions are checked **per commit, not over the net diff**: touching an authored file
+and reverting it later is still a violation, because custody is about whose hand wrote
+the file and the net diff cannot see a hand. It **runs unconditionally
 and skips internally**, which is what lets it be a *required* check: a path-filtered
 workflow never runs on pull requests touching nothing in `paths:`, and a required check
 that never runs sits *expected* forever and blocks the merge. It **reuses

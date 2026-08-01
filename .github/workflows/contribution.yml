@@ -36,12 +36,23 @@ jobs:
           fetch-depth: 0
 
       # A pull request event checks out the *merge* commit, so the working tree
-      # holds the contributor's version of every file — including the check that
-      # is about to judge them. Restore the checks from the base branch, so a
-      # fork cannot edit its own gate. Nothing else in the tree is touched: the
-      # commits being checked are read from git history, not from the worktree.
+      # holds the contributor's version of every file — including the check about
+      # to judge them. Restoring .github/ from base means the script that runs,
+      # and the custody.yml its drift check reads, are this repository's copies
+      # and not the fork's. Nothing else is touched: the commits under test are
+      # read from git history, never from the worktree.
+      #
+      # **This does not make the workflow self-protecting, and must not be read
+      # as if it did.** Under `pull_request`, GitHub takes the *workflow
+      # definition* from the merge commit — which is why fork runs need approval
+      # at all — so a fork can rewrite this file's steps whatever the worktree
+      # then says. Deleting or renaming the job fails safe (a required check that
+      # never reports blocks the merge), and §8 refuses a fork pull request that
+      # touches .github/ at all, enforced by the script below. Those two, plus
+      # the approval requirement on outside contributors, are what actually
+      # close it. This step only removes the *silent* case.
       - name: Restore the checks from the base branch
-        run: git checkout "${{ github.event.pull_request.base.sha }}" -- .github/scripts/
+        run: git checkout "${{ github.event.pull_request.base.sha }}" -- .github/
 
       # actions/setup-python@v7.0.0
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97

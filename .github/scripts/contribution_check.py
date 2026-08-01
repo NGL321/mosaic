@@ -6,9 +6,21 @@ those are checked here:
 
   EXTERNAL   the contribution arrives as a fork pull request.
   SIGN-OFF   every commit it adds carries `Signed-off-by:` (the DCO).
-  AUTHORED   it touches no authored file.
+  AUTHORED   it touches no authored file, and nothing under .github/.
 
 The fourth — review — is Noah's, always, and is not CI's to judge.
+
+**AUTHORED is per commit, not over the net diff.** Touching `CONTEXT.md` and
+reverting it two commits later is still a violation, because custody is about
+whose hand wrote the file (§5) and the hand is a fact about the commit. The net
+diff cannot see it, which is exactly why it is not what is measured.
+
+**.github/ is checked alongside the authored set, and the reason is different.**
+An authored file is refused because custody reserves it; `.github/` is refused
+because this check is *required*, and under `pull_request` GitHub reads the
+workflow definition from the merge commit — so a fork editing the workflow edits
+the gate that judges it. The prohibition is the fix that CI can enforce; the
+workflow's own comment explains why restoring the tree is not.
 
 **This check runs unconditionally and skips internally.** That is what lets it be
 a *required* check on `main`, and it is the trap `custody.yml`'s header already
@@ -57,12 +69,19 @@ from custody_check import (  # noqa: E402  (path must be set before this import)
     validate_authored_set,
 )
 
-# Output carries § and em dashes; a cp1252 console would mangle them.
-for _stream in (sys.stdout, sys.stderr):
-    try:
-        _stream.reconfigure(encoding="utf-8")
-    except (AttributeError, OSError):
-        pass
+# `custody_check`'s module body already reconfigured stdout and stderr to UTF-8
+# on import, and this file's output has the same § and em dashes to carry. It is
+# not repeated here.
+
+# Refused to a fork for the reason in the module docstring: the workflow this
+# check runs under is read from the merge commit, so a fork editing .github/ is
+# editing its own gate.
+PROTECTED_PREFIX = ".github/"
+
+
+def protected_files_touched(sha: str) -> list[str]:
+    files = git("show", "--name-only", "--format=", sha).splitlines()
+    return [f for f in files if f.startswith(PROTECTED_PREFIX)]
 
 
 def sign_offs(tr: dict[str, list[str]]) -> list[str]:
@@ -111,23 +130,37 @@ def main() -> int:
         # A pass must mean something: if the authored set is vacuous or has
         # drifted from the workflow that declares it, AUTHORED below would be
         # checking nothing. Borrowed whole from custody_check, along with the set.
+        # Both read this repository's copies, not the fork's — the workflow
+        # restores .github/ from base before invoking any of it.
         notes.extend(validate_authored_set())
+    except GitError as e:
+        print(f"contribution check could not run: {e}", file=sys.stderr)
+        return EXIT_TOOL
+
+    # Printed before anything that can fail, so a later error cannot silently
+    # take the coverage notes with it.
+    if notes:
+        print("NOTES — about what this run covers:")
+        print("\n".join(f"  {n}" for n in notes), "\n")
+
+    try:
         added = commits(base, head)
     except GitError as e:
         print(f"contribution check could not run: {e}", file=sys.stderr)
         return EXIT_TOOL
 
-    if notes:
-        print("NOTES — about what this run covers:")
-        print("\n".join(f"  {n}" for n in notes), "\n")
-
     if not added:
+        # A violation, not a broken tool. The refs resolved and the merge base
+        # was found; the pull request simply adds no non-merge commit, so there
+        # is nothing carrying a sign-off and nothing to certify. Saying "the tool
+        # could not run" would report the contribution's defect as our own.
+        print("§8 VIOLATIONS:")
         print(
-            "contribution check could not run: the pull request adds no commits "
-            "relative to its merge base, so there is nothing to certify",
-            file=sys.stderr,
+            "  the pull request adds no non-merge commit relative to its merge "
+            "base, so nothing here is signed off and there is nothing to certify. "
+            "A merge commit cannot carry the DCO for work it did not author."
         )
-        return EXIT_TOOL
+        return EXIT_VIOLATION
 
     observations: list[str] = []
 
@@ -155,15 +188,28 @@ def main() -> int:
                     f"{author} — not a violation, but worth a question on the thread"
                 )
 
-            # AUTHORED
+            # AUTHORED — per commit. A later revert does not clear it.
             touched = authored_files_touched(sha)
             if touched:
                 problems.append(
                     f"{short}\n    touches {', '.join(touched)}, which is authored "
                     f"(§5) — human-only means Noah, and an external contributor sits "
-                    f"where an agent sits. Revert the change and propose the exact "
-                    f"replacement text in this pull request instead; it will be "
-                    f"applied by hand"
+                    f"where an agent sits. Propose the exact replacement text in this "
+                    f"pull request instead; it will be applied by hand. Note that "
+                    f"reverting it in a later commit does not clear this: custody is "
+                    f"about whose hand wrote the file, which is a fact about *this* "
+                    f"commit and not about the net diff"
+                )
+
+            protected = protected_files_touched(sha)
+            if protected:
+                problems.append(
+                    f"{short}\n    touches {', '.join(protected)} — a fork pull "
+                    f"request may not modify .github/ (§8), because this check is "
+                    f"required and its workflow is read from the merge commit, so the "
+                    f"change would edit the gate judging it. Propose it in this pull "
+                    f"request as text, or open an issue; same channel as an authored "
+                    f"file, and for a different reason"
                 )
     except GitError as e:
         print(f"contribution check could not run: {e}", file=sys.stderr)
@@ -184,7 +230,8 @@ def main() -> int:
 
     print(
         f"{len(added)} commit(s) checked: every one signed off, none touching an "
-        f"authored file. Review is the remaining checklist item, and is Noah's (§8)."
+        f"authored file or .github/. Review is the remaining checklist item, and is "
+        f"Noah's (§8)."
     )
     return EXIT_OK
 

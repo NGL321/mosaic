@@ -89,12 +89,19 @@ they came from.
 
 This table is the single place the mapping lives.
 
+Copyright © 2026 Noah Litov. Attribute the CC BY 4.0 material to *Noah Litov, Mosaic*,
+with a link back to this repository and to the licence.
+
 | Path | Licence |
 |---|---|
-| `CHARTER.md`, `CONTEXT.md`, `PROTOCOL.md`, `README.md` | **CC BY 4.0** ([`LICENSE-DOCS`](LICENSE-DOCS)) |
+| `CHARTER.md`, `CONTEXT.md`, `PROTOCOL.md`, `README.md`, `CONTRIBUTING.md` | **CC BY 4.0** ([`LICENSE-DOCS`](LICENSE-DOCS)) |
 | `notebook/`, `docs/`, `curriculum/` | **CC BY 4.0** ([`LICENSE-DOCS`](LICENSE-DOCS)) |
 | `.claude/skills/`, `.agents/skills/` | **Third-party — neither.** Vendored from [`mattpocock/skills`](https://github.com/mattpocock/skills) per [`skills-lock.json`](skills-lock.json), under their upstream licence. |
 | everything else, `experiments/` included in full | **MIT** ([`LICENSE`](LICENSE)) — the default |
+
+`LICENSE` and `LICENSE-DOCS` are licence texts rather than licensed material: MIT's is
+reproduced under its own terms, and Creative Commons dedicates its licence texts to the
+public domain under CC0.
 
 **The directory wins**, and **MIT is the default**: a file nobody has classified fails
 safe toward permissive rather than into unlicensed limbo. `experiments/` is MIT in full,
@@ -106,8 +113,11 @@ Three riders:
   prose docstring in `tools/` is MIT. There is no sub-file licensing.
 - **Generated files inherit their directory.** `curriculum/open.md` is CC BY whatever
   emitted it.
-- **A new top-level directory is assigned a licence in the pull request that creates
-  it** — the one rule here with teeth.
+- **A new top-level file or directory is assigned a licence in the pull request that
+  creates it** — the one rule here with teeth. It reaches *files* as well as directories
+  because a root-level file has no directory to inherit from, so the default is all that
+  catches it, and the default is wrong for prose: `CONTRIBUTING.md` is in the table above
+  for exactly that reason.
 
 Contributions are inbound = outbound: you licence each file you touch under whatever
 that file's path already carries. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the

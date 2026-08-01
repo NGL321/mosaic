@@ -1,3 +1,8 @@
+# No `version:` key, deliberately: no `research-v*` tag exists yet, so there is
+# no version to name and a placeholder would be a pin to nothing. Until one does,
+# GitHub's "Cite this repository" button emits an unpinned citation and `message`
+# below is the only thing asking for a pin — a real gap, tracked in #79, closed by
+# adding `version:` and `date-released:` in the commit that cuts the first tag.
 cff-version: 1.2.0
 title: "Mosaic: a research programme in computational cognitive science"
 message: >-
@@ -6,7 +11,8 @@ message: >-
   unversioned citation names a target designed to move — and it moves in the
   way that matters, since a MINOR bump is a Protective Belt rung changing.
   Set `version` to the `research-vX.Y.Z` tag you read, or, for anything
-  predating a tag, set `commit` to the sha.
+  predating a tag — which is everything, today — set `commit` to the sha of the
+  commit you read.
 type: software
 authors:
   - family-names: Litov

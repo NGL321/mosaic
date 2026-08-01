@@ -8,9 +8,11 @@ Four things. The reasoning for all of them is in
 2. **Sign off every commit** — `git commit -s`, which appends `Signed-off-by:`. This is a
    [DCO](https://developercertificate.org/), not a CLA: you are certifying you have the
    right to submit the work, not assigning anything.
-3. **Touch no authored file.** `CONTEXT.md` and `CHARTER.md` are the researcher's own
-   hand. Propose exact replacement text in the pull request instead, and it will be
-   applied by hand.
+3. **Touch no authored file, and nothing under `.github/`.** `CONTEXT.md` and
+   `CHARTER.md` are the researcher's own hand; `.github/` holds the checks that judge
+   your pull request. Propose the change in the thread instead — exact replacement text
+   for an authored file, a description or an issue for the apparatus. Both are checked
+   per commit, so reverting in a later commit does not clear a violation.
 4. **Expect a reviewer.** Always, and always Noah. Research-track contributions also get a
    checker agent.
 
