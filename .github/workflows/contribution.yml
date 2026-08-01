@@ -43,6 +43,16 @@ jobs:
       # the fork *added* standing. Nothing outside .github/ is touched; the
       # commits under test are read from git history, never from the worktree.
       #
+      # **External only, and that is not an optimisation.** A reset run on an
+      # internal pull request would delete the very changes under review: this
+      # check's own pull request adds .github/scripts/contribution_check.py, which
+      # base does not have, so an unconditional reset deletes the script and the
+      # job dies at `No such file or directory`. It did, on the first attempt.
+      # Nothing about the apparatus could ever be tested in the pull request that
+      # changes it. The condition is exact rather than convenient: the reset
+      # exists to stop a *fork* editing the gate, and an internal pull request is
+      # precisely the party allowed to edit it.
+      #
       # **This does not make the workflow self-protecting, and must not be read
       # as if it did.** Under `pull_request`, GitHub takes the *workflow
       # definition* from the merge commit — which is why fork runs need approval
@@ -53,6 +63,7 @@ jobs:
       # the approval requirement on outside contributors, are what actually
       # close it. This step only removes the *silent* case.
       - name: Reset .github/ to the base branch
+        if: github.event.pull_request.head.repo.full_name != github.repository
         run: |
           git rm -rq --ignore-unmatch -- .github/
           git checkout "${{ github.event.pull_request.base.sha }}" -- .github/
