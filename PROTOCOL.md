@@ -113,7 +113,7 @@ load-bearing. So the tag is **computed, not chosen**.
 | 4 | **An operational repository** | a restore path demonstrated **by restoring**, not by existing; and the programme's routine tasks runnable without improvisation. Nothing wider than those two things. |
 | 5 | **A first experiment, designed and executable** | the experiment names the rung it tests, and the toolchain runs it end to end at least once, on trivial input if need be. Its **results are not required**. |
 | 6 | **A public work product** | not new: §5's warrant table puts a public, human-authored deliverable on every MAJOR, and ratification is `core:`. An essay stating the programme and the direction intended for it satisfies this. |
-| 7 | **A proven research loop** | one Inquiry run end to end — a Question frozen, dispatched to agents that searched instruments without Noah in the step, returning a result he acknowledged. Discharged by [Map: The research loop](https://github.com/NGL321/mosaic/issues/55) reaching its destination. |
+| 7 | **A proven research loop** | one Inquiry run end to end — a Question frozen, dispatched to agents that searched instruments without Noah in the step, returning a result he acknowledged. Discharged by the record that run leaves: a notebook entry and the `evidence:` commit that landed its result, both in the tree. Tracked by [Map: The research loop](https://github.com/NGL321/mosaic/issues/55). |
 
 **Why the experiment and not a checklist.** A checklist of intentions is satisfiable by
 ceremony, and §5 argues at length that such a gate is worse than none — in the record it is
@@ -132,14 +132,19 @@ equipment. The answer belongs to the belt.
 carry *a* run. Criterion 7 asks whether the mechanism this repository exists to build has
 ever closed a circuit. These are different claims, and only the second is the one a `1.0.0`
 makes: a version claiming a mechanised path to maturity of rigour, published with the
-mechanism never having run, is the ceremony this section spends four paragraphs arguing
-against — a checklist of intentions in the shape of a repository.
+mechanism never having run, is the ceremony this section argues against at length — a
+checklist of intentions in the shape of a repository.
 
 **This does not reintroduce nature's answer.** What criterion 7 requires is an *acknowledged
-return*, not a confirmation. An Inquiry that exhausts its budget and returns a coverage
-report has closed the circuit exactly as well as one that terminates `Answered`; both are
-results Noah reads and signs. The rule above stands unamended — `1.0.0` claims the programme
-is *equipped*, not that it is *right*.
+return*, not a confirmation. An Inquiry that exhausts its search without finding an
+instrument has closed the circuit exactly as well as one that answers its Question; both
+produce a result Noah reads and signs. The rule above stands unamended.
+
+**The cost is deliberate.** Criterion 7 puts `1.0.0` behind a working agent dispatch loop,
+which is a substantial ratchet: the charter now waits on machinery, and machinery slips. It
+is accepted because the alternative is worse — a charter claiming a mechanised path to
+maturity of rigour, whose mechanism has never been shown to run, is exactly the artifact
+whose vagueness this section demands be visible on the page.
 
 Criteria 1, 2, 5, 6 and 7 are artifacts a reader can find; 3 and 4 are Noah's to assert. The
 deferred set is mechanical:
@@ -255,20 +260,26 @@ the claim, and drafting assistance destroys the thing being claimed.
 Everything not on this list is **agent-drafted, human-signed** — the pipeline the paragraph
 above describes, and how most of this repository was in fact written.
 
-**The list adds no new custody mechanism, and that is the point.** All three land in paths
-already governed: 1 and 2 in the authored files this section names, 3 wherever the MAJOR's
-deliverable is declared. The custody check still keys on paths, and *custody follows the
-file, never the topic* is unamended. What the list adds is that the obligation is stated
-where it is read — the warrant table and this section no longer have to be read together to
-get the rule right.
+**The list adds no new *path*, which is not the same as nothing to enforce.** Exceptions 1
+and 2 land in the authored files this section already names, so `custody.yml` needs no
+change; exception 3 lands wherever the MAJOR's deliverable is declared, which is by
+construction outside a fixed path filter. *Custody follows the file, never the topic* is
+unamended. But be exact about what that buys: a path check sees **who committed**, and none
+of these three exceptions is about who committed. An agent can draft a falsifier, Noah can
+apply and commit it under his identity, and the check goes green. That is the same candour
+this section already shows about the citation row — 2 and 3 are checker-agent territory, not
+CI's. What the list adds is that the obligation is stated where it is read, so the warrant
+table and this section no longer have to be read together to get the rule right.
 
-**The Protective Belt is human-only, by the same route.** An Inquiry is the machinery by
-which a Belt claim is earned or refused, and is never itself such a claim; the Belt lives in
-`CHARTER.md`, so an agent may not add a rung, revise one, or retire one. This follows from
+**The Protective Belt is Noah's to decide.** An Inquiry is the machinery by which a Belt
+claim is earned or refused, and is never itself such a claim; the Belt lives in `CHARTER.md`,
+so **an agent may not decide to add a rung, revise one, or retire one.** This follows from
 the first bullet of this section rather than from a fourth exception above, and it is stated
 here because the surrounding rules are enumerations — and an enumeration silent on the Belt
-reads as permission. An agent may report that a result bears on a rung. Writing the rung is
-Noah's.
+reads as permission. It does not disturb the pull-quote: an agent may report that a result
+bears on a rung, and may word a rung Noah has decided on. **Deciding** the rung is Noah's;
+its falsifier is exception 2, where the keystrokes genuinely are the claim; the wording of
+the rest is the ordinary pipeline.
 
 **A falsifier is declared in advance or it is not a falsifier.** The commit adding a rung
 must be an ancestor of any `evidence:` commit citing it. This is timing rather than custody,
@@ -278,6 +289,10 @@ falsifier written after the data exists is not a weaker falsifier — it is a di
 statement, and the record must not be able to confuse the two. This is the same primitive
 that derives a result's `Register` and freezes an Inquiry's Question: what was known in
 advance is a question about ancestry, and the repository should only answer it one way.
+**Unmechanised**, and filed as [#82](https://github.com/NGL321/mosaic/issues/82) — the check
+is a short ancestry test, but there is no declared way yet for an `evidence:` commit to name
+the rung it bears on, and inventing one before the Belt has rungs would fix a convention
+against nothing.
 
 **Where a frozen rule dictates the change, the defence is the citation.** A meaning-changing
 commit to an authored file owes a defence artifact. When a Belt change is dictated by a
@@ -295,7 +310,7 @@ each checked where it can be:
 |---|---|---|
 | **Identity** | an authored file is committed under a human identity | CI, in one command, once agents commit under their own identity |
 | **Citation** | an agent co-author on an authored file carries a `Session:` trailer resolving in the Transcript Archive | CI, **for presence only** — resolution is not checkable from a public runner against a private archive, and is unmechanised |
-| **Defence** | a meaning-changing commit to an authored file carries a defence artifact — what changed, why, in Noah's own words | a checker agent, on the pull request, as the §5 gate below already works |
+| **Defence** | a meaning-changing commit to an authored file carries a defence artifact — what changed, why, in Noah's own words; or, where a decision rule frozen in advance dictated the change, a citation of that rule and the result that fired it | a checker agent, on the pull request, as the §5 gate below already works |
 
 An obligation the scaffolding era defers (§2) is not dropped — it is filed as a
 `custody:deferred` issue and blocks `1.0.0` until discharged.
