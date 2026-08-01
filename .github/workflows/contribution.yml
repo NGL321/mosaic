@@ -37,10 +37,11 @@ jobs:
 
       # A pull request event checks out the *merge* commit, so the working tree
       # holds the contributor's version of every file — including the check about
-      # to judge them. Restoring .github/ from base means the script that runs,
-      # and the custody.yml its drift check reads, are this repository's copies
-      # and not the fork's. Nothing else is touched: the commits under test are
-      # read from git history, never from the worktree.
+      # to judge them. This makes .github/ base's copy exactly: the `git rm` is
+      # what makes it a *reset* rather than an overlay, since `git checkout
+      # <sha> -- <path>` writes the paths present in that tree and leaves a file
+      # the fork *added* standing. Nothing outside .github/ is touched; the
+      # commits under test are read from git history, never from the worktree.
       #
       # **This does not make the workflow self-protecting, and must not be read
       # as if it did.** Under `pull_request`, GitHub takes the *workflow
@@ -51,8 +52,10 @@ jobs:
       # touches .github/ at all, enforced by the script below. Those two, plus
       # the approval requirement on outside contributors, are what actually
       # close it. This step only removes the *silent* case.
-      - name: Restore the checks from the base branch
-        run: git checkout "${{ github.event.pull_request.base.sha }}" -- .github/
+      - name: Reset .github/ to the base branch
+        run: |
+          git rm -rq --ignore-unmatch -- .github/
+          git checkout "${{ github.event.pull_request.base.sha }}" -- .github/
 
       # actions/setup-python@v7.0.0
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
@@ -66,3 +69,26 @@ jobs:
             "${{ github.event.pull_request.head.sha }}" \
             "${{ github.repository }}" \
             "${{ github.event.pull_request.head.repo.full_name }}"
+
+      # An internal pull request takes the skip branch, so a green run above
+      # proves the workflow parses, the reset resolves, and the runner reaches
+      # the script — and proves nothing whatever about sign-off detection, the
+      # authored-file check, or the .github/ check. Those would first execute on
+      # a runner the day a stranger opens a fork pull request, which is a poor
+      # day to discover a typo in them.
+      #
+      # So the same script is re-run over the same refs with a synthetic external
+      # head, and every internal pull request exercises the external path for
+      # free. It **never gates**: `continue-on-error` keeps the job green, and its
+      # findings are about commits §8 does not bind — internal work carries no
+      # sign-off by design, so this step is *expected* to report violations. Read
+      # it as a smoke test of the check, not as a judgement on the branch.
+      - name: Rehearse the external path (never gates)
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        continue-on-error: true
+        run: |
+          python .github/scripts/contribution_check.py \
+            "${{ github.event.pull_request.base.sha }}" \
+            "${{ github.event.pull_request.head.sha }}" \
+            "${{ github.repository }}" \
+            "rehearsal/synthetic-fork-that-does-not-exist"

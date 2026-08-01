@@ -97,6 +97,7 @@ with a link back to this repository and to the licence.
 | `CHARTER.md`, `CONTEXT.md`, `PROTOCOL.md`, `README.md`, `CONTRIBUTING.md` | **CC BY 4.0** ([`LICENSE-DOCS`](LICENSE-DOCS)) |
 | `notebook/`, `docs/`, `curriculum/` | **CC BY 4.0** ([`LICENSE-DOCS`](LICENSE-DOCS)) |
 | `.claude/skills/`, `.agents/skills/` | **Third-party — neither.** Vendored from [`mattpocock/skills`](https://github.com/mattpocock/skills) per [`skills-lock.json`](skills-lock.json), under their upstream licence. |
+| `CITATION.cff` | **MIT** — the default, and assigned rather than inherited: it is machine-readable metadata about the record, not part of it, and a reference manager should copy it freely. |
 | everything else, `experiments/` included in full | **MIT** ([`LICENSE`](LICENSE)) — the default |
 
 `LICENSE` and `LICENSE-DOCS` are licence texts rather than licensed material: MIT's is

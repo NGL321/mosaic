@@ -62,7 +62,6 @@ from custody_check import (  # noqa: E402  (path must be set before this import)
     EXIT_TOOL,
     EXIT_VIOLATION,
     GitError,
-    authored_files_touched,
     commits,
     git,
     trailers,
@@ -79,9 +78,16 @@ from custody_check import (  # noqa: E402  (path must be set before this import)
 PROTECTED_PREFIX = ".github/"
 
 
-def protected_files_touched(sha: str) -> list[str]:
-    files = git("show", "--name-only", "--format=", sha).splitlines()
-    return [f for f in files if f.startswith(PROTECTED_PREFIX)]
+def files_touched(sha: str) -> list[str]:
+    """Every path the commit touches, read once.
+
+    `custody_check.authored_files_touched` would serve half of this, but there
+    are two prohibitions to check and calling it would mean a second
+    `git show` over the same commit for the second half. The set that must never
+    be duplicated is `AUTHORED`, and that is still imported; a subprocess is not
+    a source of truth.
+    """
+    return git("show", "--name-only", "--format=", sha).splitlines()
 
 
 def sign_offs(tr: dict[str, list[str]]) -> list[str]:
@@ -189,7 +195,8 @@ def main() -> int:
                 )
 
             # AUTHORED — per commit. A later revert does not clear it.
-            touched = authored_files_touched(sha)
+            files = files_touched(sha)
+            touched = [f for f in files if f in AUTHORED]
             if touched:
                 problems.append(
                     f"{short}\n    touches {', '.join(touched)}, which is authored "
@@ -201,7 +208,7 @@ def main() -> int:
                     f"commit and not about the net diff"
                 )
 
-            protected = protected_files_touched(sha)
+            protected = [f for f in files if f.startswith(PROTECTED_PREFIX)]
             if protected:
                 problems.append(
                     f"{short}\n    touches {', '.join(protected)} — a fork pull "
