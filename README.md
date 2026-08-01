@@ -77,3 +77,45 @@ the first falsifiable claim is named.
 
 Repository structure beyond this is
 [not yet settled](https://github.com/NGL321/mosaic/issues/8).
+
+---
+
+## Licensing
+
+Mosaic is a research record with software attached, not a software project with docs
+attached, so it carries **two licences split by artifact kind** — code under MIT, the
+prose record under CC BY 4.0. Take the code freely; if you carry the ideas, name where
+they came from.
+
+This table is the single place the mapping lives.
+
+| Path | Licence |
+|---|---|
+| `CHARTER.md`, `CONTEXT.md`, `PROTOCOL.md`, `README.md` | **CC BY 4.0** ([`LICENSE-DOCS`](LICENSE-DOCS)) |
+| `notebook/`, `docs/`, `curriculum/` | **CC BY 4.0** ([`LICENSE-DOCS`](LICENSE-DOCS)) |
+| `.claude/skills/`, `.agents/skills/` | **Third-party — neither.** Vendored from [`mattpocock/skills`](https://github.com/mattpocock/skills) per [`skills-lock.json`](skills-lock.json), under their upstream licence. |
+| everything else, `experiments/` included in full | **MIT** ([`LICENSE`](LICENSE)) — the default |
+
+**The directory wins**, and **MIT is the default**: a file nobody has classified fails
+safe toward permissive rather than into unlicensed limbo. `experiments/` is MIT in full,
+prose write-ups included.
+
+Three riders:
+
+- **The licence follows the whole file.** A code block inside `PROTOCOL.md` is CC BY; a
+  prose docstring in `tools/` is MIT. There is no sub-file licensing.
+- **Generated files inherit their directory.** `curriculum/open.md` is CC BY whatever
+  emitted it.
+- **A new top-level directory is assigned a licence in the pull request that creates
+  it** — the one rule here with teeth.
+
+Contributions are inbound = outbound: you licence each file you touch under whatever
+that file's path already carries. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the
+checklist and [`PROTOCOL.md` §8](PROTOCOL.md) for the reasoning.
+
+## Citing Mosaic
+
+[`CITATION.cff`](CITATION.cff) at the root. **A citation must pin a version** — a
+`research-vX.Y.Z` tag, or a commit sha for anything predating one. `main` is the
+programme's current state of belief, not its published state, so an unversioned citation
+names a target designed to move.

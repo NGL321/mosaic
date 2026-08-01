@@ -453,7 +453,95 @@ which makes the contended-file collision structurally impossible for `CONTEXT.md
 
 ## 8. External contributions
 
-External work arrives as a fork pull request, always carries a reviewer, and **does not
-merge** until the attribution, licensing, and citation policy exists. That policy is its
-own ticket; it must be answered before the first external contribution arrives rather
-than during it.
+**The gate lifts.** External work used to sit unmerged pending this policy. It now merges
+on a checklist, half of it automated:
+
+> An external contribution merges when it **arrives as a fork pull request**, carries
+> **`Signed-off-by:` on every commit it adds**, **touches no authored file**, and has
+> **passed review**. Nothing else.
+
+### Where the boundary is
+
+**External means the fork boundary, and nothing else.** Work arriving through this repo's
+own branch and pull request flow (§4) is internal whoever or whatever held the pen — Noah,
+and agents operated out of this repo through the same pipelines. Work arriving as a fork
+pull request is external.
+
+That keys the rule to a fact CI can read rather than to a judgement about authorship, and
+it is why internal work is exempt from the sign-off: §5's custody trailers already answer
+*whose hand* far more precisely than a `Signed-off-by:` would, and adding one would be
+ceremony.
+
+### Licensing and provenance
+
+**Licensing splits by artifact kind, not by track** — MIT for code, CC BY 4.0 for the
+prose record. §1's research/tooling test asks whether a silent change could falsify a
+recorded result, which is a question about falsifiability and has nothing to do with
+copyright: a dataset generator is research track and still MIT, and this document is
+tooling track and is CC BY. The path table lives in `README.md` and is not restated here.
+
+**Inbound = outbound.** A contributor licenses each file under whatever that file's path
+already carries — touch `tools/`, MIT; touch `docs/research/`, CC BY. The table does
+double duty, which is the sign it was carved right. This binds prose contributions too;
+the origin claim matters *more* for a paragraph of research writing than for a bug fix.
+
+**DCO, not a CLA.** A CLA's only real payoff is relicensing, which the split forecloses,
+and there is no entity to assign rights to. `Signed-off-by:` — `git commit -s` — joins the
+trailer mechanism §5 already runs on rather than adding a parallel one.
+
+**No fourth provenance tier, and no third custody category.** The tiers measure *Noah's*
+warrant, not authorship, so an external contribution lands at the bottom tier until he
+does the reading: **someone else's verification is not verification**, which is #5's
+*"agent verification is not verification"* generalised. And §5's *"human only"* means
+Noah, not any human — so an external contributor sits exactly where an agent sits. A fork
+pull request touching an authored file is refused on custody grounds however good it is,
+and the contributor proposes exact replacement text in the thread, through the identical
+channel §5 gives agents. Record files are open to them, subject to review.
+
+### Review
+
+Review inherits §6's agent rule, because the paragraph above puts external work in the
+agent's seat.
+
+- A **reviewer is always required, and is always Noah.** A contributor never merges their
+  own pull request.
+- **Research-track external contributions additionally get a checker agent** that did not
+  produce the work — the second pair of eyes agent-authored apparatus already gets.
+- External work does **not** fire §5's falsifier gate. A tool is not a claim. If merging
+  it later enables a claim, that claim carries its own warrant obligations, unchanged.
+
+### Credit
+
+A tool whose silent change could falsify a recorded result is *apparatus* by §1's own
+test, and apparatus gets cited in a methods section. So an outside author has a claim on
+the research record, not merely on `git log`.
+
+- **Baseline, every contribution:** git history plus the licence's notice requirement.
+- **Where a recorded result depends on external apparatus,** the experiment record names
+  the tool and its author, methods-section style. Where that field sits belongs to the
+  record format; the obligation is fixed here.
+- **Minor contributions earn no research citation.** The obligation binds only where a
+  recorded result depends on the contribution.
+- **No `CONTRIBUTORS.md`.** It decays into a thank-you page and is a second list to keep
+  in sync with `git log`, which already holds the data.
+- **Citation, never authorship.** Co-authorship follows intellectual contribution to the
+  *claim* — a conversation held directly, never an entitlement this policy confers.
+  Substantive research collaboration is arranged out of band, and the programme is
+  reorganised then to accommodate it.
+
+### What CI enforces
+
+`.github/workflows/contribution.yml` checks the mechanical half — fork detection,
+`Signed-off-by:` on every commit the pull request adds, and the authored-file
+prohibition — so the only human step is judging the content. It **runs unconditionally
+and skips internally**, which is what lets it be a *required* check: a path-filtered
+workflow never runs on pull requests touching nothing in `paths:`, and a required check
+that never runs sits *expected* forever and blocks the merge. It **reuses
+`custody_check.py`'s `AUTHORED` set** rather than declaring a second copy of the authored
+file list, because that script already cross-checks its set against its workflow and exits
+2 on drift, and a third copy would unlearn the lesson.
+
+`CONTRIBUTING.md` carries the checklist and nothing else, because GitHub surfaces it in
+the pull request composer — reaching the contributor at the moment they contribute. This
+section is the decision of record; restating it there would create a second copy to keep
+in sync.
