@@ -1,0 +1,207 @@
+name: contribution
+
+# §8's merge checklist, over the commits a pull request adds. Three of its four
+# items are facts a runner can read — fork boundary, `Signed-off-by:` on every
+# added commit, no authored file touched. The fourth is review, which is Noah's.
+# See .github/scripts/contribution_check.py.
+#
+# There is deliberately no `paths:` filter and no `if:` on the job. This check is
+# meant to be *required* on `main`, and a required check that never runs sits
+# *expected* forever and blocks the merge — the trap custody.yml's header
+# documents. So it runs on every pull request and skips internally, inside the
+# script, at exit 0.
+#
+# The authored-file list is not declared here. It is imported from
+# custody_check.py, which cross-checks it against custody.yml's `paths:` and
+# exits 2 on drift. A second declaration would unlearn that.
+
+on:
+  pull_request:
+
+# Reads git history and the event payload. A fork pull request runs with a
+# read-only token, which is all this needs.
+permissions:
+  contents: read
+
+jobs:
+  contribution:
+    runs-on: ubuntu-latest
+    # The three arguments the gating call and the rehearsal share, named once.
+    # They differ in exactly one argument — the head repository — and that is the
+    # whole point of the rehearsal, so it is the only one written twice. A fifth
+    # argument added to one invocation and not the other would leave the
+    # rehearsal quietly testing a different call than the one that gates.
+    env:
+      BASE_SHA: ${{ github.event.pull_request.base.sha }}
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+      BASE_REPO: ${{ github.repository }}
+      CHECK: .github/scripts/contribution_check.py
+      # The head repository the rehearsals claim to be. Any name that is not
+      # BASE_REPO puts the script on its external path; this one is unregistrable
+      # and so cannot ever collide with a real fork.
+      FAKE_FORK: rehearsal/synthetic-fork-that-does-not-exist
+    steps:
+      # Pinned by digest: an action referenced by a floating tag can change
+      # under a check whose whole purpose is being trustworthy about history.
+      # actions/checkout@v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          # The check resolves a merge base; a shallow clone has none.
+          fetch-depth: 0
+
+      # A pull request event checks out the *merge* commit, so the working tree
+      # holds the contributor's version of every file — including the check about
+      # to judge them. This makes .github/ base's copy exactly: the `git rm` is
+      # what makes it a *reset* rather than an overlay, since `git checkout
+      # <sha> -- <path>` writes the paths present in that tree and leaves a file
+      # the fork *added* standing. Nothing outside .github/ is touched; the
+      # commits under test are read from git history, never from the worktree.
+      #
+      # **External only, and that is not an optimisation.** A reset run on an
+      # internal pull request would delete the very changes under review: this
+      # check's own pull request adds .github/scripts/contribution_check.py, which
+      # base does not have, so an unconditional reset deletes the script and the
+      # job dies at `No such file or directory`. It did, on the first attempt.
+      # Nothing about the apparatus could ever be tested in the pull request that
+      # changes it. The condition is exact rather than convenient: the reset
+      # exists to stop a *fork* editing the gate, and an internal pull request is
+      # precisely the party allowed to edit it.
+      #
+      # **This does not make the workflow self-protecting, and must not be read
+      # as if it did.** Under `pull_request`, GitHub takes the *workflow
+      # definition* from the merge commit — which is why fork runs need approval
+      # at all — so a fork can rewrite this file's steps whatever the worktree
+      # then says. Deleting or renaming the job fails safe (a required check that
+      # never reports blocks the merge), and §8 refuses a fork pull request that
+      # touches .github/ at all, enforced by the script below. Those two, plus
+      # the approval requirement on outside contributors, are what actually
+      # close it. This step only removes the *silent* case.
+      - name: Reset .github/ to the base branch
+        if: github.event.pull_request.head.repo.full_name != github.repository
+        run: |
+          git rm -rq --ignore-unmatch -- .github/
+          git checkout "$BASE_SHA" -- .github/
+
+      # actions/setup-python@v7.0.0
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.x'
+
+      - name: Check §8's merge checklist
+        # Through env: like everything else, rather than interpolated into the
+        # run: body. There is nothing to inject — GitHub restricts owner and
+        # repository names to [A-Za-z0-9._-] — but the env: block above exists to
+        # keep expressions out of shell bodies, and one exception is how that
+        # convention stops being one. It stays written in two places, which is
+        # the difference the rehearsal below exists to make.
+        env:
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+        run: |
+          python "$CHECK" "$BASE_SHA" "$HEAD_SHA" "$BASE_REPO" "$HEAD_REPO"
+
+      # An internal pull request takes the skip branch, so a green run above
+      # proves the workflow parses, the reset resolves, and the runner reaches
+      # the script — and proves nothing whatever about sign-off detection, the
+      # authored-file check, or the .github/ check. Those would first execute on
+      # a runner the day a stranger opens a fork pull request, which is a poor
+      # day to discover a typo in them.
+      #
+      # So the same script is re-run over the same refs with a synthetic external
+      # head, and every internal pull request exercises the external path for
+      # free. **A violation here is the expected result**, not a judgement on the
+      # branch: internal work carries no sign-off by design, and this branch edits
+      # .github/. Read it as a smoke test of the check.
+      #
+      # `continue-on-error` is deliberately *not* used, because it swallows every
+      # non-zero exit identically — and the one exit that matters here is 2, the
+      # check itself being broken (bad refs, a vacuous authored set, an import
+      # that no longer resolves). Under `continue-on-error` that renders as the
+      # same ignorable red mark as the expected violation, which is the entire
+      # value of the rehearsal leaking away. So the distinction the comment above
+      # draws in prose is drawn by the runner: 0 and 1 pass, 2 fails loudly.
+      #
+      # `always()` because a diagnostic gated on the thing it diagnoses is no
+      # diagnostic: without it, `success()` is implied and this step is skipped
+      # exactly when the step above has just failed.
+      - name: Rehearse the external path
+        if: always() && github.event.pull_request.head.repo.full_name == github.repository
+        run: |
+          python "$CHECK" "$BASE_SHA" "$HEAD_SHA" "$BASE_REPO" "$FAKE_FORK" && rc=0 || rc=$?
+          if [ "$rc" -eq 2 ]; then
+            echo "::error::the check itself is broken (exit 2) — this is not about the branch"
+            exit 1
+          fi
+          echo "rehearsal exit $rc — 0 and 1 are both fine here, 2 is not"
+
+      # The rehearsal above runs over *internal* commits, which violate by
+      # construction, and it judges by exit code alone. Both controls below exist
+      # because that combination is weaker than it looks.
+      #
+      # **Neither control may be empty.** An `--allow-empty` commit is evaluated
+      # over an empty file list, so a `files_touched` broken to always return []
+      # passes it — and passes the rehearsal above too, since the sign-off
+      # violations carry the exit code to 1 whether or not the .github/ finding
+      # is there. The check would silently stop detecting authored-file and
+      # .github/ touches, on every internal pull request, green throughout. So
+      # each control touches real files, and the negative one is asserted on its
+      # *findings* rather than on its exit code, which is the only thing that
+      # tells the two worlds apart.
+      #
+      # **Both are manufactured rather than found**, because this history has no
+      # commit that conforms to §8 — every commit here is internal, and internal
+      # work carries no sign-off by design.
+      #
+      # This step is allowed to fail the job, in both directions. A check that
+      # rejects a compliant contribution is broken where it matters most: it
+      # turns away the stranger who did everything right. A check that accepts a
+      # reserved-path edit is broken the other way, and worse.
+      - name: Rehearse the check against manufactured commits
+        if: always() && github.event.pull_request.head.repo.full_name == github.repository
+        run: |
+          set -u
+          # The base is the tip as it stands, not $BASE_SHA: the check reads every
+          # commit from the merge base forward, and against main that would drag
+          # this whole branch in and report its violations instead of judging the
+          # control. Each control is one commit, read alone.
+          before=$(git rev-parse HEAD)
+          as_contributor=(-c user.name=Rehearsal -c user.email=rehearsal@example.invalid)
+          failed=0
+
+          # ---- positive control: everything §8 asks for, and nothing else ----
+          printf 'rehearsal\n' > .rehearsal-scratch
+          git add .rehearsal-scratch
+          git "${as_contributor[@]}" commit -s -q -m "rehearsal: a conforming external commit"
+          positive=$(python "$CHECK" "$before" "$(git rev-parse HEAD)" "$BASE_REPO" "$FAKE_FORK") && rc=0 || rc=$?
+          echo "$positive"
+          git reset -q --hard "$before" && git clean -qfd
+          if [ "$rc" -ne 0 ]; then
+            echo "::error::a conforming external contribution was rejected (exit $rc)"
+            failed=1
+          fi
+
+          # ---- negative control: every prohibition at once, none signed off ----
+          printf '\n<!-- rehearsal -->\n' >> CONTEXT.md
+          mkdir -p .github/rehearsal && printf 'rehearsal\n' > .github/rehearsal/scratch
+          git add CONTEXT.md .github/rehearsal
+          git "${as_contributor[@]}" commit -q -m "rehearsal: a non-conforming external commit"
+          negative=$(python "$CHECK" "$before" "$(git rev-parse HEAD)" "$BASE_REPO" "$FAKE_FORK") && rc=0 || rc=$?
+          echo "$negative"
+          git reset -q --hard "$before" && git clean -qfd
+          if [ "$rc" -ne 1 ]; then
+            echo "::error::a non-conforming external contribution was not rejected (exit $rc)"
+            failed=1
+          fi
+          # Asserted on findings, not on the exit code — the exit code alone
+          # cannot tell a working prohibition from one that reports nothing.
+          for finding in 'no Signed-off-by' 'CONTEXT.md, which is authored' '.github/rehearsal/scratch'; do
+            case "$negative" in
+              *"$finding"*) ;;
+              *) echo "::error::the negative control never reported: $finding"; failed=1 ;;
+            esac
+          done
+
+          # HEAD is back where it started either way, so nothing added after this
+          # step inherits a worktree one commit ahead of the merge commit.
+          test "$(git rev-parse HEAD)" = "$before" || { echo "::error::HEAD not restored"; failed=1; }
+          [ "$failed" -eq 0 ] || exit 1
+          echo "both controls passed: the conforming commit is accepted, and every prohibition reported"

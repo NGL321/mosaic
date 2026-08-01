@@ -1,0 +1,40 @@
+# No `version:` key, deliberately: no `research-v*` tag exists yet, so there is
+# no version to name and a placeholder would be a pin to nothing. Until one does,
+# GitHub's "Cite this repository" button emits an unpinned citation and `message`
+# below is the only thing asking for a pin — a real gap, tracked in #79, closed by
+# adding `version:` and `date-released:` in the commit that cuts the first tag.
+cff-version: 1.2.0
+title: "Mosaic: a research programme in computational cognitive science"
+message: >-
+  Cite a pinned version, never the repository as it stands. `main` is the
+  programme's current state of belief, not its published state, so an
+  unversioned citation names a target designed to move — and it moves in the
+  way that matters, since a MINOR bump is a Protective Belt rung changing.
+  Set `version` to the `research-vX.Y.Z` tag you read, or, for anything
+  predating a tag — which is everything, today — set `commit` to the sha of the
+  commit you read.
+type: software
+authors:
+  - family-names: Litov
+    given-names: Noah
+    orcid: "https://orcid.org/0009-0005-2564-7614"
+repository-code: "https://github.com/NGL321/mosaic"
+url: "https://github.com/NGL321/mosaic"
+abstract: >-
+  A long-running, LLM-accelerated research programme investigating cognition
+  as a heterogeneous network of inference engines whose schemas each carry
+  their own metric space, and the Transport between them — of which the
+  primary observable is where Transport fails. Framed on Lakatos: a Hard Core
+  that is not revised, a Protective Belt of falsifiable claims that is, and a
+  Positive Heuristic governing how belt rungs are added and retired.
+keywords:
+  - computational cognitive science
+  - research programme
+  - interpretability
+  - open notebook science
+# Split by artifact kind, not by track — MIT for code, CC BY 4.0 for the prose
+# record. The path table that decides which is which lives in README.md.
+license:
+  - MIT
+  - CC-BY-4.0
+
