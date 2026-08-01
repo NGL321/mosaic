@@ -26,6 +26,16 @@ permissions:
 jobs:
   contribution:
     runs-on: ubuntu-latest
+    # The three arguments the gating call and the rehearsal share, named once.
+    # They differ in exactly one argument — the head repository — and that is the
+    # whole point of the rehearsal, so it is the only one written twice. A fifth
+    # argument added to one invocation and not the other would leave the
+    # rehearsal quietly testing a different call than the one that gates.
+    env:
+      BASE_SHA: ${{ github.event.pull_request.base.sha }}
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+      BASE_REPO: ${{ github.repository }}
+      CHECK: .github/scripts/contribution_check.py
     steps:
       # Pinned by digest: an action referenced by a floating tag can change
       # under a check whose whole purpose is being trustworthy about history.
@@ -66,7 +76,7 @@ jobs:
         if: github.event.pull_request.head.repo.full_name != github.repository
         run: |
           git rm -rq --ignore-unmatch -- .github/
-          git checkout "${{ github.event.pull_request.base.sha }}" -- .github/
+          git checkout "$BASE_SHA" -- .github/
 
       # actions/setup-python@v7.0.0
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
@@ -75,10 +85,7 @@ jobs:
 
       - name: Check §8's merge checklist
         run: |
-          python .github/scripts/contribution_check.py \
-            "${{ github.event.pull_request.base.sha }}" \
-            "${{ github.event.pull_request.head.sha }}" \
-            "${{ github.repository }}" \
+          python "$CHECK" "$BASE_SHA" "$HEAD_SHA" "$BASE_REPO" \
             "${{ github.event.pull_request.head.repo.full_name }}"
 
       # An internal pull request takes the skip branch, so a green run above
@@ -90,16 +97,58 @@ jobs:
       #
       # So the same script is re-run over the same refs with a synthetic external
       # head, and every internal pull request exercises the external path for
-      # free. It **never gates**: `continue-on-error` keeps the job green, and its
-      # findings are about commits §8 does not bind — internal work carries no
-      # sign-off by design, so this step is *expected* to report violations. Read
-      # it as a smoke test of the check, not as a judgement on the branch.
-      - name: Rehearse the external path (never gates)
-        if: github.event.pull_request.head.repo.full_name == github.repository
-        continue-on-error: true
+      # free. **A violation here is the expected result**, not a judgement on the
+      # branch: internal work carries no sign-off by design, and this branch edits
+      # .github/. Read it as a smoke test of the check.
+      #
+      # `continue-on-error` is deliberately *not* used, because it swallows every
+      # non-zero exit identically — and the one exit that matters here is 2, the
+      # check itself being broken (bad refs, a vacuous authored set, an import
+      # that no longer resolves). Under `continue-on-error` that renders as the
+      # same ignorable red mark as the expected violation, which is the entire
+      # value of the rehearsal leaking away. So the distinction the comment above
+      # draws in prose is drawn by the runner: 0 and 1 pass, 2 fails loudly.
+      #
+      # `always()` because a diagnostic gated on the thing it diagnoses is no
+      # diagnostic: without it, `success()` is implied and this step is skipped
+      # exactly when the step above has just failed.
+      - name: Rehearse the external path
+        if: always() && github.event.pull_request.head.repo.full_name == github.repository
         run: |
-          python .github/scripts/contribution_check.py \
-            "${{ github.event.pull_request.base.sha }}" \
-            "${{ github.event.pull_request.head.sha }}" \
-            "${{ github.repository }}" \
-            "rehearsal/synthetic-fork-that-does-not-exist"
+          python "$CHECK" "$BASE_SHA" "$HEAD_SHA" "$BASE_REPO" \
+            "rehearsal/synthetic-fork-that-does-not-exist" && rc=0 || rc=$?
+          if [ "$rc" -eq 2 ]; then
+            echo "::error::the check itself is broken (exit 2) — this is not about the branch"
+            exit 1
+          fi
+          echo "rehearsal exit $rc — 0 and 1 are both fine here, 2 is not"
+
+      # The rehearsal above can only ever run the external path over *internal*
+      # commits, which violate by construction — so it proves the failure paths
+      # execute and their messages render, and cannot prove that a *conforming*
+      # external contribution passes. No conforming commit exists in this history
+      # to point it at, so one is made: an empty commit, signed off, touching no
+      # file and therefore neither an authored file nor .github/. Everything §8
+      # asks for, and nothing else.
+      #
+      # This is the positive control, and it is allowed to fail the job. A check
+      # that cannot return 0 for a compliant contribution is broken in the
+      # direction that matters most — it rejects the stranger who did everything
+      # right — and that is worth a red build on an internal pull request.
+      - name: Rehearse a conforming external contribution
+        if: always() && github.event.pull_request.head.repo.full_name == github.repository
+        run: |
+          # The base is the tip as it stands, not $BASE_SHA: the check reads
+          # every commit from the merge base forward, and against main that would
+          # drag this whole branch in and report its violations instead. The
+          # control has to be the empty commit alone.
+          before=$(git rev-parse HEAD)
+          git -c user.name="Rehearsal" -c user.email="rehearsal@example.invalid" \
+            commit --allow-empty -s -q -m "rehearsal: a conforming external commit"
+          python "$CHECK" "$before" "$(git rev-parse HEAD)" "$BASE_REPO" \
+            "rehearsal/synthetic-fork-that-does-not-exist" && rc=0 || rc=$?
+          if [ "$rc" -ne 0 ]; then
+            echo "::error::a conforming external contribution was rejected (exit $rc)"
+            exit 1
+          fi
+          echo "positive control passed: a signed-off commit touching nothing reserved is accepted"
