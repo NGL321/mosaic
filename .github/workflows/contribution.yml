@@ -1,0 +1,57 @@
+name: contribution
+
+# §8's merge checklist, over the commits a pull request adds. Three of its four
+# items are facts a runner can read — fork boundary, `Signed-off-by:` on every
+# added commit, no authored file touched. The fourth is review, which is Noah's.
+# See .github/scripts/contribution_check.py.
+#
+# There is deliberately no `paths:` filter and no `if:` on the job. This check is
+# meant to be *required* on `main`, and a required check that never runs sits
+# *expected* forever and blocks the merge — the trap custody.yml's header
+# documents. So it runs on every pull request and skips internally, inside the
+# script, at exit 0.
+#
+# The authored-file list is not declared here. It is imported from
+# custody_check.py, which cross-checks it against custody.yml's `paths:` and
+# exits 2 on drift. A second declaration would unlearn that.
+
+on:
+  pull_request:
+
+# Reads git history and the event payload. A fork pull request runs with a
+# read-only token, which is all this needs.
+permissions:
+  contents: read
+
+jobs:
+  contribution:
+    runs-on: ubuntu-latest
+    steps:
+      # Pinned by digest: an action referenced by a floating tag can change
+      # under a check whose whole purpose is being trustworthy about history.
+      # actions/checkout@v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          # The check resolves a merge base; a shallow clone has none.
+          fetch-depth: 0
+
+      # A pull request event checks out the *merge* commit, so the working tree
+      # holds the contributor's version of every file — including the check that
+      # is about to judge them. Restore the checks from the base branch, so a
+      # fork cannot edit its own gate. Nothing else in the tree is touched: the
+      # commits being checked are read from git history, not from the worktree.
+      - name: Restore the checks from the base branch
+        run: git checkout "${{ github.event.pull_request.base.sha }}" -- .github/scripts/
+
+      # actions/setup-python@v7.0.0
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.x'
+
+      - name: Check §8's merge checklist
+        run: |
+          python .github/scripts/contribution_check.py \
+            "${{ github.event.pull_request.base.sha }}" \
+            "${{ github.event.pull_request.head.sha }}" \
+            "${{ github.repository }}" \
+            "${{ github.event.pull_request.head.repo.full_name }}"
