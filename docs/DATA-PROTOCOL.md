@@ -179,7 +179,7 @@ than batch publish.
 
 **Mosaic has no `publish.sh` yet.** Until it does, no run has a mechanised path to §3.4's
 deterministic location, and the first experiment will need one before its outputs can be
-cited.
+cited. Tracked as [#42](https://github.com/NGL321/mosaic/issues/42).
 
 ---
 
@@ -284,5 +284,5 @@ not as decided. Until it closes, a release freeze is proposed to Noah rather tha
 | | What is missing | Where it is tracked |
 |---|---|---|
 | §3.4 | The retention arithmetic — runs × checkpoints × size — before the first large sweep | map [#1](https://github.com/NGL321/mosaic/issues/1), *Not yet specified*; needs [#7](https://github.com/NGL321/mosaic/issues/7)'s first rung |
-| §5 | `publish.sh` — no mechanised path from a run's output to `Desk/mosaic/runs/<run-id>/` | unfiled; blocks the first experiment's outputs being citable |
+| §5 | `publish.sh` — no mechanised path from a run's output to `Desk/mosaic/runs/<run-id>/` | [#42](https://github.com/NGL321/mosaic/issues/42), on map [#1](https://github.com/NGL321/mosaic/issues/1); blocks the first experiment's outputs being citable |
 | §8.4 | Whether publication-time artifact release is exempt from §3.3, and under what retention | [#9](https://github.com/NGL321/mosaic/issues/9) |
