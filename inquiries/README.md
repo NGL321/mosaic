@@ -32,11 +32,17 @@ investigation, not a single **Experiment**. Three levels, defined in
 instrument configured, and a **Run** executes one Experiment under one Inquiry. Only the Run
 is produced rather than declared, and only the Run leaves a record: the manifest in `runs/`.
 
+**Committed here, but not owned here.** A config's nesting is where the file sits, not what
+makes it what it is — an Experiment is identified by its config's sha256 and nothing else, so
+a byte-identical config under another Inquiry is the same Experiment, not a copy of it.
+Committing one here binds it to this Inquiry's *search*, never to this Inquiry's *identity*.
+
 Seeds are therefore **not** in `config.yaml`. A number is hard-coded into a configuration only
-if it is essential to what defines that configuration, and a seed never defines one — an
-Experiment is identified by its config's sha256, so a seed written in would make every seed a
-different Experiment and leave the multi-seed object nameless. The config declares how seeds
-are drawn; each run's manifest records the value it drew.
+if it is essential to what defines that configuration, and a seed never defines one — written
+in, every seed would be a different Experiment, every Experiment would have exactly one run,
+and the multi-seed object would have no name. The config declares how seeds are drawn; each
+run's manifest records the value it drew, which is where the seed the repository must keep to
+reproduce a run now lives.
 
 ## What is not stored here
 
@@ -44,10 +50,11 @@ are drawn; each run's manifest records the value it drew.
 [`docs/DATA-PROTOCOL.md` §3.3](../docs/DATA-PROTOCOL.md), adopted in
 [#3](https://github.com/NGL321/mosaic/issues/3), runs publish to
 `Desk/mosaic/runs/<run-id>/` (§3.4) and the repository keeps only what is needed to
-reproduce them: seeds, configuration, and code.
+reproduce them: configuration, code, and the per-run seed each manifest records.
 
 `runs/` therefore holds **manifests, not bytes** — one small file per run, recording the
-run id, the config SHA it was produced from, the sha256 of the output, and the Drive path.
+run id, the config SHA it was produced from, the seed it drew, the sha256 of the output, and
+the Drive path.
 The manifest is what a notebook entry cites, and it is what makes a result traceable after
 the bytes have been moved or pruned.
 

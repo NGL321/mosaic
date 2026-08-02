@@ -134,7 +134,7 @@ rather than declared, and the only one that leaves a record. It names both axes:
 gives it a configuration, the Inquiry gives it a Question and pays for it. What varies between
 runs of one Experiment is only what that configuration itself declares varies; the seed is drawn
 per run and recorded, never written into the config. Output publishes outside the repository
-and one manifest stays behind — run id, config SHA, output sha256, Drive path.
+and one manifest stays behind — run id, config SHA, seed, output sha256, Drive path.
 _Avoid_: Experiment, job, trial, iteration
 
 <!-- One Run is several CI jobs: #58's checkpoint-and-resume, forced by GITHUB_TOKEN's
