@@ -115,6 +115,31 @@ _Avoid_: Competence criterion, fitness function, validity check, baseline
 <!-- Distinct from the competence floor, which is a property of Noah rather than of an
      instrument. The two were both called "competence" until #56 separated them. -->
 
+**Experiment**:
+One instrument, configured — the functional process a Run executes. Identified by the sha256
+of its configuration and by nothing else: two configurations differing at all are two
+Experiments however alike their intent, and two that are byte-identical are one however
+separately they were arrived at. It does not belong to an Inquiry — the two are independent,
+and it is a Run that names both. Declared, never produced.
+_Avoid_: Inquiry, trial, condition, arm, variant
+
+<!-- In Searching, Experiments are tried against the Adequacy Criterion; at the freeze one
+     Experiment's configuration becomes the Inquiry's frozen config, and the discriminating
+     measurement is runs of that one. The word is phase-neutral — what changes at the freeze
+     is who may open one, which is a property of the state. -->
+
+**Run**:
+One execution of an Experiment under an Inquiry — the only one of the three that is produced
+rather than declared, and the only one that leaves a record. It names both axes: the Experiment
+gives it a configuration, the Inquiry gives it a Question and pays for it. What varies between
+runs of one Experiment is only what that configuration itself declares varies; the seed is drawn
+per run and recorded, never written into the config. Output publishes outside the repository
+and one manifest stays behind — run id, config SHA, output sha256, Drive path.
+_Avoid_: Experiment, job, trial, iteration
+
+<!-- One Run is several CI jobs: #58's checkpoint-and-resume, forced by GITHUB_TOKEN's
+     24-hour expiry, resumes as a fresh job. A job is a dispatch event, not a unit of evidence. -->
+
 **Register**:
 Which of two modes a result was produced in. *Confirmatory* if its metric and decision rule
 are ancestors of the data they judge; *exploratory* otherwise. Exploratory results are

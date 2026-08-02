@@ -11,7 +11,7 @@ live here and are versioned as research, despite reading as tools.
 inquiries/
 └── NNN-short-slug/
     ├── README.md        the claim this serves, and what would falsify it
-    ├── config.yaml      seeds and configuration
+    ├── config.yaml      the configuration, and how seeds are drawn
     ├── src/
     └── runs/
         └── <date>-<run-id>.md    manifest only
@@ -26,9 +26,17 @@ that would retire it. An Inquiry that cannot say what would falsify the claim it
 not ready to run.
 
 **One Inquiry, one directory, many runs.** The instruments an Inquiry searches over are
-configurations under it, never sibling directories: the directory names the line of
-investigation, not a single experiment. That leaves `experiment` free for what it means one
-level down — an instrument run inside an Inquiry's budget.
+configurations committed with it, never sibling directories: the directory names the line of
+investigation, not a single **Experiment**. Three levels, defined in
+[`CONTEXT.md`](../CONTEXT.md) — an Inquiry is a searchable domain, an Experiment is one
+instrument configured, and a **Run** executes one Experiment under one Inquiry. Only the Run
+is produced rather than declared, and only the Run leaves a record: the manifest in `runs/`.
+
+Seeds are therefore **not** in `config.yaml`. A number is hard-coded into a configuration only
+if it is essential to what defines that configuration, and a seed never defines one — an
+Experiment is identified by its config's sha256, so a seed written in would make every seed a
+different Experiment and leave the multi-seed object nameless. The config declares how seeds
+are drawn; each run's manifest records the value it drew.
 
 ## What is not stored here
 
