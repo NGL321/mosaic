@@ -113,6 +113,7 @@ load-bearing. So the tag is **computed, not chosen**.
 | 4 | **An operational repository** | a restore path demonstrated **by restoring**, not by existing; and the programme's routine tasks runnable without improvisation. Nothing wider than those two things. |
 | 5 | **A first experiment, designed and executable** | the experiment names the rung it tests, and the toolchain runs it end to end at least once, on trivial input if need be. Its **results are not required**. |
 | 6 | **A public work product** | not new: §5's warrant table puts a public, human-authored deliverable on every MAJOR, and ratification is `core:`. An essay stating the programme and the direction intended for it satisfies this. |
+| 7 | **A proven research loop** | one Inquiry run end to end — a Question frozen, dispatched to agents that searched for instruments without Noah in the search step, terminating `Answered` or `Exhausted` on a result he acknowledged. Discharged by the record that run leaves: a notebook entry and the `evidence:` commit that landed its result, both in the tree. Tracked by [Map: The research loop](https://github.com/NGL321/mosaic/issues/55). |
 
 **Why the experiment and not a checklist.** A checklist of intentions is satisfiable by
 ceremony, and §5 argues at length that such a gate is worse than none — in the record it is
@@ -127,7 +128,28 @@ scaffolding gate; it is a research result, and it could be years or never. `1.0.
 programme is *equipped*, not that it is *right*. Executing the experiment once proves the
 equipment. The answer belongs to the belt.
 
-Criteria 1, 2, 5 and 6 are artifacts a reader can find; 3 and 4 are Noah's to assert. The
+**Why the loop and not just the experiment.** Criterion 5 asks whether the toolchain can
+carry *a* run. Criterion 7 asks whether the mechanism this repository exists to build has
+ever closed a circuit. These are different claims, and only the second is the one a `1.0.0`
+makes: a version claiming a mechanised path to maturity of rigour, published with the
+mechanism never having run, is the ceremony this section argues against at length — a
+checklist of intentions in the shape of a repository.
+
+**This does not reintroduce nature's answer.** What criterion 7 requires is an *acknowledged
+return*, not a confirmation. `Answered` and `Exhausted` are mutually unreachable terminal
+states, and **both discharge it**: an Inquiry that exhausts its search never reaches a
+measurement, so what it returns is a report of the search itself — which is a research
+output under §3's `evidence:` row, and lands as one. A search that establishes no instrument
+exists inside the budget has closed the circuit exactly as well as one that answers its
+Question. The rule above stands unamended.
+
+**The cost is deliberate.** Criterion 7 puts `1.0.0` behind a working agent dispatch loop,
+which is a substantial ratchet: the charter now waits on machinery, and machinery slips. The
+price is accepted because a charter whose central mechanism has never been shown to run is
+precisely the artifact this section calls *indistinguishable from the real thing* in the
+record.
+
+Criteria 1, 2, 5, 6 and 7 are artifacts a reader can find; 3 and 4 are Noah's to assert. The
 deferred set is mechanical:
 
 ```console
@@ -228,6 +250,61 @@ above already prescribes, and it is how most of the vocabulary was in fact writt
 **deciding** the vocabulary is the breach. An agent **wording** a decision Noah made is the
 sanctioned pipeline, and forbidding it would forbid the protocol's own instruction.
 
+**Three exceptions, and they are the whole list.** The rule above governs everything except
+artifacts whose value *is* that a particular human produced them. There, the keystrokes are
+the claim, and drafting assistance destroys the thing being claimed.
+
+| | Human-authored outright | Lands in | Why the pen matters |
+|---|---|---|---|
+| 1 | **The competence floor** | `CONTEXT.md` | A root assertion about Noah. An agent co-authoring a claim about what Noah can defend unaided is circular — the thing the claim exists to bound would be drafting the bound. |
+| 2 | **Falsification criteria** | `CHARTER.md`, with the rung | The warrant table below already demands the falsifier *"in their own words"*; saying so only there is what lets an agent draft one and a human sign it. A falsifier is the gate's instrument, and an instrument the measured party did not build measures nothing. |
+| 3 | **Creative and proof-based deliverables that demonstrate the researcher's own knowledge** | declared per deliverable | The `core:` row's *"public, human-authored work product"*, generalised. An essay, a publication, a proof: the deliverable *is* the demonstration, so an agent-drafted one demonstrates the agent. |
+
+Everything not on this list is **agent-drafted, human-signed** — the pipeline the paragraph
+above describes, and how most of this repository was in fact written.
+
+**The list adds no new *path*, which is not the same as nothing to enforce.** Exceptions 1
+and 2 land in the authored files this section already names, so `custody.yml` needs no
+change; exception 3 lands wherever the MAJOR's deliverable is declared, which is by
+construction outside a fixed path filter. *Custody follows the file, never the topic* is
+unamended. But be exact about what that buys: a path check sees **who committed**, and none
+of these three exceptions is about who committed. An agent can draft a falsifier, Noah can
+apply and commit it under his identity, and the check goes green. That is the same candour
+this section already shows about the citation row — 2 and 3 are checker-agent territory, not
+CI's. What the list adds is that the obligation is stated where it is read, so the warrant
+table and this section no longer have to be read together to get the rule right.
+
+**The Protective Belt is Noah's to decide.** An Inquiry is the machinery by which a Belt
+claim is earned or refused, and is never itself such a claim; the Belt lives in `CHARTER.md`,
+so **an agent may not decide to add a rung, revise one, or retire one.** This follows from
+the first bullet of this section rather than from a fourth exception above, and it is stated
+here because the surrounding rules are enumerations — and an enumeration silent on the Belt
+reads as permission. It does not disturb the pull-quote: an agent may report that a result
+bears on a rung, and may word a rung Noah has decided on. **Deciding** the rung is Noah's;
+its falsifier is exception 2, where the keystrokes genuinely are the claim; the wording of
+the rest is the ordinary pipeline.
+
+**A falsifier is declared in advance or it is not a falsifier.** The commit adding a rung
+must be an ancestor of any `evidence:` commit citing it. This is timing rather than custody,
+so it is not the path check's business; it is git ancestry, checkable in a clone by anyone,
+and it costs the author nothing beyond committing the criterion before running the test. A
+falsifier written after the data exists is not a weaker falsifier — it is a different kind of
+statement, and the record must not be able to confuse the two. This is the same primitive
+that derives a result's `Register` and freezes an Inquiry's Question: what was known in
+advance is a question about ancestry, and the repository should only answer it one way.
+**Unmechanised**, and deferred under §2 as [#82](https://github.com/NGL321/mosaic/issues/82),
+labelled `custody:deferred` so it blocks `1.0.0` like any other — the check is a short
+ancestry test, but there is no declared way yet for an `evidence:` commit to name the rung it
+bears on, and inventing one before the Belt has rungs would fix a convention against nothing.
+
+**Where a frozen rule dictates the change, the defence is the citation.** A meaning-changing
+commit to an authored file owes a defence artifact. When a Belt change is dictated by a
+decision rule committed before the data existed, that obligation is discharged by citing the
+rule and the result that fired it: the author wrote the reasoning in advance, which is the
+stronger claim, and restating it afterwards adds nothing a reader can check. A Belt change
+made at **discretion** — a rung added, or one retired without its falsifier firing — owes a
+full defence, unchanged.
+
 A `Co-Authored-By:` trailer on an authored file is therefore **not a violation**. It is a
 routing signal: it triggers obligations rather than convicting the commit. Three obligations,
 each checked where it can be:
@@ -236,7 +313,7 @@ each checked where it can be:
 |---|---|---|
 | **Identity** | an authored file is committed under a human identity | CI, in one command, once agents commit under their own identity |
 | **Citation** | an agent co-author on an authored file carries a `Session:` trailer resolving in the Transcript Archive | CI, **for presence only** — resolution is not checkable from a public runner against a private archive, and is unmechanised |
-| **Defence** | a meaning-changing commit to an authored file carries a defence artifact — what changed, why, in Noah's own words | a checker agent, on the pull request, as the §5 gate below already works |
+| **Defence** | a meaning-changing commit to an authored file carries a defence artifact — what changed, why, in Noah's own words; or, where a decision rule frozen in advance dictated the change, a citation of that rule and the result that fired it | a checker agent, on the pull request, as the §5 gate below already works |
 
 An obligation the scaffolding era defers (§2) is not dropped — it is filed as a
 `custody:deferred` issue and blocks `1.0.0` until discharged.
@@ -280,8 +357,8 @@ denial it is true.
 
 Defence is unbounded until the programme says where it bottoms out. The **competence floor**
 is Noah's declared statement of what he can defend unaided; it is an authored file's content
-and so must be written by him, unassisted, which is the one place custody's strictest reading
-belongs. An agent co-authoring a root assertion about Noah is circular.
+and so must be written by him, unassisted, under exception 1 above. An agent co-authoring a
+root assertion about Noah is circular.
 
 - Defence terminates **at the floor**, not at first principles.
 - Whatever a derivation needs from below the floor is **Verification Debt** — filed as a
