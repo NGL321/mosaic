@@ -1,4 +1,4 @@
-# Experiments
+# Inquiries
 
 **Research track.** Everything under this directory fails the test in
 [`PROTOCOL.md` §1](../PROTOCOL.md): if it changed silently, a result already in the record
@@ -8,7 +8,7 @@ live here and are versioned as research, despite reading as tools.
 ## Layout
 
 ```
-experiments/
+inquiries/
 └── NNN-short-slug/
     ├── README.md        the claim this serves, and what would falsify it
     ├── config.yaml      seeds and configuration
@@ -17,13 +17,18 @@ experiments/
         └── <date>-<run-id>.md    manifest only
 ```
 
-Experiments are numbered and named for the question, not for the notebook entry that
-discusses them — several entries may cite one experiment, and an experiment that only ever
+Inquiries are numbered and named for their **Question**, not for the notebook entry that
+discusses them — several entries may cite one Inquiry, and an Inquiry that only ever
 served one entry is still findable a year later.
 
-An experiment's `README.md` names the Protective Belt claim it serves and the observation
-that would retire it. An experiment that cannot say what would falsify the claim it serves is
+An Inquiry's `README.md` names the Protective Belt claim it serves and the observation
+that would retire it. An Inquiry that cannot say what would falsify the claim it serves is
 not ready to run.
+
+**One Inquiry, one directory, many runs.** The instruments an Inquiry searches over are
+configurations under it, never sibling directories: the directory names the line of
+investigation, not a single experiment. That leaves `experiment` free for what it means one
+level down — an instrument run inside an Inquiry's budget.
 
 ## What is not stored here
 
