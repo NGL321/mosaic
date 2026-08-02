@@ -113,7 +113,7 @@ load-bearing. So the tag is **computed, not chosen**.
 | 4 | **An operational repository** | a restore path demonstrated **by restoring**, not by existing; and the programme's routine tasks runnable without improvisation. Nothing wider than those two things. |
 | 5 | **A first experiment, designed and executable** | the experiment names the rung it tests, and the toolchain runs it end to end at least once, on trivial input if need be. Its **results are not required**. |
 | 6 | **A public work product** | not new: §5's warrant table puts a public, human-authored deliverable on every MAJOR, and ratification is `core:`. An essay stating the programme and the direction intended for it satisfies this. |
-| 7 | **A proven research loop** | one Inquiry run end to end — a Question frozen, dispatched to agents that searched instruments without Noah in the step, returning a result he acknowledged. Discharged by the record that run leaves: a notebook entry and the `evidence:` commit that landed its result, both in the tree. Tracked by [Map: The research loop](https://github.com/NGL321/mosaic/issues/55). |
+| 7 | **A proven research loop** | one Inquiry run end to end — a Question frozen, dispatched to agents that searched for instruments without Noah in the search step, terminating `Answered` or `Exhausted` on a result he acknowledged. Discharged by the record that run leaves: a notebook entry and the `evidence:` commit that landed its result, both in the tree. Tracked by [Map: The research loop](https://github.com/NGL321/mosaic/issues/55). |
 
 **Why the experiment and not a checklist.** A checklist of intentions is satisfiable by
 ceremony, and §5 argues at length that such a gate is worse than none — in the record it is
@@ -136,15 +136,18 @@ mechanism never having run, is the ceremony this section argues against at lengt
 checklist of intentions in the shape of a repository.
 
 **This does not reintroduce nature's answer.** What criterion 7 requires is an *acknowledged
-return*, not a confirmation. An Inquiry that exhausts its search without finding an
-instrument has closed the circuit exactly as well as one that answers its Question; both
-produce a result Noah reads and signs. The rule above stands unamended.
+return*, not a confirmation. `Answered` and `Exhausted` are mutually unreachable terminal
+states, and **both discharge it**: an Inquiry that exhausts its search never reaches a
+measurement, so what it returns is a report of the search itself — which is a research
+output under §3's `evidence:` row, and lands as one. A search that establishes no instrument
+exists inside the budget has closed the circuit exactly as well as one that answers its
+Question. The rule above stands unamended.
 
 **The cost is deliberate.** Criterion 7 puts `1.0.0` behind a working agent dispatch loop,
-which is a substantial ratchet: the charter now waits on machinery, and machinery slips. It
-is accepted because the alternative is worse — a charter claiming a mechanised path to
-maturity of rigour, whose mechanism has never been shown to run, is exactly the artifact
-whose vagueness this section demands be visible on the page.
+which is a substantial ratchet: the charter now waits on machinery, and machinery slips. The
+price is accepted because a charter whose central mechanism has never been shown to run is
+precisely the artifact this section calls *indistinguishable from the real thing* in the
+record.
 
 Criteria 1, 2, 5, 6 and 7 are artifacts a reader can find; 3 and 4 are Noah's to assert. The
 deferred set is mechanical:
@@ -289,10 +292,10 @@ falsifier written after the data exists is not a weaker falsifier — it is a di
 statement, and the record must not be able to confuse the two. This is the same primitive
 that derives a result's `Register` and freezes an Inquiry's Question: what was known in
 advance is a question about ancestry, and the repository should only answer it one way.
-**Unmechanised**, and filed as [#82](https://github.com/NGL321/mosaic/issues/82) — the check
-is a short ancestry test, but there is no declared way yet for an `evidence:` commit to name
-the rung it bears on, and inventing one before the Belt has rungs would fix a convention
-against nothing.
+**Unmechanised**, and deferred under §2 as [#82](https://github.com/NGL321/mosaic/issues/82),
+labelled `custody:deferred` so it blocks `1.0.0` like any other — the check is a short
+ancestry test, but there is no declared way yet for an `evidence:` commit to name the rung it
+bears on, and inventing one before the Belt has rungs would fix a convention against nothing.
 
 **Where a frozen rule dictates the change, the defence is the citation.** A meaning-changing
 commit to an authored file owes a defence artifact. When a Belt change is dictated by a
