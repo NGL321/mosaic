@@ -98,14 +98,14 @@ with a link back to this repository and to the licence.
 | `notebook/`, `docs/`, `curriculum/` | **CC BY 4.0** ([`LICENSE-DOCS`](LICENSE-DOCS)) |
 | `.claude/skills/`, `.agents/skills/` | **Third-party — neither.** Vendored from [`mattpocock/skills`](https://github.com/mattpocock/skills) per [`skills-lock.json`](skills-lock.json), under their upstream licence. |
 | `CITATION.cff` | **MIT** — the default, and assigned rather than inherited: it is machine-readable metadata about the record, not part of it, and a reference manager should copy it freely. |
-| everything else, `experiments/` included in full | **MIT** ([`LICENSE`](LICENSE)) — the default |
+| everything else, `inquiries/` included in full | **MIT** ([`LICENSE`](LICENSE)) — the default |
 
 `LICENSE` and `LICENSE-DOCS` are licence texts rather than licensed material: MIT's is
 reproduced under its own terms, and Creative Commons dedicates its licence texts to the
 public domain under CC0.
 
 **The directory wins**, and **MIT is the default**: a file nobody has classified fails
-safe toward permissive rather than into unlicensed limbo. `experiments/` is MIT in full,
+safe toward permissive rather than into unlicensed limbo. `inquiries/` is MIT in full,
 prose write-ups included.
 
 Three riders:

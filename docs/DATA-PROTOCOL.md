@@ -115,7 +115,7 @@ metrics, analysis outputs, final figures)? → Drive, under the project's `Desk`
 This is the clause the map's *Not yet specified* cites as a precondition on the first sweep.
 It is not yet dischargeable — the arithmetic needs a first rung's experimental design, which
 [#7](https://github.com/NGL321/mosaic/issues/7) has not produced. The *mechanism* around it
-is settled and lives in [`experiments/README.md`](../experiments/README.md): the repository
+is settled and lives in [`inquiries/README.md`](../inquiries/README.md): the repository
 keeps one manifest per run and never the bytes.
 
 **3.5 — Is it scratch for a running process?** → local temp or the scratch area. Never the
@@ -244,9 +244,10 @@ citation is stable and checkable by anyone Noah grants access to, the archive st
 and reorganising the archive never breaks a citation already in the record — which is
 exactly the property §2 promises and the reason its append-only rule has no exceptions.
 
-The same construction is what lets `experiments/*/runs/` hold manifests rather than bytes: a
-manifest records the run id, the config SHA it was produced from, the sha256 of the output,
-and the Drive path. The hash is the claim; the path is a convenience that may change.
+The same construction is what lets `inquiries/*/runs/` hold manifests rather than bytes: a
+manifest records the run id, the config SHA it was produced from, the seed it drew, the
+sha256 of the output, and the Drive path. The hash is the claim; the path is a convenience
+that may change.
 
 ### 8.3 Load-bearing maps onto the two tracks, and must keep mapping
 
