@@ -1,8 +1,8 @@
 # Mosaic
 
 Mosaic is a long-running, LLM-accelerated research programme in computational cognitive science,
-investigating cognition as a heterogeneous network of inference engines operating in
-representation-constrained metric spaces.
+investigating cognition as a heterogeneous network of inference engines whose schemas each carry
+their own metric space, and the **Transport** between them.
 
 ## Language
 
@@ -153,6 +153,14 @@ _Avoid_: Preregistered, post-hoc, mode, class, tier
 Every term here is contested in the contemporary literature. Where Mosaic borrows one, the source
 is named on an `_After_` line; where Mosaic's usage diverges from that source, the divergence is
 named on a `_Departs_` line. Departures are fine; unmarked departures are not.
+
+> **The terms are here; the commitments are in the charter.** Where an entry below says *the
+> programme's first axiom* or *an axis of the Edge of Chaos Bound*, it is naming a Hard Core
+> member, not stating it. What each member commits the programme to, which stratum it sits in and
+> what fires its escape hatch are the charter's ([`CHARTER.md`](CHARTER.md), assembled under
+> [#12](https://github.com/NGL321/mosaic/issues/12)); `PROTOCOL.md` §3's rule that a definition is
+> not a claim is why they are not restated here. Until the charter exists,
+> [#6](https://github.com/NGL321/mosaic/issues/6) is canonical for the roster.
 
 **Inference Engine**:
 A system delineated by a Markov blanket whose internal state carries predictive information about
@@ -308,8 +316,39 @@ science, not physics, and does not investigate the axiom's own falsifiers.
      with its no-feedback assumption, is not yet defensible unaided. -->
 
 **Scale Corollary**:
-The programme's second axiom: the properties above hold at any scale and on any substrate, so a
-mathematical model, an artificial network and a biological one are corollaries of one another —
-differing in scale and substrate, not in kind. Held as a working axiom the programme may itself
-falsify. It is what licenses Mosaic to speak of minds without speaking of brains.
+The programme's second axiom, and an actual corollary of **Least Action** rather than a second
+stipulation: thermodynamic systems are information systems, and least action applies to any system
+describable as a complex system of discrete parts, so the principles above hold at every such
+level. A mathematical model, an artificial network and a biological one are therefore corollaries
+of one another — differing in scale, not in kind. It is what licenses Mosaic to speak of minds
+without speaking of brains. Held as a working axiom the programme may itself falsify.
+_Avoid_: Scale invariance, level independence
+
+**Structural Realisation**:
+The programme's third axiom: cognition arises from **structure, not substance**. Held separately
+from the **Scale Corollary** because the warrant is different in kind — reasoned from bounded
+solution spaces and the dynamical-systems view, not from physics. *Monist rider:* structure is
+always the structure **of** a physical system. There is no structure without a substrate, and no
+dependence on **which** substrate — multiple realisability without Plato's dualism.
+Together with the **Scale Corollary** this yields a derived consequence, one level above
+substrate: independence from the *implementing computation*. A Turing machine built inside
+Conway's Game of Life does not depend on the hardware Life runs on — the Scale Corollary holds the
+principles at every level of the stack, and Structural Realisation fixes the machine's identity at
+the level where its structure lives. Stated as a derivation rather than a fourth axiom, because
+that derivation is where the physics-sourced and dynamics-sourced commitments unify.
 _Avoid_: Substrate independence, multiple realisability, universality
+
+**Informational Capacity**:
+One of the two axes of the **Edge of Chaos** Bound — the axis excluding the under-ordered. Named
+here so the Bound has vocabulary to be stated in; **operationalised under
+[#87](https://github.com/NGL321/mosaic/issues/87) and landing under
+[#104](https://github.com/NGL321/mosaic/issues/104)**, and this entry says so rather than guessing
+at a definition. *Informational* is not decoration: bare "capacity" collides with the general
+cognitive capacity named in **Schema Dynamics**.
+_Avoid_: Capacity, bandwidth, expressivity, complexity
+
+**Order**:
+The other axis of the **Edge of Chaos** Bound — the axis excluding the over-ordered. Named here on
+the same terms as **Informational Capacity**, with its operational definition deferred to
+[#104](https://github.com/NGL321/mosaic/issues/104).
+_Avoid_: Structure, regularity, stability, criticality
