@@ -1,3 +1,15 @@
+---
+ticket: 13
+map: 1
+date: 2026-07-28
+kind: verification
+tier: T3
+session: unrecorded
+sources: 21
+debt: [29, 30, 31, 32, 135, 136, 137, 138]
+supersedes: null
+---
+
 # Verifying the vocabulary's cited influences
 
 **Ticket:** [#13 — Verify the vocabulary's cited influences](https://github.com/NGL321/mosaic/issues/13)
@@ -11,20 +23,20 @@
 
 The nine attributions named in the ticket were checked: **six came back clean, three need wording changes.** The table below adds three related sub-claims that came up in the course of checking them — a sentence in *Representation* that leans on Still et al., the *Limnaea* root of assimilation/accommodation, and the Pohl/Walker bibliographic details — bringing it to twelve rows. Of those three, one is **Loose**, one is **Unresolved**, and one is clean. The two worst findings are both in the Least Action / Representation cluster, which is where the file leans hardest.
 
-| Attribution | Verdict | One-line reason |
-|---|---|---|
-| **Jaynes (1957) + Landauer (1961)** — "the information–thermodynamics identity" | **Loose** | Landauer states a *minimum*, not an identity, and explicitly declines to rest his argument on an entropy–information connection. Jaynes's result is inferential, not physical. |
-| **Still, Sivak, Bell & Crooks (2012)** — non-predictive information as dissipated work | **Supported** | Eq. (14) is an equality for instantaneous dissipation; Eq. (18) is a lower bound on the total. Conditions matter and are listed. |
-| Representation's line *"structure that is not functional… is dissipated work"* | **Loose** | Still et al. dissipate the non-*predictive* part of retained information. Mosaic's "functional" adds a use-by-the-engine condition the theorem does not carry. |
-| **Tishby, Pereira & Bialek (1999) + Still (2014)** — compression against a predictive relevance variable | **Supported** | Tishby et al. are agnostic about the relevance variable; Still (2014) is what makes it the future. The `_After_` line currently credits both for the "predictive" part. |
-| **Pearl (1988) + Friston** — Markov blanket | **Supported** | Pearl's coinage, Def. (3.12) p. 97, purely conditional-independence. Friston 2013/2019 do make every blanketed thing free-energy-minimising. The claimed departure is real. |
-| **Piaget** — schema / assimilation / accommodation; **Piaget & García (1989)** | **Supported** | *Schème* = generalisable structure of an action, from Piaget's own French; the English collapse is demonstrable in two separate translations; Piaget & García p. 268 says exactly what Mosaic says it says. |
-| **Poincaré (1908)** — incubation and the aesthetic sieve | **Supported** | Both are in the essay verbatim. The word *schema* occurs **zero** times in it. The four-stage naming is Wallas (1926), confirmed from Wallas's own text. |
-| **Mountcastle (1957; 1978)** + **Horton & Adams (2005)** | **Loose** | Horton & Adams deny a *function*, not existence — correctly cited. But Mountcastle did not frame it as a hypothesis; the hedge is Mosaic's, and the sentence currently reads as if it were his. |
-| **Hawkins et al. (2019); Hawkins (2021)** | **Loose** | "The same object" and "vote" are the papers' own. "**Interchangeable** reference frames" is not — and misdescribes the theory, in which each column has a *distinct* location and a *distinct* sensory patch. |
-| **Singer & Wu / Hansen & Ghrist** — connection Laplacian as orthogonal-restriction sheaf Laplacian | **Supported** | Hansen & Ghrist state it themselves, §3.6, in one sentence. Two qualifications they add are worth carrying. |
-| *Limnaea stagnalis* as the biological root of assimilation/accommodation | **Unresolved** | Could not reach Piaget's 1929 malacology paper. Also: the mollusc work was **not** his thesis — see §11, item 2. |
-| Pohl et al. (2026) / Walker et al. (2023) bibliographic details | **Supported** | Author lists, years, venues and both arXiv numbers check out exactly. |
+| § | Attribution | Verdict | One-line reason |
+|---|---|---|---|
+| §1 | **Jaynes (1957) + Landauer (1961)** — "the information–thermodynamics identity" | **Loose** | Landauer states a *minimum*, not an identity, and explicitly declines to rest his argument on an entropy–information connection. Jaynes's result is inferential, not physical. |
+| §2 | **Still, Sivak, Bell & Crooks (2012)** — non-predictive information as dissipated work | **Supported** | Eq. (14) is an equality for instantaneous dissipation; Eq. (18) is a lower bound on the total. Conditions matter and are listed. |
+| §2.4 | Representation's line *"structure that is not functional… is dissipated work"* | **Loose** | Still et al. dissipate the non-*predictive* part of retained information. Mosaic's "functional" adds a use-by-the-engine condition the theorem does not carry. |
+| §3 | **Tishby, Pereira & Bialek (1999) + Still (2014)** — compression against a predictive relevance variable | **Supported** | Tishby et al. are agnostic about the relevance variable; Still (2014) is what makes it the future. The `_After_` line currently credits both for the "predictive" part. |
+| §4 | **Pearl (1988) + Friston** — Markov blanket | **Supported** | Pearl's coinage, Def. (3.12) p. 97, purely conditional-independence. Friston 2013/2019 do make every blanketed thing free-energy-minimising. The claimed departure is real. |
+| §5 | **Piaget** — schema / assimilation / accommodation; **Piaget & García (1989)** | **Supported** | *Schème* = generalisable structure of an action, from Piaget's own French; the English collapse is demonstrable in two separate translations; Piaget & García p. 268 says exactly what Mosaic says it says. |
+| §6 | **Poincaré (1908)** — incubation and the aesthetic sieve | **Supported** | Both are in the essay verbatim. The word *schema* occurs **zero** times in it. The four-stage naming is Wallas (1926), confirmed from Wallas's own text. |
+| §7 | **Mountcastle (1957; 1978)** + **Horton & Adams (2005)** | **Loose** | Horton & Adams deny a *function*, not existence — correctly cited. But Mountcastle did not frame it as a hypothesis; the hedge is Mosaic's, and the sentence currently reads as if it were his. |
+| §8 | **Hawkins et al. (2019); Hawkins (2021)** | **Loose** | "The same object" and "vote" are the papers' own. "**Interchangeable** reference frames" is not — and misdescribes the theory, in which each column has a *distinct* location and a *distinct* sensory patch. |
+| §9 | **Singer & Wu / Hansen & Ghrist** — connection Laplacian as orthogonal-restriction sheaf Laplacian | **Supported** | Hansen & Ghrist state it themselves, §3.6, in one sentence. Two qualifications they add are worth carrying. |
+| §5.2 | *Limnaea stagnalis* as the biological root of assimilation/accommodation | **Unresolved** | Could not reach Piaget's 1929 malacology paper. Also: the mollusc work was **not** his thesis — see §11, item 2. |
+| §10 | Pohl et al. (2026) / Walker et al. (2023) bibliographic details | **Supported** | Author lists, years, venues and both arXiv numbers check out exactly. |
 
 ---
 
@@ -414,23 +426,76 @@ Not re-verified for content (already checked in the vocabulary session), but the
 
 ---
 
-## 11. Surviving Verification Debt
+## What this does not establish
 
-To be logged against the Curriculum. Two kinds: sources I could not reach, and derivations Noah would need to be able to defend unaided.
+Retrofitted under [#50](https://github.com/NGL321/mosaic/issues/50) against the [output
+contract](README.md), which postdates this document. **Sources not reached** is recoverable
+here because §11 already recorded it; the other two subsections are reconstructed from the
+document's own text and not from the session that produced it, which is the limit
+[#50](https://github.com/NGL321/mosaic/issues/50) names.
 
 ### Sources not reached
 
-1. **Mountcastle (1957)**, J. Neurophysiol. **20**, 408–434, and **Mountcastle (1978)**, *The Mindful Brain* chapter. Both paywalled or print-only. The 1957 conclusion is quoted consistently across the citing literature, and the 1978 chapter's framing is inferable from its title and Mountcastle's own 1997 review, but neither was read in original. *What would settle it:* a library copy of *The Mindful Brain*, or institutional access to J. Neurophysiol.
-2. **Piaget (1929)**, *Les races lacustres de la Limnaea stagnalis L.*, Bull. Biol. France Belgique **63**, 424–455. Not reached. The species, the transplant experiment (elongate ↔ globular shell morph under still ↔ turbulent water), and the claim that this work is the biological root of assimilation/accommodation are attested only in secondary sources here. **Also note a probable error in the way this is usually remembered:** Piaget's *doctoral thesis* (1918) was *Introduction à la malacologie valaisanne*, on Valais molluscs generally — the *Limnaea* work is a research programme running from the 1920s, not a thesis. Nothing in CONTEXT.md turns on this, so no edit was made, but the programme should not repeat the "1929 thesis" formulation. *What would settle it:* the 1929 paper itself, or Piaget's *Biologie et connaissance* (1967), where he draws the biology→cognition link in his own voice.
-3. **Piaget's own use of *schéma*** as a distinct figurative term. The *schème* side is nailed from primary French; the contrast is not. *What would settle it:* the French text of *La formation du symbole chez l'enfant* (1945) or *L'image mentale chez l'enfant* (1966), checked for whether Piaget uses *schéma* systematically for the figurative/image aspect.
-4. **Tishby, Pereira & Bialek**, Proc. 37th Allerton Conference (1999). Only the April 2000 arXiv posting was read. The 1999 date is the conventional citation and is almost certainly right; the proceedings volume itself was not consulted.
+Four, and all four are now filed debt.
 
-### Mathematics and physics Noah would need to defend unaided
+- **Mountcastle (1957)**, J. Neurophysiol. **20**, 408–434, and **Mountcastle (1978)**, *The Mindful Brain* chapter — both paywalled or print-only. The 1957 conclusion is quoted consistently across the citing literature and the 1978 framing is inferable from Mountcastle's own 1997 review, but neither was read in original. [#29](https://github.com/NGL321/mosaic/issues/29).
+- **Piaget (1929)**, *Les races lacustres de la Limnaea stagnalis L.* — not reached at all. The species, the transplant experiment, and the claim that this work is the biological root of assimilation/accommodation are attested here **only in secondary sources**. [#30](https://github.com/NGL321/mosaic/issues/30).
+- **Piaget's own systematic use of *schéma*** in primary French. The *schème* side is nailed from Piaget's own text; the contrast is not. [#31](https://github.com/NGL321/mosaic/issues/31).
+- **Tishby, Pereira & Bialek**, Proc. 37th Allerton Conference (1999) — only the April 2000 arXiv posting was read; the proceedings volume was never consulted. [#135](https://github.com/NGL321/mosaic/issues/135).
 
-5. **Still et al. (2012) Eq. (14).** Deriving `β⟨W_diss[x_t→x_{t+1}]⟩ = H[s_t|x_{t+1}] − H[s_t|x_t] = I_mem(t) − I_pred(t)` requires nonequilibrium free energy as a functional of an arbitrary distribution (their Eq. 8), the Crooks/Jarzynski setting, and the KL-divergence expression for the additional nonequilibrium free energy (Eq. 6). This is the single most load-bearing derivation in the entire vocabulary and it is currently unowned. **Highest-priority item.**
-6. **The no-feedback condition.** Still et al. assume no feedback from system to drive. Mosaic's inference engines act. Establishing whether the nostalgia–dissipation result survives feedback — or what replaces it — is a genuine open question for the programme, not just a reading exercise. Still (2014) §4.1 and the interactive-learning line she cites are the entry point.
-7. **Sheaf Laplacians and the O(n)-bundle specialisation.** Enough Hodge theory on cell complexes to see why δ² = 0 makes the coboundary a discrete flat connection, and why the scalar-multiple refinement in Hansen & Ghrist §3.5 is forced rather than cosmetic.
-8. **Landauer's bound versus the second law.** The gap between "this is a minimum" and "this minimum is achievable" is where the entire thermodynamics-of-computation literature since 1961 lives (Bennett, Norton, Sagawa). Least Action is stated as an axiom and CONTEXT.md declares it out of scope for falsification — but the *bound* language now in the `_After_` line is a promise that the distinction is understood.
+Everything else in the appendix was opened directly: arXiv PDF, publisher landing page,
+Project Gutenberg or Internet Archive scan of the original edition, or Google Books
+search-inside on a scanned first edition.
+
+**One reached source is thinner than the list makes it look.** Mountcastle (1997) is in the
+appendix as *abstract only* — it is what the 1978 framing was inferred from, so §7's verdict
+leans on an abstract, and that is a weaker footing than the appendix's uniform bullet style
+suggests.
+
+### Open gaps
+
+- **Whether the `_After_` lines are *complete*, not merely correct.** This document checked the attributions the ticket named. It did not ask whether an entry credits everything it borrows — which is how [#97](https://github.com/NGL321/mosaic/issues/97) was later found: `Obstruction`'s gauge-theory and sheaf-cohomology citations were **never in this document's brief**, and the word *Obstruction* does not appear here at all. There may be others.
+- **A probable error in how the *Limnaea* work is remembered**, opened and deliberately not closed: Piaget's *doctoral thesis* (1918) was *Introduction à la malacologie valaisanne*, on Valais molluscs generally. The *Limnaea* work is a research programme running from the 1920s, not a thesis. Nothing in `CONTEXT.md` turned on it, so no edit was made — but the programme should not repeat the "1929 thesis" formulation.
+- **Whether Mosaic's "functional" condition on *Representation* can be given a thermodynamic warrant at all**, or only a stipulative one. §2.4 established that Still et al. do not supply it; it did not establish that nothing does.
+
+### Load-bearing ifs
+
+- **If Still et al.'s Eq. (14) does not derive as stated**, §2's **Supported** falls, and with it the thermodynamic warrant under `Least Action` and `Representation` both. This is the single most load-bearing derivation in the vocabulary and it is unowned — [#32](https://github.com/NGL321/mosaic/issues/32).
+- **If the no-feedback assumption is not benign**, §2's verdict survives as a statement about Still et al. and stops being usable by Mosaic, whose engines act by construction — [#136](https://github.com/NGL321/mosaic/issues/136).
+- **If Mountcastle did frame columnar organisation as a result rather than an organising principle**, §7's correction is backwards: the hedge would be his and not Mosaic's, and the sentence would need to move the other way. This rests on an abstract and on secondary literature — [#29](https://github.com/NGL321/mosaic/issues/29).
+- **If Hansen & Ghrist §3.6 does not say what §9 reads it as saying**, `Transport`'s whole apparatus claim is unsourced. The sentence was read; the mathematics under it was not — [#137](https://github.com/NGL321/mosaic/issues/137).
+
+---
+
+## Verification Debt
+
+Eight items, all filed. Two kinds: sources that could not be reached, and derivations Noah
+would need to be able to defend unaided. The second kind is what schedules Curriculum work;
+the first is a library problem.
+
+1. **Mountcastle (1957; 1978) unread in the original** — [#29](https://github.com/NGL321/mosaic/issues/29). *What would settle it:* a library copy of *The Mindful Brain*, or institutional access to J. Neurophysiol.
+2. **Piaget (1929), *Limnaea*, unreached** — [#30](https://github.com/NGL321/mosaic/issues/30). *What would settle it:* the 1929 paper, or *Biologie et connaissance* (1967), where Piaget draws the biology→cognition link in his own voice.
+3. **Piaget's own use of *schéma* unconfirmed from primary French** — [#31](https://github.com/NGL321/mosaic/issues/31). *What would settle it:* the French text of *La formation du symbole chez l'enfant* (1945) or *L'image mentale chez l'enfant* (1966).
+4. **Tishby, Pereira & Bialek read as the 2000 arXiv posting, not the 1999 proceedings** — [#135](https://github.com/NGL321/mosaic/issues/135). Bibliographic, not substantive; filed because the record should not carry a year nobody checked.
+5. **Still et al. (2012) Eq. (14) is not defensible unaided** — [#32](https://github.com/NGL321/mosaic/issues/32). Deriving `β⟨W_diss[x_t→x_{t+1}]⟩ = H[s_t|x_{t+1}] − H[s_t|x_t] = I_mem(t) − I_pred(t)` requires nonequilibrium free energy as a functional of an arbitrary distribution (their Eq. 8), the Crooks/Jarzynski setting, and the KL expression for the additional nonequilibrium free energy (Eq. 6). **Highest-priority item.**
+6. **The no-feedback condition** — [#136](https://github.com/NGL321/mosaic/issues/136). Still et al. assume no feedback from system to drive; Mosaic's inference engines act. Whether the nostalgia–dissipation result survives feedback may be a genuine open question rather than a reading exercise. Still (2014) §4.1 is the entry point.
+7. **Sheaf Laplacians and the O(n)-bundle specialisation** — [#137](https://github.com/NGL321/mosaic/issues/137). Enough Hodge theory on cell complexes to see why δ² = 0 makes the coboundary a discrete flat connection, and why the scalar-multiple refinement in Hansen & Ghrist §3.5 is forced rather than cosmetic.
+8. **Landauer's bound versus the second law** — [#138](https://github.com/NGL321/mosaic/issues/138). The gap between *this is a minimum* and *this minimum is achievable* is where the thermodynamics-of-computation literature since 1961 lives. The *bound* language this document put into the `_After_` line is a promise that the distinction is understood.
+
+---
+
+## Proposals
+
+**None.** All five wording changes this document recommended were applied when
+[#13](https://github.com/NGL321/mosaic/issues/13) landed and are on `main`: the
+Jaynes/Landauer bound-not-identity correction, the Tishby/Still credit split,
+`Representation`'s "dissipated work" line, the Mountcastle hedge, and the removal of the
+Hawkins "interchangeable reference frames" claim.
+
+Nothing further is proposed here. The `CONTEXT.md` edits this document's findings *later*
+justified — the provenance badges settled in [#5](https://github.com/NGL321/mosaic/issues/5) —
+belong to [#96](https://github.com/NGL321/mosaic/issues/96) and are proposed there rather than
+restated here: a proposal in two places is a proposal that can drift.
 
 ---
 
