@@ -2,11 +2,12 @@
 ticket: 57
 map: 55
 date: 2026-07-31
+revised: 2026-08-02
 kind: question
 tier: T3
 session: unrecorded
-sources: 47
-debt: [68, 70, 71, 73, 75]
+sources: 48
+debt: [68, 70, 71, 73]
 supersedes: null
 ---
 
@@ -17,6 +18,8 @@ supersedes: null
 **Date:** 2026-07-31
 
 **Provenance.** Machine-produced, unverified. Every price, quota and quoted sentence below was retrieved on **2026-07-31** from a first-party page — the provider's own pricing page, its own documentation, or its own source repository on GitHub — and is quoted rather than recalled. Where a fact could not be reached from first-party documentation the verdict is **Unresolved** and says so, on [#13](https://github.com/NGL321/mosaic/issues/13)'s precedent; three of the six providers have at least one such hole and one of them, vast.ai, is unpriceable in principle. Two claims were settled by reading first-party *source code* rather than prose, and are marked where they occur. The workload sizing in §1 is **derived, not retrieved** — it comes from a paper's method section by way of the programme's own survey, and no wall-clock GPU measurement exists anywhere in Mosaic; that is the weakest number here and everything expressed in *hours per month* inherits it. None of this has been checked by Noah unaided.
+
+**Revised 2026-08-02**, before landing, to carry [#75](https://github.com/NGL321/mosaic/issues/75)'s refutations of two vast.ai findings and the eligibility rule that follows from them — itemised in §0.1. The one fact added on that date, vast.ai's bandwidth charge, is quoted from its billing reference and dated in the appendix; everything else here still carries its 2026-07-31 retrieval.
 
 > **Volatility warning.** Every figure in this document is a GPU spot price or a published rate card in a market that has repriced repeatedly. GitHub's own GPU runner rate is quoted after a January 2026 price change. Treat anything here older than a quarter as a prompt to re-fetch, not as a standing fact.
 
@@ -36,8 +39,19 @@ supersedes: null
 | **8** Is Together AI a candidate? | **Refuted** — it sells no small GPU, and its minimum volume alone is $163.84/month | §5 |
 | **9** Is GitHub's own GPU runner a candidate? | **Refuted** — $3.12/hr and explicitly not free on public repositories | §5 |
 | **10** Is Lambda a candidate? | **Refuted** — no stop-without-charge state and no documented spend cap | §4 |
-| **11** Is vast.ai a candidate? | **Unresolved** — the provider publishes no price a document can cite | §4 |
+| **11** Is vast.ai a candidate? | **Refuted** as a candidate — no published price *and* no provider-enforced spend ceiling, which is the constraint §8 says actually binds | §4, §8 |
 | **12** Does the loop fit under $50/month? | **Supported**, with room — the binding constraint is the ceiling's enforcement, not the price | §8 |
+
+### 0.1 What this revision changed
+
+**Corrected 2026-08-02, before landing, under [#119](https://github.com/NGL321/mosaic/issues/119).** The document was written on 2026-07-31 and has not merged; [#75](https://github.com/NGL321/mosaic/issues/75) then swept all 131 first-party vast.ai pages and refuted two of its findings from first-party documentation. Four things moved, and the exact replacement text for the first three is [#75](https://github.com/NGL321/mosaic/issues/75)'s:
+
+1. **§7 no longer reads vast.ai's egress as an unmentioned absence.** It is a *documented charge at an unpublished rate* — every byte in either direction, whatever state the instance is in — which is worse than an absent line item, not better. `DATA-PROTOCOL` §3.4 guarantees Mosaic incurs it on every commission.
+2. **§4.2 no longer claims live rates exist only in the authenticated console.** An unauthenticated `GET https://console.vast.ai/api/v0/bundles/` returned the offer table on 2026-08-02, contradicting vast.ai's own published auth requirement. That makes a sample cheap and a citation no less impossible.
+3. **Verdict row 11 moves from Unresolved to Refuted**, and §8 states the eligibility rule the change rests on: a provider whose price cannot be cited is not eligible for the tier. The load-bearing reason is not tidiness — §5 of [#75](https://github.com/NGL321/mosaic/issues/75) found vast.ai has **no provider-enforced spend ceiling at all**, and §12 of this document's own verdict says the binding constraint is the ceiling's enforcement rather than the price. vast.ai fails on that constraint independently of cost, so pricing it would not make it eligible. Its row leaves the §8 comparison table; the dated sample survives as an observation in [#75](https://github.com/NGL321/mosaic/issues/75).
+4. **Verification Debt item 5 is discharged.** [#75](https://github.com/NGL321/mosaic/issues/75) settled it, in the second of the two ways that item offered — a ruling that an uncitable price is disqualifying. The two debts that sweep filed against vast.ai's API, [#117](https://github.com/NGL321/mosaic/issues/117) on a digest reference and [#118](https://github.com/NGL321/mosaic/issues/118) on the unauthenticated offer table, are **retired as moot** by the same ruling: a provider outside the tier carries no premise-12 obligation and needs no price channel. Both issues named that outcome as conditional on this decision, which is now taken.
+
+Nothing about Modal, RunPod, Lambda, Together or the GitHub runner moved, and the recommendation is unchanged.
 
 ### The one-line verdict
 
@@ -126,7 +140,7 @@ RunPod undercuts Modal substantially and is the provider that already satisfies 
 
 ---
 
-## 4. Lambda — **Refuted**; vast.ai — **Unresolved**
+## 4. Lambda — **Refuted**; vast.ai — **Refuted**
 
 ### 4.1 Lambda bills until you destroy the machine
 
@@ -140,13 +154,13 @@ Two further gaps. Lambda's on-demand product is **VM images, not containers** �
 
 **Verdict: Refuted.** The idle-cost model alone disqualifies it; no documented spend cap was found either (§6).
 
-### 4.2 vast.ai publishes no price
+### 4.2 vast.ai publishes no price, and is ineligible on the ceiling regardless
 
-vast.ai is a marketplace, and [its pricing page](https://vast.ai/pricing) says so rather than publishing rates: "Prices are set by the market, not by Vast," across "40+ data centers," with only relative tiers — On-Demand, Interruptible ("50%+ cheaper"), and Reserved. There is no floor, no reference SKU rate, and no table. Live offers exist only in the authenticated console, which is neither a citable document nor a stable fact.
+vast.ai is a marketplace, and [its pricing page](https://vast.ai/pricing) says so rather than publishing rates: "Prices are set by the market, not by Vast," across "40+ data centers," with only relative tiers — On-Demand, Interruptible ("50%+ cheaper"), and Reserved. There is no floor, no reference SKU rate, and no table. Live offers are obtainable without an account — an unauthenticated `GET https://console.vast.ai/api/v0/bundles/` returns the offer table, contradicting vast.ai's own documented requirement that "All endpoints require `Authorization: Bearer $VAST_API_KEY`." That makes a sample cheap and a citation no less impossible: the endpoint is undocumented, the response is a truncated default slice, and the result is a weather report rather than a rate.
 
 Its mechanics are otherwise sound: [per-second billing](https://docs.vast.ai/billing) — "You are charged the base active rental cost for every second your instance is in the active/connected state" — and a documented [CLI](https://vast.ai/developers/cli) with [bearer-token auth](https://docs.vast.ai/api/authentication) explicitly built for automation ("Pipe to jq. Automate everything."). The same billing page carries the stopped-instance trap in stronger terms than RunPod's: "Storage charges continue even when instances are stopped… As with any stopped instance, you will continue to be billed for disk storage, even if your balance is negative." Digest pinning is neither shown nor denied in [the create-instance reference](https://docs.vast.ai/api-reference/instances/create-instance) or [the templates page](https://docs.vast.ai/templates), which document the field only as `repository/image_name:tag`.
 
-**Verdict: Unresolved**, on [#13](https://github.com/NGL321/mosaic/issues/13)'s precedent. This is not a search that went badly; it is a fact the owning party declines to publish, so more reading will not close it. Logged as [#75](https://github.com/NGL321/mosaic/issues/75).
+**Verdict: Refuted**, and on two independent grounds. This document originally returned **Unresolved** on [#13](https://github.com/NGL321/mosaic/issues/13)'s precedent — not a search that went badly but a fact the owning party declines to publish. [#75](https://github.com/NGL321/mosaic/issues/75) then swept all 131 first-party pages and found the position worse than unpriced: bandwidth is a **documented charge at an unpublished rate**, billed on "every byte sent or received to or from the instance, regardless of what state it is in" (§7), which `DATA-PROTOCOL` §3.4 guarantees Mosaic incurs on every commission. It also found **no provider-enforced spend ceiling of any kind** — and §6 and §12 both hold that the ceiling's enforcement, not the price, is the binding constraint. vast.ai therefore fails the tier independently of cost, so pricing it would not make it eligible. The eligibility rule that follows from this is stated in §8.
 
 ---
 
@@ -207,7 +221,9 @@ The bytes have to leave, because `docs/DATA-PROTOCOL.md` §3.4 routes durable ar
 
 **The destination is free, conditionally.** [The Drive API limits page](https://developers.google.com/workspace/drive/api/guides/limits) states "All standard use of the Google Drive API is available at no additional cost," with a 750 GB/day upload limit and a 1 TB/day per-project quota. It also carries a warning worth recording now rather than discovering later: "Exceeding the quota request limits is planned to incur charges to your Google Cloud billing account later in 2026," with "at least 90 days' notice."
 
-**Egress at the source is free where it is documented, and undocumented where it matters.** RunPod's pricing page states "no fees for data ingress or egress." Lambda's billing page states "you are not charged for ingress or egress." **Modal's pricing page carries no egress, bandwidth or data-transfer line at all** — and an absent line item is not a documented price of zero. Neither vast.ai's nor Together's pages mention egress either. Logged as [#71](https://github.com/NGL321/mosaic/issues/71).
+**Egress at the source is free where it is documented, and undocumented where it matters.** RunPod's pricing page states "no fees for data ingress or egress." Lambda's billing page states "you are not charged for ingress or egress." **Modal's pricing page carries no egress, bandwidth or data-transfer line at all** — and an absent line item is not a documented price of zero. Logged as [#71](https://github.com/NGL321/mosaic/issues/71).
+
+Together's page does not mention egress. **vast.ai's does, and says the opposite of free:** its [billing page](https://docs.vast.ai/guides/reference/billing) lists "Bandwidth costs (in \$/TB)" as a separate charge and states that "You are charged bandwidth prices for every byte sent or received to or from the instance, regardless of what state it is in," at a rate set per host and, in its own words, "not shown in your \$cost/hr or \$cost/day pricing breakdowns." A documented charge at an unpublished rate is worse than an absent line item, not better. Established by [#75](https://github.com/NGL321/mosaic/issues/75), retrieved 2026-08-02.
 
 **Volumes are small by construction, which is why this is debt and not a blocker.** `DATA-PROTOCOL` §3.3 forbids storing anything regenerable from a config and a seed, and names "activation tensors, distance matrices, derived features, intermediate representations and re-renderable figures — which is to say most of what an experiment produces by volume." What crosses the wire is checkpoints, metrics and final figures. Modal's own volume storage, if any is used, is $0.09/GiB/month with 1 TiB/month included, per [its pricing page](https://modal.com/pricing) — but under §3.3 the right amount of persistent provider-side storage is zero.
 
@@ -217,6 +233,10 @@ The bytes have to leave, because `docs/DATA-PROTOCOL.md` §3.4 routes durable ar
 
 **Take Modal's Starter plan, run on the T4, and fund it as prepaid rather than metered.**
 
+**The eligibility rule this study settles, before the table that applies it:**
+
+> A provider enters the cost tier on a **citable published rate** — a page, retrievable without an account, that states what a unit of compute costs. A marketplace whose prices exist only as live offers is not underdocumented but structurally unpriceable, and is **not eligible**, regardless of what a console or an API sample shows. Samples may be recorded as dated observations; they may not occupy a row in the comparison table.
+
 | Provider | Cheapest adequate GPU | $/hr | Hours inside $50/mo |
 |---|---|---|---|
 | RunPod (Community) | RTX A5000, 24 GB | $0.16 | 312.5 |
@@ -225,7 +245,8 @@ The bytes have to leave, because `docs/DATA-PROTOCOL.md` §3.4 routes durable ar
 | Lambda | Quadro RTX 6000, 24 GB | $0.69 | 72.5 |
 | GitHub GPU runner | Tesla T4, 16 GB | $3.12 | 16.0 |
 | Together | H100, 80 GB | $3.99 | 12.5, less $163.84 storage |
-| vast.ai | — | Unresolved | Unresolved |
+
+**vast.ai has no row**, by the rule above. Its unauthenticated offer sample of 2026-08-02 spread `dph_total` across $0.0104–$5.3146/hr ([#75](https://github.com/NGL321/mosaic/issues/75)), which is the observation's own argument for why a single sample is not a rate; it is retained there as a dated observation and is not a price this table can carry.
 
 The case for Modal over the cheaper RunPod rests on three things and not on price:
 
@@ -273,7 +294,7 @@ Against it: RunPod is 3.7× cheaper and **documents the digest pinning that prem
 2. **No provider-enforced monthly spend cap was established for the recommended tier** ([#70](https://github.com/NGL321/mosaic/issues/70)). Modal documents a budget and not its behaviour; RunPod documents an hourly rate limit and no budget. *Settled by:* setting a $5 budget and running past it.
 3. **Modal publishes no egress or bandwidth price** ([#71](https://github.com/NGL321/mosaic/issues/71)), leaving the `DATA-PROTOCOL` §3.4 publication leg unpriced on the recommended provider while RunPod and Lambda both document it as free. *Settled by:* a first-party statement, or one measured invoice.
 4. **GPU-hours per commission is derived, never measured** ([#73](https://github.com/NGL321/mosaic/issues/73)). This is the exact analogue of the assumed token model in the automation-cost study: the provider ranking survives it, the monthly levels do not. *Settled by:* one instrumented training run — the same run that discharges items 1 and 2.
-5. **vast.ai cannot be priced from first-party documentation at all** ([#75](https://github.com/NGL321/mosaic/issues/75)). Structurally unreachable, in the sense the vocabulary-verification ticket set as precedent — the owning party declines to publish, so further reading cannot close it. *Settled by:* an authenticated console read treated as a sample, or a ruling that an uncitable price is disqualifying.
+A fifth item, *vast.ai cannot be priced from first-party documentation at all*, stood here until 2026-08-02 and is **discharged** — see §0.1.
 
 ---
 
@@ -320,6 +341,7 @@ None. This document answers a question and proposes no change to an authored fil
 **vast.ai**
 - Pricing — https://vast.ai/pricing
 - Billing, per-second charging and stopped-instance storage — https://docs.vast.ai/billing
+- Billing reference: bandwidth charged per byte in either direction, at a per-host rate not shown in the cost breakdown — https://docs.vast.ai/guides/reference/billing (retrieved 2026-08-02)
 - API authentication — https://docs.vast.ai/api/authentication
 - CLI for automation — https://vast.ai/developers/cli
 - Create-instance API reference — https://docs.vast.ai/api-reference/instances/create-instance
