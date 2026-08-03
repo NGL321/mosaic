@@ -27,7 +27,7 @@ The boundary is decided by one test, applied when the branch is created:
 > Yes → research track. No → tooling track.
 
 **Worked example.** A deterministic dataset generator is **research track**, despite
-reading as a tool. Change its generation logic and every experiment citing those
+reading as a tool. Change its generation logic and every Run citing those
 datasets now describes data that no longer exists. The same holds for analysis
 pipelines, seed handling, and any scheduler whose ordering can reach a result. The
 tooling track is smaller than "tooling" sounds: it is the apparatus that can garble the
@@ -169,7 +169,7 @@ rather than judged at release time.
 |---|---|---|
 | `core:` | MAJOR | Hard Core revision |
 | `belt:` | MINOR | A Protective Belt rung added, retired, or falsified |
-| `evidence:` | PATCH | Research output, verification results, experiment runs |
+| `evidence:` | PATCH | Research output, verification results, Runs |
 | `record:` | PATCH | Notebook, ledger, corrections, vocabulary |
 
 ### Tooling track
@@ -236,7 +236,7 @@ Two rules, stated together because each is hollow alone.
   pull request; the human applies it. The charter's path is named here, before it is
   written, because the custody check keys on paths: a charter under any other name would
   leave that check green and covering nothing.
-- **Record files** (research documents, notebook entries, ledger rows, experiment
+- **Record files** (research documents, notebook entries, ledger rows, Run
   output): agent-writable.
 - **Gate artifacts are record, not belief.** A checker agent's critique of a falsifier
   draft, and a teach-cycle transcript, are agent-written and land in the record even
@@ -603,8 +603,8 @@ test, and apparatus gets cited in a methods section. So an outside author has a 
 the research record, not merely on `git log`.
 
 - **Baseline, every contribution:** git history plus the licence's notice requirement.
-- **Where a recorded result depends on external apparatus,** the experiment record names
-  the tool and its author, methods-section style. Where that field sits belongs to the
+- **Where a recorded result depends on external apparatus,** the record of the Run that
+  produced it names the tool and its author, methods-section style. Where that field sits belongs to the
   record format; the obligation is fixed here.
 - **Minor contributions earn no research citation.** The obligation binds only where a
   recorded result depends on the contribution.
