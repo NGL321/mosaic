@@ -25,4 +25,4 @@ permanent record.
 
 | # | Title | Status |
 |---|---|---|
-| 0001 | A private Transcript Archive inside a transparent programme | *not yet written — [#10](https://github.com/NGL321/mosaic/issues/10)* |
+| 0001 | [A private Transcript Archive inside a transparent programme](0001-private-transcript-archive.md) | Accepted |
