@@ -285,7 +285,11 @@ the programme's seed, not a boundary drawn afterwards. There, many cortical colu
 object*, each from its own sensory patch and its own location in an object-anchored reference
 frame, and vote toward a consensus about which object is present. Mosaic's schemas are
 heterogeneous by construction — different problems, not one problem in different coordinates — and
-its primary observable is where reconciliation **fails** (Obstruction), not where it succeeds. The
+the two accounts face opposite directions: Thousand Brains' voting is engineered to make
+reconciliation **succeed**, where Mosaic looks at where it **fails** (Obstruction). A contrast in
+direction, and not a claim that Obstruction is the programme's primary observable —
+[#9](https://github.com/NGL321/mosaic/issues/9) withdrew that claim, and Obstruction holds no
+status in the Positive Heuristic, neither primacy nor preference. The
 specific disagreements, and which of them Noah attributes to engineering assumptions imported into
 the theory, are stated in their own ticket rather than here.
 
@@ -321,8 +325,15 @@ stipulation: thermodynamic systems are information systems, and least action app
 describable as a complex system of discrete parts, so the principles above hold at every such
 level. A mathematical model, an artificial network and a biological one are therefore corollaries
 of one another — differing in scale, not in kind. It is what licenses Mosaic to speak of minds
-without speaking of brains. Held as a working axiom the programme may itself falsify.
+without speaking of brains.
 _Avoid_: Scale invariance, level independence
+_Departs_: **Exposed, not permitted.** This is the one Hard Core member ordinary belt work can
+falsify as a side effect. The cross-domain convergence search rule tests it every time it runs,
+because this axiom is what licenses treating artificial and biological networks as corollaries of
+one another: if features found in machine-learning systems reliably fail to appear in neural
+population data, the thing that has failed is the Scale Corollary. That is an exposure the
+programme's own method creates, not a permission it grants itself, and it does **not** make the
+axiom a targetable Inquiry Question — the Negative Heuristic's injunction stands uniform.
 
 **Structural Realisation**:
 The programme's third axiom: cognition arises from **structure, not substance**. Held separately
