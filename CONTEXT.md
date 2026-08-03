@@ -38,7 +38,10 @@ _Avoid_: Pivot, course correction
 **Provenance Tier**:
 The label every Mosaic claim carries, recording how it was reached: derived unaided, derived with
 assistance and personally verified, or machine-produced and unverified. The tier travels with the
-claim wherever the claim goes.
+claim wherever the claim goes. **Agent verification does not promote a tier** — an agent's reading
+is evidence attached to the claim, and the ladder measures what Noah can defend;
+[`curriculum/README.md`](curriculum/README.md#provenance-tiers) holds the normative statement and
+the three tiers themselves.
 _Avoid_: Confidence level, epistemic status
 
 **Verification Debt**:
@@ -162,7 +165,12 @@ named on a `_Departs_` line. Departures are fine; unmarked departures are not.
 > not a claim is why they are not restated here. Until the charter exists,
 > [#6](https://github.com/NGL321/mosaic/issues/6) is canonical for the roster.
 
-**Inference Engine**:
+Each term carries its **Provenance Tier** as a badge — `⟦T3 · #33⟧`, the tier and the debt issues
+holding it down. Every one of them is **T3**; see [Provenance of this
+section](#provenance-of-this-section) at the foot of the section for what that means here and what
+it does not.
+
+**Inference Engine**: ⟦T3⟧
 A system delineated by a Markov blanket whose internal state carries predictive information about
 states beyond that blanket — over and above what its current boundary state carries. Being an
 engine is a matter of degree — measured by **Extraction**, below — and many blanketed systems are
@@ -175,7 +183,7 @@ _Departs_: The blanket **individuates** but does not **qualify**. Friston's cons
 every blanketed thing is already minimising free energy. A Mosaic engine has to hold predictive
 information to count, so the criterion is thermodynamic rather than definitional.
 
-**Extraction**:
+**Extraction**: ⟦T3 · #33⟧
 How much of the predictive structure *available in what an engine observes* the engine actually
 captures — its achieved predictive information as a fraction of the ceiling set by the observed
 process itself. A property of the inference machinery, and the sense in which an engine has a
@@ -189,7 +197,7 @@ ceiling avoids needing one. Closer in spirit to Chollet (2019), where the quanti
 relative to what was given, though Mosaic normalises by *observational access* rather than by priors
 and experience.
 
-**Representation**:
+**Representation**: ⟦T3 · #32⟧
 A set of world-states an engine's internal state does not distinguish, whose separation from other
 such sets is *sensitive* and *specific* to some feature, *invariant* to the rest, and *functional*
 — carrying predictive information the engine's inference actually uses. Structure that is not
@@ -204,7 +212,7 @@ for a representation is strong. Mosaic's definition is **constitutive**, and tak
 as its measurement instrument rather than as its content. Named by *content* (which world-states
 are collapsed), not by *vehicle* (which internal states do the collapsing).
 
-**Schema**:
+**Schema**: ⟦T3 · #30, #31⟧
 A coherent set of representations that hang together and update as a unit, carrying **its own
 metric space** — not every problem is solvable from the same perspective, so schemas addressing
 different problems are not commensurable by default. An engine holds many; holding exactly one is a
@@ -218,7 +226,7 @@ _Departs_: Piaget's *schème* is the generalisable structure of an **action**; a
 set of representations. English translation collapses *schème* and *schéma*, and Mosaic's usage
 matches neither exactly.
 
-**Closure**:
+**Closure**: ⟦T3 · #33⟧
 How much of the environment's influence on what a schema observes is accounted for by those
 observations themselves — whether the schema is self-sufficient or driven from outside. A property
 of *which* variables were carved together, so it belongs to the schema and not to the engine
@@ -239,16 +247,12 @@ literature largely treats closure as a property a level either has or lacks.
      compared across environments at all. That property is load-bearing and should not be traded
      away for a more convenient absolute measure. -->
 
-<!-- Provenance Tier for Extraction and Closure: machine-produced, unverified. Legg & Hutter,
-     Chollet, Bertschinger et al., and Kemeny & Snell are recall, not warrant. Verification Debt. -->
-
-
 <!-- Poincaré, "Mathematical Creation" (Science and Method, 1908), is cited for the incubation
      phenomenology — the fuzzy conception that sharpens while one is occupied elsewhere, and the
      aesthetic sieve that selects which combinations surface. The *word* schema is not his; the
      mechanism claim is Piaget's. -->
 
-**Transport**:
+**Transport**: ⟦T3⟧
 The structured relation carrying a representation in one schema to its counterpart in another —
 what makes two inferences held in different metric spaces comparable at all.
 _Avoid_: Mapping, translation, alignment, projection, correspondence
@@ -261,7 +265,7 @@ retired. In physics a gauge symmetry is **exact** — redundancy in describing o
 keeps that sense only *within* a schema, and treats the between-schema case as a connection rather
 than a symmetry. The apparatus borrowed is the fibre bundle, not the phrase.
 
-**Obstruction**:
+**Obstruction**: ⟦T3 · #97⟧
 The failure of Transport to be consistent: a representation carried around a loop of schemas does
 not come back to itself. Not noise and not error — a property of the network's structure.
 Occurs *within* an engine (its own schemas will not reconcile) as well as between them.
@@ -269,7 +273,7 @@ _Avoid_: Disagreement, inconsistency, error, misalignment, conflict
 _After_: Curvature and holonomy in gauge theory; sheaf cohomology for the obstruction to a
 consistent global section.
 
-**Schema Dynamics**:
+**Schema Dynamics**: ⟦T3 · #29⟧
 The level of description above the engine — how representations relate within a schema and schemas
 relate across engines — together with the claim that general cognitive capacity is a property of
 those relations rather than of any single engine. Mosaic's object of study.
@@ -293,7 +297,7 @@ status in the Positive Heuristic, neither primacy nor preference. The
 specific disagreements, and which of them Noah attributes to engineering assumptions imported into
 the theory, are stated in their own ticket rather than here.
 
-**Least Action**:
+**Least Action**: ⟦T3 · #32⟧
 The programme's first axiom: information transformation is a thermodynamic process, so inference is
 subject to the same variational principle as any other physical process. Free energy is one
 candidate functional under it, not the axiom itself.
@@ -304,22 +308,7 @@ retained non-predictive information as dissipated work.
 _Departs_: Held as Hard Core by *disciplinary* declaration — Mosaic is computational cognitive
 science, not physics, and does not investigate the axiom's own falsifiers.
 
-<!-- Provenance Tier: machine-produced, checked against primary sources. Every attribution in this
-     section was read back to the source in docs/research/2026-07-28-verifying-cited-influences.md
-     (ticket #13). Verified as written: Still et al. (2012), Tishby et al. (1999), Still (2014),
-     Pearl (1988), Friston (2013; 2019), Piaget, Piaget & García (1989), Poincaré (1908), Horton &
-     Adams (2005), Singer & Wu / Hansen & Ghrist, and the Pohl/Walker bibliographic details.
-     Corrected here as a result: the Jaynes/Landauer line (Landauer states a bound, not an identity,
-     and explicitly declines to rest his argument on an entropy–information connection); the
-     Tishby/Still credit split; Representation's "dissipated work" line; the Mountcastle hedge; the
-     Hawkins "interchangeable reference frames" claim.
-
-     Remaining Verification Debt, logged against the Curriculum: Mountcastle (1957; 1978) and
-     Piaget's 1929 Limnaea paper were not read in original; Piaget's own distinct use of *schéma*
-     is unconfirmed from primary French; and the derivation of Still et al.'s Eq. (14), together
-     with its no-feedback assumption, is not yet defensible unaided. -->
-
-**Scale Corollary**:
+**Scale Corollary**: ⟦T3⟧
 The programme's second axiom, and an actual corollary of **Least Action** rather than a second
 stipulation: thermodynamic systems are information systems, and least action applies to any system
 describable as a complex system of discrete parts, so the principles above hold at every such
@@ -363,3 +352,28 @@ The other axis of the **Edge of Chaos** Bound — the axis excluding the over-or
 the same terms as **Informational Capacity**, with its operational definition deferred to
 [#104](https://github.com/NGL321/mosaic/issues/104).
 _Avoid_: Structure, regularity, stability, criticality
+
+---
+
+### Provenance of this section
+
+**Every attribution above is T3 — machine-produced and not verified by Noah.** The `_After_` and
+`_Departs_` lines were read back to primary sources by an agent in
+[#13](https://github.com/NGL321/mosaic/issues/13), which is **evidence, not warrant**; the tier
+does not move until Noah does the reading. See
+[`curriculum/README.md`](curriculum/README.md#provenance-tiers) for why. Open debt:
+[`label:debt:open`](https://github.com/NGL321/mosaic/issues?q=is%3Aissue+label%3Adebt%3Aopen).
+
+Verified as written under [#13](https://github.com/NGL321/mosaic/issues/13): Still et al. (2012),
+Tishby et al. (1999), Still (2014), Pearl (1988), Friston (2013; 2019), Piaget, Piaget & García
+(1989), Poincaré (1908), Horton & Adams (2005), Singer & Wu / Hansen & Ghrist, and the Pohl/Walker
+bibliographic details. Corrected as a result: the Jaynes/Landauer line (Landauer states a bound,
+not an identity, and explicitly declines to rest his argument on an entropy–information
+connection); the Tishby/Still credit split; **Representation**'s "dissipated work" line; the
+Mountcastle hedge; and the Hawkins "interchangeable reference frames" claim.
+
+**The badge attaches to an entry's `_After_` and `_Departs_` lines, not to its definition** — those
+are factual claims about what a cited source says, and a definition is not a claim
+([`PROTOCOL.md` §3](PROTOCOL.md)). That is why **Programme structure** and **Warrant** carry no
+badges, and why **Structural Realisation**, **Informational Capacity** and **Order** carry none
+either: they cite nothing yet.
