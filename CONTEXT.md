@@ -156,11 +156,10 @@ named on a `_Departs_` line. Departures are fine; unmarked departures are not.
 
 **Inference Engine**:
 A system delineated by a Markov blanket whose internal state carries predictive information about
-states beyond that blanket — over and above what its current boundary state carries. Its dynamics
-are a controlled Markov process over internal and boundary states jointly. Being an engine is a
-matter of degree — measured by **Extraction**, below — and many blanketed systems are not one at
-all. The degree is **not a scalar**: an engine's Extraction is one number, but the **Closure** of
-each of its schemas is another, and the two move independently.
+states beyond that blanket — over and above what its current boundary state carries. Being an
+engine is a matter of degree — measured by **Extraction**, below — and many blanketed systems are
+not one at all. The degree is **not a scalar**: an engine's Extraction is one number, but the
+**Closure** of each of its schemas is another, and the two move independently.
 _Avoid_: Agent, model, module, particle, node
 _After_: Pearl (1988) for the blanket as conditional independence; Friston for its use as the
 boundary of a thing.
@@ -201,9 +200,8 @@ are collapsed), not by *vehicle* (which internal states do the collapsing).
 A coherent set of representations that hang together and update as a unit, carrying **its own
 metric space** — not every problem is solvable from the same perspective, so schemas addressing
 different problems are not commensurable by default. An engine holds many; holding exactly one is a
-special case, and the common one. Schemas nest, combine, and conflict — and that mid-level
-structure, not the individual representation, is where compositionality lives. The metric attaches
-here and not to the engine, so an engine holding several schemas is itself a small network.
+special case. Schemas nest, combine, and conflict. The metric attaches here and not to the engine,
+so an engine holding several schemas is itself a small network.
 _Avoid_: Ontology, scheme, carving, representational scheme, frame, script, world model
 _After_: Piaget, for the unit and for **assimilation** (input sorted into representations already
 held) and **accommodation** (the set itself re-carves); Piaget & García, *Psychogenesis and the
@@ -216,8 +214,8 @@ matches neither exactly.
 How much of the environment's influence on what a schema observes is accounted for by those
 observations themselves — whether the schema is self-sufficient or driven from outside. A property
 of *which* variables were carved together, so it belongs to the schema and not to the engine
-reasoning over it. High **Extraction** under low Closure is the interesting case: predicting well
-despite most of what drives the observations being unseen.
+reasoning over it. Under low Closure a schema may still predict well, with most of what drives its
+observations unseen.
 _Avoid_: Modularity, encapsulation, independence, sufficiency
 _After_: **Informational closure** (Bertschinger, Olbrich, Ay & Jost, on closure and level
 identification in systems theory); **lumpability** of Markov chains (Kemeny & Snell) as the exact
@@ -257,8 +255,8 @@ than a symmetry. The apparatus borrowed is the fibre bundle, not the phrase.
 
 **Obstruction**:
 The failure of Transport to be consistent: a representation carried around a loop of schemas does
-not come back to itself. Not noise and not error — a computable property of the network's
-structure. Occurs *within* an engine (its own schemas will not reconcile) as well as between them.
+not come back to itself. Not noise and not error — a property of the network's structure.
+Occurs *within* an engine (its own schemas will not reconcile) as well as between them.
 _Avoid_: Disagreement, inconsistency, error, misalignment, conflict
 _After_: Curvature and holonomy in gauge theory; sheaf cohomology for the obstruction to a
 consistent global section.
