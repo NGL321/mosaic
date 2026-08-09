@@ -100,9 +100,9 @@ store it.** Store the generator config in the repo. Regenerable bytes in canonic
 are pure cost: they ride the nightly mirror and the backup forever.
 
 For Mosaic this covers activation tensors, distance matrices, derived features, intermediate
-representations and re-renderable figures — which is to say most of what an experiment
-produces by volume. **This is a design constraint on every experiment**, not a cleanup
-policy: a pipeline that cannot regenerate its intermediates from a seed has failed §3.3 at
+representations and re-renderable figures — which is to say most of what a Run
+produces by volume. **This is a design constraint on every Experiment**, not a cleanup
+policy: a config that cannot regenerate its intermediates from a seed has failed §3.3 at
 design time, and is also failing the load-bearing standard in §1.
 
 **3.4 — Is it a durable artifact someone will rely on later** (model checkpoints, run
@@ -147,7 +147,7 @@ The Lab Notebook is **not** a note and does not route here; see §8.1.
 discriminator is *intent*, not publication status: Secure Research is work Noah does not
 intend to keep public from the outset, and Mosaic is public-by-design from day one. Its loss
 or theft would cost nothing, because being seen is the whole point. Institutional and cloud
-compute are therefore available, which means experiments need not be sized to one desktop.
+compute are therefore available, which means Runs need not be sized to one desktop.
 
 This corrects a first reading that took "unpublished" to mean "sensitive" and excluded cloud
 compute; the correction is [#3](https://github.com/NGL321/mosaic/issues/3)'s second

@@ -25,7 +25,7 @@ it can be checked rather than believed.
 **Two rules, in [`PROTOCOL.md`](PROTOCOL.md):**
 
 **Custody.** Agents write the record; the human writes the beliefs. Research documents,
-notebook entries, and experiment output are agent-writable. `CONTEXT.md` and the charter
+notebook entries, and Run output are agent-writable. `CONTEXT.md` and the charter
 are human-only — agents propose exact text, the human applies it. So:
 
 ```console
