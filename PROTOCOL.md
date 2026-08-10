@@ -297,14 +297,6 @@ labelled `custody:deferred` so it blocks `1.0.0` like any other — the check is
 ancestry test, but there is no declared way yet for an `evidence:` commit to name the rung it
 bears on, and inventing one before the Belt has rungs would fix a convention against nothing.
 
-**Where a frozen rule dictates the change, the defence is the citation.** A meaning-changing
-commit to an authored file owes a defence artifact. When a Belt change is dictated by a
-decision rule committed before the data existed, that obligation is discharged by citing the
-rule and the result that fired it: the author wrote the reasoning in advance, which is the
-stronger claim, and restating it afterwards adds nothing a reader can check. A Belt change
-made at **discretion** — a rung added, or one retired without its falsifier firing — owes a
-full defence, unchanged.
-
 A `Co-Authored-By:` trailer on an authored file is therefore **not a violation**. It is a
 routing signal: it triggers obligations rather than convicting the commit. Three obligations,
 each checked where it can be:
@@ -313,13 +305,16 @@ each checked where it can be:
 |---|---|---|
 | **Identity** | an authored file is committed under a human identity | CI, in one command, once agents commit under their own identity |
 | **Citation** | an agent co-author on an authored file carries a `Session:` trailer resolving in the Transcript Archive | CI, **for presence only** — resolution is not checkable from a public runner against a private archive, and is unmechanised |
-| **Defence** | a meaning-changing commit to an authored file carries a defence artifact — what changed, why, in Noah's own words; or, where a decision rule frozen in advance dictated the change, a citation of that rule and the result that fired it | a checker agent, on the pull request, as the §5 gate below already works |
+| **Defence** | a meaning-changing commit to an authored file carries a defence artifact — what changed, why, in Noah's own words. **Which changes owe one, and what discharges it, is *The defence — which changes owe one* below**; not every authored-file change does | a checker agent, on the pull request, as the §5 gate below already works |
 
 An obligation the scaffolding era defers (§2) is not dropped — it is filed as a
 `custody:deferred` issue and blocks `1.0.0` until discharged.
 
-The de minimis exception (§6) carries over unchanged, and is what keeps the defence
-obligation affordable: a change that cannot alter meaning owes nothing further.
+The de minimis exception (§6) carries over unchanged: a change that cannot alter meaning owes
+nothing further. It is no longer the only relief, and the two are different claims — de
+minimis says *nothing was claimed*, while a citation under *The defence — which changes owe
+one* below says *the claim was defended earlier, and here is where*. A rule that could only
+say the first would force every settled term through a second grilling to reach the second.
 
 **The session trailer's spelling is pinned here**, because a document and a checker that
 disagree about a key produce a check that convicts correctly cited commits — which is
@@ -352,6 +347,78 @@ against an openly LLM-accelerated programme. The honest answer is not that no mo
 it — it did — but that every place one did is recorded, traceable to a session, and
 accompanied by a defence Noah wrote. That answer is stronger than a denial, and unlike a
 denial it is true.
+
+### The defence — which changes owe one
+
+The subsection below says where defence bottoms out. This one says what fires it. An
+obligation that fires on everything is decided at review time by whoever is arguing, and a
+defence waived by a persuasive reviewer is indistinguishable in the record from one that was
+never owed — the failure this whole section is built to exclude, arriving through the door
+nobody was watching.
+
+**The unit is the section, one level finer than the file.** Custody keys on paths and that is
+unchanged; the defence keys on where in an authored file the change lands.
+
+| Where | Owes a defence |
+|---|---|
+| `CONTEXT.md` § **Research substance** | **Yes.** Its preamble declares every term *"contested in the contemporary literature"*; its entries carry `_After_` / `_Departs_` lines and Provenance Tiers. There is an outside to be right about, so there is something a defence can demonstrate. |
+| `CONTEXT.md` § **Programme structure**, § **Warrant**, § **Delegated inquiry** | **No.** These name how this repository's machinery is organised. A structural definition makes no claim about the world, and a defence of one demonstrates nothing — it is an author explaining his own filing system back to himself. |
+| `CHARTER.md`, throughout | **Yes.** It holds the rungs and their falsifiers: claims, and nothing else. |
+
+**The default is to owe one.** A new authored file, or a fourth `CONTEXT.md` section, owes a
+defence until this table says otherwise. The rule is a general obligation with three named
+exemptions rather than a list of places the gate applies, because the two differ only on the
+case nobody can see yet — and there the first fails loudly while the second fails silently:
+no failing check, nothing in the diff, just a file quietly outside the gate. This section
+already takes that posture when it names `CHARTER.md`'s path before the file exists.
+
+**Reasoning recorded in advance discharges by citation.** A defence written afterwards argues
+from a record its author already has; one written before argues from nothing, and is the
+stronger claim for it. Where the reasoning is already in the record, the pull request cites it
+instead of restating it. How much that discharges depends on **whose words the record holds**:
+
+- **Noah's own, committed in advance — the discharge is total.** Where a Belt change is
+  dictated by a decision rule committed before the data existed, citing the rule and the
+  result that fired it *is* the defence. The falsifier is human-authored outright under
+  exception 2; the reasoning is already on the page in his hand, and restating it afterwards
+  adds nothing a reader can check. A Belt change made at **discretion** — a rung added, or one
+  retired without its falsifier firing — owes a full defence, unchanged.
+- **An agent's write-up of a grilling — the discharge is partial.** A closed grilling ticket
+  records the alternatives rejected and why, but records them in an agent's prose summarising
+  Noah's decisions. The interrogation happened; the artifact in his words did not. The pull
+  request cites the ticket and carries a **delta defence** — what the branch text asserts
+  beyond what the cited resolutions settled. Where there is no delta, that is a sentence and
+  one exchange, and the citation is the substance.
+
+Two conditions on the second route. The cited ticket must have been worked **with Noah in the
+loop** — an agent-run research ticket discharges nothing, because the defence is a claim about
+his comprehension and nobody interrogated it. And the citation must **enumerate the terms it
+covers**: a section is usually settled across several tickets, and an unenumerated citation
+under-covers the ones it does not reach, silently.
+
+**The asymmetry is deliberate, and it is where the programme puts its bottleneck.** These
+routes let the automated part of the work run without Noah in the step, and concentrate the
+human cost at the point a claim enters the record. Exploration is unbounded within budget;
+integration costs a paragraph. A rule that charged for both would buy nothing extra, and would
+be paid for by not exploring.
+
+**Sufficiency is comprehension, never prose.** The checker grills whether the author
+understands what changed, and must not return a defence for tightening. *Warrant — whose
+understanding* below already diagnoses failure two ways — *understands, expresses poorly*
+routes to coaching, *does not understand* routes to a teach cycle — and the same diagnosis
+governs here. A bar that makes the artifact expensive to produce buys nothing this gate
+measures: its value is that the author produced it, not that it reads well. A defence is
+evidence, not a deliverable, and a checker rejecting on polish has broken the instrument.
+
+**The override is Noah's, recorded, and never an agent's to raise.** He may rule a change
+inside the obligation exempt, in his own words on the thread, saying why no comprehension
+claim is at stake. **An agent may not invoke the override and may not propose one** — a
+checker suggesting he might want to is precisely the persuasive reviewer above. The ruling
+costs about what complying costs, which is the point: it is not a way to spend less but a
+different statement, and the record should be able to tell *"here is what I understand"* from
+*"nothing here turns on my understanding."* **A recurring override is evidence the table above
+is wrong** — the same exemption written twice is a signal to amend this subsection rather than
+to keep ruling.
 
 ### The competence floor — where defence stops
 
@@ -440,10 +507,12 @@ and repair its own work. It cannot independently assess reasoning it generated.
   checker agent grills it there, and the teach cycle, if it fires, happens in that
   thread — which makes the human–machine boundary **visible in the record** rather than
   advertised in a README.
-- **Any pull request touching an authored file**, at whatever level: the defence artifact
-  (§5) goes on the thread and is grilled there, by an agent that did not draft the text. A
-  `record:` change to `CONTEXT.md` is PATCH by §3 and still carries this, because the
-  obligation follows the *file*, not the bump.
+- **Any pull request touching an authored file**, at whatever level: where §5 says a defence
+  is owed, the artifact goes on the thread and is grilled there, by an agent that did not
+  draft the text. A `record:` change to `CONTEXT.md` is PATCH by §3 and still carries this,
+  because the obligation follows the *file and the section*, never the bump. **Which changes
+  owe one, and what discharges it, is §5's** — kept there so that scope and its relief are
+  read together, which is what this bullet's earlier unconditional wording prevented.
 
 **Never rebase a pushed branch.** `inquiry/` branches take `main` by merging it in. This
 produces uglier history, and the ugliness is correct: rebase rewrites *when* something
