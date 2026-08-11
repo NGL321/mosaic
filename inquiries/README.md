@@ -10,8 +10,9 @@ live here and are versioned as research, despite reading as tools.
 ```
 inquiries/
 └── NNN-short-slug/
-    ├── README.md        the claim this serves, and what would falsify it
-    ├── config.yaml      the configuration, and how seeds are drawn
+    ├── README.md        the charter — frozen at open
+    ├── configs/         candidate instruments, tried during Searching
+    ├── config.yaml      the frozen instrument; exists only after the freeze
     ├── src/
     └── runs/
         └── <date>-<run-id>.md    manifest only
@@ -19,11 +20,26 @@ inquiries/
 
 Inquiries are numbered and named for their **Question**, not for the notebook entry that
 discusses them — several entries may cite one Inquiry, and an Inquiry that only ever
-served one entry is still findable a year later.
+served one entry is still findable a year later. `NNN` is the Inquiry's **issue number**:
+agents open Inquiries themselves, so the tracker is the only allocator two concurrent
+sessions can both see.
 
-An Inquiry's `README.md` names the Protective Belt claim it serves and the observation
-that would retire it. An Inquiry that cannot say what would falsify the claim it serves is
-not ready to run.
+An Inquiry's `README.md` names the **Conjecture** it bridges toward — one or several, in
+`conjectures/`, which is a sibling of this directory and never a parent of it — together
+with a hypothesis-blind **Adequacy Criterion** and an environment requirement. An Inquiry
+that cannot state an Adequacy Criterion cannot be delegated, and the refusal is itself a
+finding about the Inquiry.
+
+**The falsifier is not here.** It belongs to the Conjecture, which is what the Inquiry
+serves; a Protective Belt claim is what a conjecture may *become*, several human acts
+later. What the charter holds is the **decision rule** — the falsifier's local,
+machine-checkable shadow over one instrument.
+
+**Nothing in the charter is signed.** The Question is drafted by the agent that opens the
+Inquiry and the Adequacy Criterion is apparatus, so the freeze is **git ancestry** rather
+than a human signature; the human's hand is on the Conjecture. The budget, the stall
+tolerance and the continue/return/retire rule live there too — an Inquiry declaring any of
+them is writing its own cheque.
 
 **One Inquiry, one directory, many runs.** The instruments an Inquiry searches over are
 configurations committed with it, never sibling directories: the directory names the line of
@@ -31,6 +47,13 @@ investigation, not a single **Experiment**. Three levels, defined in
 [`CONTEXT.md`](../CONTEXT.md) — an Inquiry is a searchable domain, an Experiment is one
 instrument configured, and a **Run** executes one Experiment under one Inquiry. Only the Run
 is produced rather than declared, and only the Run leaves a record: the manifest in `runs/`.
+
+**The appearance of `config.yaml` is the freeze.** During Searching there is no such file,
+only candidates under `configs/`. When one passes the Adequacy Criterion it is committed to
+that path, and *that commit is the freeze event* — dated, attributable, and an ancestor of
+everything measured afterwards, which is what makes the discriminating result confirmatory
+without anyone having to assert that it is. Changing it afterwards is a new Inquiry, not an
+amendment to this one.
 
 **Committed here, but not owned here.** A config's nesting is where the file sits, not what
 makes it what it is — an Experiment is identified by its config's sha256 and nothing else, so
@@ -69,4 +92,9 @@ Deliberately. The first empirical line is still open — [#17](https://github.co
 reopened the choice of *phenomenon* (formation versus structure), and
 [#7](https://github.com/NGL321/mosaic/issues/7) has not yet named the first Protective Belt
 claim. Scaffolding a plausible `001-eca-grokking/` here would encode a decision the programme
-has explicitly reopened.
+has explicitly reopened. Nothing can be opened here before a Conjecture exists to open it
+under, either — an Inquiry serving nothing is unaimed and nobody's budget pays for it.
+
+A worked charter, written against this layout and deliberately kept out of it, is in
+[`docs/prototypes/inquiry-charter/`](../docs/prototypes/inquiry-charter/) with the dispatch
+gate that refuses a malformed one.

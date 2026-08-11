@@ -8,6 +8,12 @@ AFK — "a visible refusal, and itself a finding about the Inquiry". A rule sati
 by writing a word is not a rule (#26 R6), so every check below is either structural
 or checked against git, and none of them reads prose for meaning.
 
+**Nothing here checks a signature.** After #164 the Inquiry charter carries no human
+hand: the Question is agent-drafted, the Adequacy Criterion is apparatus, and the
+freeze is ancestry. Noah's hand is on the Conjecture, one level up. Three refusals
+below exist precisely to keep it there — a charter that declares a budget, a stall
+tolerance or a continue/return/retire rule is claiming authority that is not its own.
+
 Run the driver, not this file:
 
     python docs/prototypes/inquiry-charter/prototype_tui.py
@@ -26,6 +32,18 @@ import yaml
 
 REFUSALS = {
     "NO_QUESTION": "No frozen Question. There is nothing for agents to search against.",
+    "NO_CONJECTURE": (
+        "The charter names no Conjecture. #164: an Inquiry is opened under a posted "
+        "conjecture's authority and its budget, and the axioms it contributes are "
+        "meaningless outside that system. An Inquiry serving nothing is unpayable and "
+        "unaimed."
+    ),
+    "QUESTION_TARGETS_CORE": (
+        "The Question occupies the goal position over a Hard Core member. #61's typing "
+        "rule: core sentences may appear as premises and never as a goal. This is #9's "
+        "'no Hard Core member may be an Inquiry's Question' as a well-formedness "
+        "condition rather than a prohibition someone has to remember."
+    ),
     "NO_ADEQUACY": (
         "No Adequacy Criterion. Premise 2: this Inquiry cannot be delegated AFK. "
         "The refusal is a finding — the Inquiry is not ready, and saying so is research output."
@@ -35,13 +53,20 @@ REFUSALS = {
         "decides, and a threshold, or no agent can tell when the search has ended."
     ),
     "ADEQUACY_NOT_BLIND": (
-        "The Adequacy Criterion references a name declared under `hypothesis` or "
-        "`discriminating`. Blindness is enforced by scope, not by reading: the two "
-        "namespaces are disjoint or the charter is refused."
+        "The Adequacy Criterion references a name declared under `hypothesis`, "
+        "`axiom_if_carried` or `discriminating`. Blindness is enforced by scope, not by "
+        "reading: the two namespaces are disjoint or the charter is refused."
     ),
-    "NO_FALSIFIER": (
-        "The hypothesis states no falsifier. inquiries/README.md: an Inquiry that "
-        "cannot say what would falsify the claim it serves is not ready to run."
+    "NO_REDUCTION_CHECK": (
+        "No reduction check. #9, via #61: a novel measure must show predictive content "
+        "the cheapest available measure does not already carry, with the confound set "
+        "named before the data exists. An Inquiry proposing a novel measure with no "
+        "statable confound set refuses itself."
+    ),
+    "HAZARDS_UNDECLARED": (
+        "No hazard declaration. #9 splits them: testable hazards become further adequacy "
+        "clauses, untestable ones are named and travel onto every leg this Inquiry earns. "
+        "An empty declaration is a claim that there are none, and must be written as one."
     ),
     "NO_DECISION_RULE": (
         "A discriminating metric with no decision rule. A number that means nothing "
@@ -52,37 +77,39 @@ REFUSALS = {
         "is derived from ancestry, never asserted. A declared register is a register "
         "an argument can move."
     ),
+    "GOVERNOR_DECLARED": (
+        "The charter declares a budget, a spend ceiling or a stall tolerance. #164 moved "
+        "the governor to the Conjecture, which is what authorises and pays for this "
+        "Inquiry. A local budget is an Inquiry writing its own cheque."
+    ),
+    "RULE_DECLARED": (
+        "The charter declares a continue/return/retire rule. #61: those verbs only mean "
+        "anything at the Conjecture. What the Inquiry keeps is mechanical and needs no "
+        "signature — adequacy met, freeze; allocation spent, Exhausted; inadmissible "
+        "result, return."
+    ),
     "TIER_NAMED": (
         "The environment names a tier rather than stating a requirement. Premise 11: "
         "the charter declares what it needs; the loop decides what satisfies it. An "
         "agent may never widen a tier, and it cannot widen what it cannot name."
     ),
-    "NO_PLACEMENT": (
-        "No placement constraint. Premise 7: every dataset an Inquiry touches carries "
-        "a declared constraint, and absence is not permission."
-    ),
-    "NO_BUDGET": "No search budget. There is no terminator, so Exhausted is unreachable.",
     "NO_ENVIRONMENT": (
         "No environment requirement. The loop cannot route a job it cannot describe, "
         "and silence would be routed to whatever is cheapest."
     ),
-    "RULE_NAMES_HARD_CORE": (
-        "The continue/return/retire rule references the Hard Core. #61: the Negative "
-        "Heuristic mechanises as a refusal — an agent may never record a result as "
-        "bearing on the axioms, so its rule may never reason about them."
+    "NO_PLACEMENT": (
+        "No placement constraint. Premise 7: every dataset an Inquiry touches carries "
+        "a declared constraint, and absence is not permission."
     ),
-    "UNSIGNED": (
-        "The charter's last commit was not authored by the human. §5 custody: "
-        "falsification criteria are human-authored outright. Under a GitHub App "
-        "identity (#24) this is checkable, not a matter of trust."
-    ),
-    "FROZEN_FIELD_TOUCHED": (
-        "An agent commit modified a frozen field. The freeze is git ancestry, and this "
-        "is what makes it checkable in a clone rather than promised in a document."
+    "POST_OPEN_AMENDMENT": (
+        "A frozen field was modified after the Inquiry opened. #61: agents may propose "
+        "and may never amend. The freeze is git ancestry, which is what makes it "
+        "checkable in a clone rather than promised in a document. An unsatisfiable "
+        "Adequacy Criterion ends the Inquiry Exhausted; it does not get edited."
     ),
 }
 
-HARD_CORE_TERMS = ("hard core", "least action", "scale corollary", "axiom")
+HARD_CORE_TERMS = ("least action", "scale corollary")
 
 # A tier is a place. A requirement is a capability. The gate knows the place-names.
 TIER_NAMES = (
@@ -100,11 +127,15 @@ TIER_NAMES = (
 
 MISSING_REFUSAL = {
     "question": "NO_QUESTION",
+    "conjectures": "NO_CONJECTURE",
     "adequacy": "NO_ADEQUACY",
-    "budget": "NO_BUDGET",
     "placement": "NO_PLACEMENT",
     "environment_requirement": "NO_ENVIRONMENT",
 }
+
+# Fields that belong to the Conjecture. Their presence here is the refusal.
+GOVERNOR_FIELDS = ("budget", "spend_ceiling", "stall_tolerance", "token_allocation")
+RULE_FIELDS = ("continue_return_retire", "continue", "retire")
 
 
 @dataclass
@@ -122,13 +153,13 @@ class Verdict:
 def _names_in(node) -> set[str]:
     """Every identifier-ish token reachable from a subtree.
 
-    Deliberately crude: file paths, snake_case names, and quoted symbols. The point
-    is that blindness is decided over a *name set*, so an agent cannot argue its way
-    across the boundary — it can only rename, and renaming is visible in the diff.
+    Deliberately crude: file paths and snake_case names. The point is that blindness is
+    decided over a *name set*, so an agent cannot argue its way across the boundary — it
+    can only rename, and renaming is visible in the diff of a file frozen at open.
     """
     out: set[str] = set()
     if isinstance(node, dict):
-        for k, v in node.items():
+        for v in node.values():
             out |= _names_in(v)
     elif isinstance(node, list):
         for v in node:
@@ -140,6 +171,16 @@ def _names_in(node) -> set[str]:
     return out
 
 
+def _strip_prose(node):
+    """Drop the fields written for a human. The gate never reads them for meaning."""
+    prose = {"rationale", "statement", "requires", "basis", "notes", "over"}
+    if isinstance(node, dict):
+        return {k: _strip_prose(v) for k, v in node.items() if k not in prose}
+    if isinstance(node, list):
+        return [_strip_prose(v) for v in node]
+    return node
+
+
 def parse(text: str) -> dict:
     parts = re.split(r"(?m)^---[ \t]*$\n?", text, maxsplit=2)
     if len(parts) < 3 or parts[0].strip():
@@ -147,11 +188,9 @@ def parse(text: str) -> dict:
     return yaml.safe_load(parts[1]) or {}
 
 
-def check(charter: dict, *, signed_by_human: bool = True,
-          agent_touched_frozen: bool = False) -> Verdict:
+def check(charter: dict, *, amended_after_open: bool = False) -> Verdict:
     v = Verdict()
 
-    # -- presence -----------------------------------------------------------
     for key, code in MISSING_REFUSAL.items():
         if not charter.get(key):
             v.refuse(code, f"missing: {key}")
@@ -160,31 +199,47 @@ def check(charter: dict, *, signed_by_human: bool = True,
     hypothesis = charter.get("hypothesis") or {}
     discriminating = charter.get("discriminating") or {}
 
-    # -- adequacy is machine-decidable --------------------------------------
+    # -- the Question may not aim at the core ------------------------------
+    hits = [t for t in HARD_CORE_TERMS if t in str(charter.get("question", "")).lower()]
+    if hits:
+        v.refuse("QUESTION_TARGETS_CORE", f"in goal position: {', '.join(hits)}")
+
     if adequacy:
+        # -- adequacy is machine-decidable ---------------------------------
         missing = [k for k in ("probe", "decides", "threshold") if not adequacy.get(k)]
         if missing:
             v.refuse("ADEQUACY_NOT_DECIDABLE", f"missing: {', '.join(missing)}")
 
-        # -- adequacy is hypothesis-blind, by scope --------------------------
-        adequacy_names = _names_in(
-            {k: val for k, val in adequacy.items() if k != "rationale"})
-        hypothesis_names = _names_in(hypothesis) | _names_in(discriminating)
+        # -- #9's two mandatory clauses ------------------------------------
+        if not adequacy.get("reduction_check"):
+            v.refuse("NO_REDUCTION_CHECK")
+        hazards = adequacy.get("hazards")
+        if hazards is None or not isinstance(hazards, dict) or (
+            "testable" not in hazards and "untestable" not in hazards
+        ):
+            v.refuse("HAZARDS_UNDECLARED")
+
+        # -- adequacy is hypothesis-blind, by scope -------------------------
+        adequacy_names = _names_in(_strip_prose(adequacy))
+        hypothesis_names = _names_in(_strip_prose(
+            {"h": hypothesis, "d": discriminating, "a": charter.get("axiom_if_carried")}))
         leaked = sorted(adequacy_names & hypothesis_names)
         if leaked:
             v.refuse("ADEQUACY_NOT_BLIND", f"shared names: {', '.join(leaked)}")
-
-    # -- a hypothesis, if present, states its falsifier ----------------------
-    if hypothesis and not hypothesis.get("falsified_by"):
-        v.refuse("NO_FALSIFIER")
 
     # -- a metric without a rule --------------------------------------------
     if discriminating.get("metric") and not discriminating.get("decision_rule"):
         v.refuse("NO_DECISION_RULE")
 
-    # -- the register is derived, never declared -----------------------------
+    # -- three things that live one level up ---------------------------------
     if "register" in charter or "register_policy" in charter:
         v.refuse("REGISTER_DECLARED")
+    named = [f for f in GOVERNOR_FIELDS if f in charter]
+    if named:
+        v.refuse("GOVERNOR_DECLARED", f"declared: {', '.join(named)}")
+    named = [f for f in RULE_FIELDS if f in charter]
+    if named:
+        v.refuse("RULE_DECLARED", f"declared: {', '.join(named)}")
 
     # -- requirement, not tier ----------------------------------------------
     env_text = yaml.safe_dump(charter.get("environment_requirement") or "").lower()
@@ -192,17 +247,9 @@ def check(charter: dict, *, signed_by_human: bool = True,
     if named:
         v.refuse("TIER_NAMED", f"named: {', '.join(named)}")
 
-    # -- the rule may not reason about the Hard Core -------------------------
-    rule_text = yaml.safe_dump(charter.get("continue_return_retire") or "").lower()
-    hits = [t for t in HARD_CORE_TERMS if t in rule_text]
-    if hits:
-        v.refuse("RULE_NAMES_HARD_CORE", f"named: {', '.join(hits)}")
-
-    # -- the two git-checked ones -------------------------------------------
-    if not signed_by_human:
-        v.refuse("UNSIGNED")
-    if agent_touched_frozen:
-        v.refuse("FROZEN_FIELD_TOUCHED")
+    # -- the git-checked one -------------------------------------------------
+    if amended_after_open:
+        v.refuse("POST_OPEN_AMENDMENT")
 
     return v
 
@@ -211,7 +258,11 @@ def render(v: Verdict, *, slug: str) -> str:
     """What the gate emits. A refusal is a comment on the Inquiry's issue, not a log line."""
     if v.dispatchable:
         return f"DISPATCHABLE — {slug}\n  The Question is frozen. Searching may begin."
-    lines = [f"REFUSED — {slug}", f"  {len(v.refusals)} refusal(s). The Inquiry does not enter Searching.", ""]
+    lines = [
+        f"REFUSED — {slug}",
+        f"  {len(v.refusals)} refusal(s). The Inquiry does not enter Searching.",
+        "",
+    ]
     for code, detail in v.refusals:
         lines.append(f"  [{code}]{(' ' + detail) if detail else ''}")
         lines.append(f"      {REFUSALS[code]}")
