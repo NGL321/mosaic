@@ -162,7 +162,8 @@ _Avoid_: Inquiry, trial, condition, arm, variant
 **Run**:
 One execution of an Experiment under an Inquiry — the only one of the three that is produced
 rather than declared, and the only one that leaves a record. It names both axes: the Experiment
-gives it a configuration, the Inquiry gives it a Question and pays for it. What varies between
+gives it a configuration, the Inquiry gives it a Question, and the Conjecture that Inquiry
+serves pays for it. What varies between
 runs of one Experiment is only what that configuration itself declares varies; the seed is drawn
 per run and recorded, never written into the config. Output publishes outside the repository
 and one manifest stays behind — run id, config SHA, seed, output sha256, Drive path.
