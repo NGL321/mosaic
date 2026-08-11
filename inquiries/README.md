@@ -11,6 +11,7 @@ live here and are versioned as research, despite reading as tools.
 inquiries/
 └── NNN-short-slug/
     ├── README.md        the charter — frozen at open
+    ├── axiom.md         the axiom's life — append-only
     ├── configs/         candidate instruments, tried during Searching
     ├── config.yaml      the frozen instrument; exists only after the freeze
     ├── src/
@@ -66,6 +67,70 @@ in, every seed would be a different Experiment, every Experiment would have exac
 and the multi-seed object would have no name. The config declares how seeds are drawn; each
 run's manifest records the value it drew, which is where the seed the repository must keep to
 reproduce a run now lives.
+
+## The axiom ledger
+
+An Inquiry contributes **one sentence** — the charter's `axiom_if_carried` — to every
+Conjecture it bridges toward. `axiom.md` records that sentence's life, and it is the one
+record the Protective Belt graph cannot derive.
+
+**The belt graph is a projection, not a store** ([#90](https://github.com/NGL321/mosaic/issues/90)).
+Its nodes are `conjectures/`, its edges are the `conjectures:` list in the charter above, an
+admitted rung is in `CHARTER.md`, and a **leg** is the pair (Inquiry, Conjecture) once the
+axiom has carried — the leg's kind, domain, axiom text and declared untestable hazards are
+all *read* from the frozen charter and never copied. Materialising the graph as a fourth
+artifact would buy nothing and could disagree with the three trees that already say it, with
+no tiebreaker; the discrepancy would surface as a wrong health reading rather than a failing
+check.
+
+Three event kinds, appended and never edited:
+
+- **`carried`** — the discriminating measurement passed the frozen `decision_rule` and Noah
+  acknowledged the result. This is the event that brings a leg into existence.
+- **`hazard`** — an untestable hazard discovered after the freeze. The charter cannot take it,
+  being frozen at open, and under [#9](https://github.com/NGL321/mosaic/issues/9) a late one
+  obliges a corroboration Inquiry and retires nothing.
+- **`retracted`** — the axiom no longer holds. Two routes, below.
+
+**Retraction is written once, here — never per conjecture.** An axiom is not owned by the
+system that bought it, which is why `conjectures/` is a sibling of this directory rather than
+a parent; a retraction filed per-conjecture would re-introduce that ownership and store one
+fact in three places. `#9`'s **per-leg demotion survives in full as a computation**: a leg is
+live exactly when its axiom is live *and* the conjecture's system still proves its goal with
+it, so a leg genuinely can die for one Conjecture and stand for another without either fact
+being asserted anywhere.
+
+The cost is deliberate and is the reason for the placement: reading *why a Conjecture lost a
+leg* means opening the Inquiry that bought it. A lost leg is exactly the moment that warrants
+Noah's own investigation, and the layout forces the trace rather than summarising it.
+
+### The two routes
+
+|  | Fires on | Whose hand | Defence |
+|---|---|---|---|
+| **Rule-dictated** | a Run of the frozen Experiment fails the frozen `decision_rule` | agent-written | `PROTOCOL` §5 discharges **by citation** — the rule, and the Run that fired it, both committed before the data existed |
+| **Discretionary** | the declared hazard bit; the Adequacy Criterion turns out not to establish competence; a better instrument supersedes it | Noah's | full defence, unchanged |
+
+Neither route waits. A rule-dictated retraction **executes immediately and files a return**.
+The argument that protects conjecture retirement — *a silent retirement would leave Noah
+believing what the programme has already abandoned* — does not transfer: a Conjecture is a
+belief he holds, while an axiom is a fact about a measurement, and an axiom known not to
+replicate but left standing means the Conjecture's formal system keeps proving things off a
+premise known to be false.
+
+**The cascade stops at the projection.** A retraction can leave an admitted rung with no live
+leg, and that state is real and visible — but a rung is retired only by a commit to
+`CHARTER.md` in Noah's hand, under `PROTOCOL` §5's *the Protective Belt is Noah's to decide*.
+An agent's retraction can never move the Belt; it can only stop the graph from claiming
+support that is gone.
+
+Three things do **not** retract an axiom, and each is settled elsewhere: **inconsistency**
+with another axiom fires a mandatory return
+([#61](https://github.com/NGL321/mosaic/issues/61)) — neither sentence is wrong for
+conflicting; a **stall** returns and never retires
+([`conjectures/`](../conjectures/README.md)); and a **MAJOR** demotes the whole Belt while
+retaining every leg in place, which is what makes the rebuild a re-validation rather than a
+re-run.
 
 ## What is not stored here
 
