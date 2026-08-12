@@ -85,6 +85,21 @@ _Avoid_: Study plan, coursework
 
 ### Delegated inquiry
 
+**Prospect**:
+A notion in flight — a direction the programme could take, recorded because it is worth keeping
+and not yet worth acting on. Either a *proto-conjecture* (a notion not yet defensible enough to
+post to the belt graph) or a *proto-Inquiry* (a line of investigation with no statable frozen
+Question), or both at once. Deliberately incomplete, and asserted of nothing: a Prospect is never
+a claim, carries no warrant, and obliges the programme to nothing. Filing one is free and open to
+anyone — Noah, an agent, or an outsider.
+_Avoid_: Seed, idea, lead, hunch, backlog item
+
+<!-- "Seed" is barred here specifically: it is reserved for the mathematical sense already defined
+     on Run, in this same section — "the seed is drawn per run and recorded". -->
+
+<!-- The backlog is #109, open permanently; entries are its comments and its body is the
+     authoring format. A Prospect precedes an Inquiry, which is why it is first in this section. -->
+
 **Inquiry**:
 A single line of empirical investigation delegated to agents, and the unit in which the
 programme buys evidence: a frozen Question, an Adequacy Criterion, a search budget, a signed
