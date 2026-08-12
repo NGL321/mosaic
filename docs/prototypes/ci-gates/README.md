@@ -24,6 +24,18 @@ confirms it: the suite took an afternoon and the interesting part was never the 
 The question is **what happens when a check nobody can satisfy fires**, so that it becomes
 visible rather than routed around.
 
+Driving it moved the centre of gravity twice. The waiver answered quickly and by reuse — §11
+below — and the afternoon's real work turned out to be §6a, where a gate designed to catch a
+mistyped bump ended up deleting the field it was checking.
+
+**The rulings, in one place.** §2 the type/bump gate is load-bearing and reads the **commit
+stack only**; §3 custody classifies three ways and fails closed on the undecidable; §5 a
+mixed-track branch is a violation and gets split; §6 a recurring finding is a protocol defect
+rather than a waiver candidate; §6a **the merge commit is computed and `Bump:` is deleted**;
+§7 the link gate is blocking under three scoping rules; §8 links are checked and prose paths
+are not; §11 **a waiver is a `custody:deferred` issue read from a committed snapshot**; §12
+custody is unwaivable, and a gate goes *required* only when the repository is green on it.
+
 ## What the prototype found
 
 ### 1. Twenty-one of twenty-one pull requests would not have merged — and the number is honest rather than rhetorical
@@ -74,6 +86,12 @@ argument the record made against itself, in writing, without noticing.
 in value if not in principle, because it is the only one with a demonstrated live failure
 that changed what the version history claims.
 
+**And driving that finding is what dissolved half the gate.** The failure was possible only
+because the merge subject's type *and* its `Bump:` line were both written by hand, so both
+could be wrong together — and they were, consistently, which is exactly why nothing caught
+it. See *The merge commit is computed* below, which is the largest ruling this ticket makes
+and was not in its brief.
+
 ### 3. The custody gate cannot be built the way #24 ruled it, because GitHub's signature attests the API call and never the hand
 
 #24 ruled the boundary is *a signature, not a name*: agents commit as a GitHub App through
@@ -118,9 +136,9 @@ Nothing in the record defines this field's form. §6 shows one example and stops
 a compliance failure; it is a specification gap that has been filled six different ways by
 the same person because there was nothing to be consistent with.
 
-**Ruled on #176: the grammar is `Bump: <track> <MAJOR|MINOR|PATCH>`, pinned in §6** the way
-§5 pins the `Session:` trailer's spelling, and for the identical reason — *a document and a
-checker that disagree about a key produce a check that convicts correct commits.*
+The prototype's first ruling here was to pin a grammar in §6, the way §5 pins the `Session:`
+trailer's spelling. **Driving it with Noah overturned that.** The field should not have a
+grammar because it should not exist — see the next section.
 
 ### 5. One branch, two tracks: three merges leave a bump with nowhere to go
 
@@ -134,9 +152,12 @@ This is not a nuisance finding. §3's whole claim is that *the release bump is c
 rather than judged*, and a computation that silently drops one of its inputs is not a
 computation.
 
-**Left open deliberately.** The prototype reports it and does not rule: whether the answer is
-*split the branch*, *state two `Bump:` lines*, or *§1 is wrong and a branch has a primary
-track* is a protocol question with three defensible answers and no evidence between them.
+**Ruled on #176: split the branch — §1 stands.** A mixed branch is a violation, the gate
+blocks it, and the fix is two branches and two pull requests. The two alternatives were
+*state two bumps* and *§1 is wrong, a branch has a primary track*; both keep §1's one-test
+-one-answer premise only by weakening it, and neither pays for the ceremony it saves. The
+cost is real and accepted: three of this repository's twenty-one pull requests would have
+been six.
 
 ### 6. §6's `(#PR)` is wrong, and the check found the protocol rather than the history
 
@@ -162,6 +183,64 @@ same move §5 already makes for the defence override (*"a recurring override is 
 table above is wrong"*). Mechanised the cheapest possible way: the waiver ledger is
 countable, so **the same code waived N times is a visible number**, and the number is the
 signal. Nothing needs to enforce it beyond making it impossible not to see.
+
+This particular finding then stops existing at all: under the next section the merge
+subject is emitted rather than typed, so whatever it names, it names by construction.
+
+### 6a. The merge commit is computed, and `Bump:` is deleted
+
+The largest ruling of the ticket, and it was not in its brief. It came out of Noah's reading
+of §2 above: *version bumping should not belong to those merge commits but rather the commit
+stacks that are being merged.*
+
+**Merge commits survive, and that is a derivation rather than a taste.** Fast-forward-only
+needs a linear history, and §7 forbids rebasing a pushed branch. The only route to linearity
+without rebase is to merge `main` *into* the branch and then fast-forward — which puts every
+branch commit and every sync merge onto the trunk, and `git log --first-parent main` stops
+being a changelog of units of work. `--no-ff` is not defended by preference; it is what is
+left once §7 binds.
+
+**`Bump:` restates the subject's own type prefix.** §3's two tables partition the type set by
+track and map each type 1:1 onto a level, so `record:` *is* research PATCH and `feat:` *is*
+tooling MINOR. The line tells a reader nothing the first word of the subject does not, and it
+is a second **hand-written** statement of a fact §3 says is **computed**. That is
+[#90](https://github.com/NGL321/mosaic/issues/90)'s stored copy that can disagree with the
+recomputation with no tiebreaker, and [#63](https://github.com/NGL321/mosaic/issues/63)'s
+*computed always, rendered only where it is read*, arriving for the third time in the same
+programme.
+
+**Ruled on #176:**
+
+1. **The merge commit's mechanical content is generated, never authored** — the subject's
+   type from the highest type on the stack, the body's ticket list from the branch's
+   `Resolve #N` lines. Its **prose** stays authored: the *what landed* clause and the
+   one-line gist §6 already has written once and used three times are the parts no function
+   can produce. This is §5's own pull-quote in a new dialect — *custody is over the decision,
+   not the keystrokes* — with the tool wording a decision Noah made.
+2. **`Bump:` is deleted from §6.**
+3. **The tie is broken by §3's table order** — `core > belt > evidence > record`,
+   `feat > fix > chore`. §6 says the merge takes *the highest* type, and `evidence:` against
+   `record:` is a tie on level; a generator cannot be ambiguous, so the order is pinned.
+4. **CI offers, Noah pastes, `main` verifies.** A pre-merge check computes the exact message
+   and posts it; Noah pastes it into the merge button; a post-merge check on `main`
+   recomputes and verifies. The obvious alternative — an Action performing the merge through
+   the API so the text cannot be edited at all — is **refused because it reverses a #24
+   ruling**: the App needs no write access to `main`, and buying message integrity with trunk
+   write access is a bad trade for a message the human is pasting anyway. Running the
+   function twice costs nothing, because it is a function.
+
+**What this dissolves.** §4's missing grammar (nothing is typed, so nothing can be
+misspelt), §6's `(#PR)`-versus-`(#ticket)` disagreement (whatever the generator emits is the
+form), and `b2b3b2c` itself — with the subject type computed it would have read `core:`, and
+the MAJOR would have been sitting at trunk level in the changelog where §6 wanted it.
+
+**And it settles the custody gate's scope by consequence rather than by decision.** A merge
+commit under this rule carries no authored content and introduces no tree its parents did not
+already carry, both of which the branch commits were checked on. **Custody has nothing to
+adjudicate there**, so the custody gate reads the commits a pull request adds and not the
+merge — which is exactly where `custody_check.py` already looks. The GitHub-signed-under-a-
+human-login case in §3 above therefore stops being the common case and becomes what it should
+be: a finding about commits, where an agent could actually forge one.
 
 ### 7. Link integrity is clean, and the nuisance the ticket predicted is entirely a scoping failure
 
@@ -300,7 +379,7 @@ lands in three waves, and the waves are already filed:
 
 | Gate | Required when | Blocked on |
 |---|---|---|
-| type / bump, branch, link | immediately — one branch of fixes clears them | — |
+| type / bump, branch, link | immediately — one branch of fixes clears them | §6a's amendment |
 | research front matter | the retrofit lands | [#50](https://github.com/NGL321/mosaic/issues/50) |
 | custody | the App exists and Noah's key is registered | [#175](https://github.com/NGL321/mosaic/issues/175), [#161](https://github.com/NGL321/mosaic/issues/161) |
 
@@ -309,14 +388,6 @@ This is not a waiver — nothing is being excused. It is the ordering that alrea
 
 ## Open, and handed on
 
-- **Does the custody gate read merge commits at all?** GitHub's web-merge signature is a real
-  attestation that the authenticated account pressed the button — arguably the strongest
-  evidence in the repository — and is simultaneously obtainable by any agent holding that
-  account's token. Either merges are out of scope on the ground that merging is not
-  authorship, or the merge button is abandoned for a signed path. Noah's, and it changes
-  what #175 has to set up. **Filed as a ticket.**
-- **One branch, two tracks** (§5 above). Three defensible answers, no evidence between them.
-  **Filed as a ticket.**
 - **`record/` is a real branch class and §4 does not have it.** Five branches, all landing a
   record change that answers no wayfinder ticket type. §4 says prefixes *are* wayfinder's
   ticket types; practice invented a sixth. Either §4 gains the class or the branches were

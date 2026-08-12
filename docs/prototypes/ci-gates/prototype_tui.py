@@ -102,12 +102,18 @@ EXPLAIN = {
 # Waiver cases. One real finding, four homes, two granters.
 # ---------------------------------------------------------------------------
 
-def waiver_case(model: str, granted_by: str, code: str = "T5") -> None:
-    ch = BY_PR[133]
+def waiver_case(model: str, granted_by: str, code: str = "B1") -> None:
+    """A real waiver candidate: `record/` is a branch class §4 never declared.
+
+    Five branches use it, all landing a record change that answers no wayfinder
+    ticket type. Either §4 gains the class or they were misnamed — and until
+    someone decides, the gate is right and the branch is not wrong.
+    """
+    ch = BY_PR[171]
     w = gates.Waiver(
         code=code,
-        subject=ch.merge["sha"],
-        reason="the two core: commits are pre-charter corrections, not a Hard Core revision",
+        subject=ch.branch,
+        reason="`record/` is real practice and §4 has no class for it; amendment pending",
         model=model,
         granted_by=granted_by,
         expires="1.0.0" if model == "issue" else None,
@@ -140,6 +146,28 @@ def model_table() -> None:
     print("  and it is the axis the other one needs.")
 
 
+def computed_merge() -> None:
+    """#176 §6a — the merge commit generated rather than typed."""
+    ch = BY_PR[133]
+    print("\n" + "=" * 78)
+    print("COMPUTED MERGE COMMIT — what b2b3b2c would have said")
+    print("=" * 78)
+    print("\n  What actually landed:\n")
+    for line in (ch.merge["subject"] + "\n\n" + ch.merge["body"]).rstrip().splitlines():
+        print(f"    {line}")
+    print("\n  What `merge_message()` emits from the same branch — prose and gist")
+    print("  supplied by the author, everything else computed:\n")
+    prose = "the four CONTEXT.md tickets, proposed for Noah's hand"
+    gist = ("Lands #89's and #91's Hard Core corrections alongside #95's and #96's\n"
+            "record changes.")
+    for line in gates.merge_message(ch, prose, gist).rstrip().splitlines():
+        print(f"    {line}")
+    print("\n  The subject reads `core:`, which §3 maps to research MAJOR, and the")
+    print("  Hard Core revision is visible at trunk level in `git log --first-parent`")
+    print("  — which is where §6 wanted it and where it was not. `Bump:` is gone")
+    print("  because the first word of the subject already says it.")
+
+
 def unwaivable() -> None:
     print("\n" + "=" * 78)
     print("WAIVER REFUSED — custody is not waivable, however it is granted")
@@ -166,12 +194,13 @@ CASES = [
      lambda: print(gates.render(
          gates.Change(None, None, {"sha": "-", "subject": "the tree as it stands", "body": ""}, []),
          gates.gate_link(None)))),
+    ("g", "the merge commit #133 would have got, computed  ← the ruling", computed_merge),
     ("m", "the four candidate waiver homes, side by side", model_table),
-    ("w1", "waive T5 by trailer, granted by Noah", lambda: waiver_case("trailer", "human")),
-    ("w2", "waive T5 by trailer, granted by an agent", lambda: waiver_case("trailer", "agent")),
-    ("w3", "waive T5 in the pull request body — granter unknowable",
+    ("w1", "waive B1 by commit trailer, granted by Noah", lambda: waiver_case("trailer", "human")),
+    ("w2", "waive B1 by commit trailer, granted by an agent", lambda: waiver_case("trailer", "agent")),
+    ("w3", "waive B1 in the pull request body — granter unknowable",
      lambda: waiver_case("pr-body", "undecidable")),
-    ("w4", "waive T5 as a custody:deferred-style issue", lambda: waiver_case("issue", "human")),
+    ("w4", "waive B1 as a custody:deferred issue  ← the ruling", lambda: waiver_case("issue", "human")),
     ("x", "waive the custody gate — refused", unwaivable),
 ]
 

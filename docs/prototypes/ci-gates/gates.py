@@ -45,6 +45,8 @@ class Finding:
 
     def __str__(self) -> str:
         mark = {BLOCKING: "FAIL", ADVISORY: "warn", UNDECIDABLE: "????"}[self.severity]
+        if self.gate == "type" and self.code not in LIVE_CODES:
+            mark = "gone"   # superseded by #176 §6a — the field it checks is deleted
         if self.waived_by is not None:
             mark = "WAIV"
         line = f"  {mark}  {self.code}  {self.subject:<28} {self.detail}"
@@ -128,6 +130,19 @@ def gate_custody(ch: Change) -> list[Finding]:
 # ---------------------------------------------------------------------------
 # TYPE — §3's computed bump, against §6's stated one
 # ---------------------------------------------------------------------------
+#
+# **Half of this gate was ruled out of existence by driving it.** T3, T4, T5 and
+# T7 all check a hand-written statement of something §3 says is computed, and
+# #176 §6a deleted the statement instead: the merge commit is generated, so the
+# only human judgement left is the type on each commit (T1), whether the branch
+# stayed on one track (T6), and — post-merge, on `main` — whether the merge
+# commit agrees with what `merge_message()` recomputes (T2).
+#
+# The superseded checks are kept because this file is a primary source for how
+# that was decided, and because their counts against real history are the
+# argument that decided it. `LIVE_CODES` is what survives.
+
+LIVE_CODES = frozenset({"T1", "T2", "T6"})
 
 RESEARCH = {"core": "MAJOR", "belt": "MINOR", "evidence": "PATCH", "record": "PATCH"}
 TOOLING = {"feat": "MINOR", "fix": "PATCH", "chore": None}
@@ -152,6 +167,42 @@ def computed_bump(types: list[str]) -> dict[str, str]:
         if track and level and RANK[level] > RANK.get(best.get(track)):
             best[track] = level
     return best
+
+
+# §3's table order, pinned because a generator cannot be ambiguous: `evidence:`
+# and `record:` tie on level, and §6 says the merge takes *the highest* type.
+TABLE_ORDER = ["core", "belt", "evidence", "record", "feat", "fix", "chore"]
+
+
+def highest_type(types: list[str]) -> str | None:
+    known = [t for t in types if t in TABLE_ORDER]
+    return min(known, key=TABLE_ORDER.index) if known else None
+
+
+def merge_message(ch: Change, prose: str, gist: str) -> str:
+    """The merge commit, computed. Ruled on #176 §6a.
+
+    Everything mechanical is emitted; `prose` and `gist` are the author's, because
+    they are the parts no function can produce. There is no `Bump:` line: §3 maps
+    the subject's own type 1:1 onto track and level, and a second hand-written
+    statement of a computed fact is how `b2b3b2c` landed a MAJOR as a PATCH.
+    """
+    top = highest_type([type_of(c["subject"]) for c in ch.commits]) or "chore"
+    # The branch's own commits name their tickets — `(#96)`, `Resolves #5` — and
+    # that is the convention §6 finding 6 above found everyone had already chosen
+    # over naming the pull request. The generator reads it rather than fighting it.
+    # …and it reads only the *trailing* parenthesised group, because a subject
+    # like `record: land #5's provenance notation (#96)` cites #5 and resolves
+    # #96. Harvesting every `#N` in the line conflates the two, which the first
+    # draft of this function did.
+    resolved: set[str] = set()
+    for c in ch.commits:
+        tail = re.search(r"\(([#\d,\s/]+)\)\s*$", c["subject"])
+        if tail:
+            resolved |= set(re.findall(r"#?(\d+)", tail.group(1)))
+    resolved = sorted(resolved, key=int)
+    tickets = ", ".join(f"#{n}" for n in resolved) or "no ticket"
+    return f"{top}: {prose} (#{ch.pr})\n\nResolves {tickets}.\n\n{gist}\n"
 
 
 def gate_type(ch: Change) -> list[Finding]:
@@ -393,7 +444,8 @@ def resolve(ch: Change, findings: list[Finding], waivers: list[Waiver]) -> list[
 
 
 def verdict(findings: list[Finding]) -> tuple[int, str]:
-    live = [f for f in findings if f.waived_by is None]
+    live = [f for f in findings if f.waived_by is None
+            and not (f.gate == "type" and f.code not in LIVE_CODES)]
     if any(f.severity == BLOCKING for f in live):
         return 1, "BLOCKED"
     if any(f.severity == UNDECIDABLE for f in live):
