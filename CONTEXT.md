@@ -88,12 +88,42 @@ _Avoid_: Study plan, coursework
 
 ### Delegated inquiry
 
+**Prospect**:
+A notion in flight — a direction the programme could take, recorded because it is worth keeping
+and not yet worth acting on. Either a *proto-conjecture* (a notion not yet defensible enough to
+post to the belt graph) or a *proto-Inquiry* (a line of investigation with no statable frozen
+Question), or both at once. Deliberately incomplete, and asserted of nothing: a Prospect is never
+a claim, carries no warrant, and obliges the programme to nothing. Filing one is free and open to
+anyone — Noah, an agent, or an outsider.
+_Avoid_: Seed, idea, lead, hunch, backlog item
+
+<!-- "Seed" is barred here specifically: it is reserved for the mathematical sense already defined
+     on Run, in this same section — "the seed is drawn per run and recorded". -->
+
+<!-- The backlog is #109, open permanently; entries are its comments and its body is the
+     authoring format. A Prospect precedes an Inquiry, which is why it is first in this section. -->
+
+**Conjecture**:
+A node posted at a distance from the Hard Core and the admitted Protective Belt because Noah
+suspects it is true and cannot yet show it. Noah's prose, by hand, always — agents may propose
+one as a Prospect and may never post one. It is the unit that holds a token allocation, a spend
+ceiling, a stall tolerance, and the formal system its Inquiries reason into. Retiring one is his
+alone: a conjecture is a belief he holds, so a silent retirement would leave him believing what
+the programme has abandoned.
+_Avoid_: Hypothesis, direction, line, thesis, guess
+
+<!-- The Hard Core is premise-only in a conjecture's system: it may support a derivation and may
+     never be its goal. A result that bears on the core is one whose admission makes the system
+     inconsistent, which is how #61 mechanises the Negative Heuristic's mandatory return. -->
+
 **Inquiry**:
 A single line of empirical investigation delegated to agents, and the unit in which the
-programme buys evidence: a frozen Question, an Adequacy Criterion, a search budget, a signed
-continue/return/retire rule, and an environment requirement. Persistent and stateful — an
-Inquiry may lie dormant for years and resume where it stopped. It is the machinery by which a
-Protective Belt claim is earned or refused, and is never itself such a claim.
+programme buys evidence: a frozen Question, an Adequacy Criterion, and an environment
+requirement. Opened by an agent under a posted Conjecture, whose budget pays for it and whose
+formal system its results enter as axioms. One Inquiry may serve several Conjectures, because an
+axiom is not owned by the system that bought it. Persistent and stateful — an Inquiry may lie
+dormant for years and resume where it stopped. It is the machinery by which a Protective Belt
+claim is earned or refused, and is never itself such a claim.
 _Avoid_: Commission, experiment, study, line, direction, project, task
 
 <!-- Nine states, fixed in #56 and formalised in #62. Non-terminal: Searching, Measuring,
@@ -102,10 +132,11 @@ _Avoid_: Commission, experiment, study, line, direction, project, task
      freeze between Searching and Measuring partitions them. -->
 
 **Question**:
-The empirical matter an Inquiry exists to settle. Frozen when the Inquiry opens and Noah's
-alone — agents search for instruments capable of answering it and may never alter it. A
-*hypothesis* is a falsifiable claim about a Question, committed in advance; an Inquiry may run
-without one.
+The empirical matter an Inquiry exists to settle. Drafted by the agent that opens the Inquiry,
+frozen the moment it opens, and never altered afterwards — the freeze is what matters here, and
+it binds agents absolutely. Reviewed by Noah when the Inquiry returns a result worth
+acknowledging. A *hypothesis* is a falsifiable claim about a Question, committed in advance; an
+Inquiry may run without one.
 _Avoid_: Target, query, goal, objective, research question
 
 **Adequacy Criterion**:
@@ -134,7 +165,8 @@ _Avoid_: Inquiry, trial, condition, arm, variant
 **Run**:
 One execution of an Experiment under an Inquiry — the only one of the three that is produced
 rather than declared, and the only one that leaves a record. It names both axes: the Experiment
-gives it a configuration, the Inquiry gives it a Question and pays for it. What varies between
+gives it a configuration, the Inquiry gives it a Question, and the Conjecture that Inquiry
+serves pays for it. What varies between
 runs of one Experiment is only what that configuration itself declares varies; the seed is drawn
 per run and recorded, never written into the config. Output publishes outside the repository
 and one manifest stays behind — run id, config SHA, seed, output sha256, Drive path.
