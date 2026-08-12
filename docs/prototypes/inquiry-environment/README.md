@@ -13,7 +13,8 @@ python docs/prototypes/inquiry-environment/prototype_tui.py
 - `example/base.digest` — the repo-level pin. **The default for new freezes, and nothing else.**
 - `example/env.lock` — the other file that freezes, beside `config.yaml`.
 - `example/run-manifest.md` — the run manifest, with the `env:` block this ticket adds.
-- `contract.py` — fourteen named refusals across **two** gates.
+- `contract.py` — fourteen named refusals across **two** gates, plus one **hazard**, which
+  is deliberately not a refusal.
 - `prototype_tui.py` — breaks the contract one field at a time, so each refusal can be
   *made to happen* rather than described.
 
@@ -67,8 +68,18 @@ true of results **already recorded**, and silent about the re-run. Under an indi
 re-running an unchanged frozen config next year executes it on a different CUDA, and the
 disagreement has no visible cause. Copying the digest into `env.lock` at freeze makes a
 frozen Inquiry **immune to the tooling track**, which is what freezing was supposed to
-mean. The cost is real and is the thing to decide out loud: a frozen Inquiry never receives
-a security patch, and unfreezing to get one is a new Inquiry.
+mean.
+
+**Ruled on #64, and the ruling dissolved the cost the prototype had raised.** The prototype
+put the trade as: a frozen Inquiry never receives a security patch, so the repository
+accumulates directories pinned to images with known CVEs. Noah's answer was that *an
+Inquiry is a body of work* — so revising or repeating a result is **new work**, and a new
+directory is signal rather than clutter. That reframing removes the security half outright:
+if a revision is always a new Inquiry frozen against a current base, **Mosaic never pulls
+the old image again.** It is a historical record, not a live artifact. The only party who
+ever runs it is a stranger reproducing the old result, which is exactly the defensibility
+the digest exists for. Stated plainly, because it is easy to over-claim: **the contract
+guarantees a stranger can reproduce an old run. It does not promise that we ever will.**
 
 **5. The cache is keyed on the inputs, and the key is a correctness property rather than a
 performance one.** `sha256(base_digest ‖ lock_sha256)`, and nothing else — not the Inquiry,
@@ -87,11 +98,15 @@ disagree. That looks like a defect until you notice the alternative is worse —
 is what converts such a disagreement from mysterious into diagnosable, and it is the only
 place the driver value can live.
 
-**7. The block is written by the runner, never by the job.** A container cannot verify its
-own digest from the inside; a job reporting its own image is reporting a string it was
-handed. The only party that can honestly say what was pulled is the party that pulled it.
-The `/etc/mosaic-env` marker in the base is retained anyway, and the recipe says plainly
-what it is: a **self-report** that catches the accident, not the adversary.
+**7. The block is written by the party that pulled the image, never by the job inside it.**
+A container cannot verify its own digest from the inside; a job reporting its own image is
+reporting a string it was handed. **Which** party pulled does not matter and the refusal
+deliberately does not ask — the CI runner in the cloud and the launch tool on Noah's
+desktop are equally honest reporters, because both are outside the container. Being outside
+is the whole property. (Noted on #64, where Noah's practice is to run locally *in* a
+container: that is an attested run, not a hand-entered one.) The `/etc/mosaic-env` marker
+in the base is retained anyway, and the recipe says plainly what it is: a **self-report**
+that catches the accident, not the adversary.
 
 **8. Containerisation on the self-hosted tier is enforced at publish, not at execution —
 and this is the ticket's main structural finding.** The failure to prevent is a result that
@@ -103,6 +118,31 @@ not in the record.** The script still runs. It just cannot become a finding. Thi
 same move #60 made with `config.yaml` — do not police the act, police the artifact the act
 must produce — and it is why `contract.py` has two gates rather than one. The freeze gate
 is cheap and bypassable; the publish gate is the one that holds.
+
+**8b. It holds against the accident and not against the shortcut — and the shortcut is
+allowed, marked.** A manifest is a small text file. Someone who ran bare-metal and wants
+the number in anyway can type the `env:` block by hand, and the gate cannot tell, because
+every field in it is a string the runner would also have written. Premise 17 already pays
+for the answer: once the dispatch App signs as itself, a manifest committed by the App and
+one committed by Noah's account are **different objects in git, visibly and permanently**.
+So the gate never has to detect a forgery — there is nothing to forge, because the mark is
+the author.
+
+**Ruled on #64: hand-entry is accepted, not refused.** Visibility over prohibition, the
+same choice this repository makes everywhere. What the gate does instead is append an
+`environment_unattested` **untestable hazard** to the Inquiry — automatically, so it cannot
+be omitted by the one party with a motive to omit it.
+
+Three things had to hold for that to be the right shape, and they do. **Register does not
+move**: ancestry is intact, `#56` derives Register from ancestry alone, and letting
+authorship touch it would make Register partly declared, which is what `#63` exists to
+prevent. **The hazard is the right existing machinery**: `#9` already rules that an
+untestable hazard is *declared and attaches permanently to every leg the Inquiry earns*,
+which is exactly the behaviour wanted — it travels into the coverage report someone reads
+at a stall. And the overlap is admissible: `#9`'s hazards were written for hazards in the
+*instrument*, this one is in the *record-keeping*, and Noah ruled the overlap acceptable on
+the argument that **record-keeping is instrumentation of a form**, leaning inclusive rather
+than exclusive on a borderline case rather than growing a second mechanism beside the first.
 
 **9. The trust root is the runner, and #58's finding recurs one layer down.** If the runner
 is the only honest reporter of the environment, then the environment guarantee rests on who

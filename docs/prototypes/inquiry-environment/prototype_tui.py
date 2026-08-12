@@ -91,7 +91,19 @@ def desktop_run(lock, man, cfg):
 
 
 def self_reported(lock, man, cfg):
+    """Reported from INSIDE the container. A hand-LAUNCHED containerised run is fine —
+    the launch tool pulled the image, so it is the honest reporter. This is not that."""
     man["env"]["reported_by"] = "job"
+    return lock, man, cfg
+
+
+def hand_entered(lock, man, cfg):
+    """Ran bare-metal, manifest typed by hand, committed by Noah's account.
+
+    ALLOWED. Noah's ruling: visibility over prohibition. The Register does not move —
+    ancestry is intact — and the gate names an untestable hazard that travels with every
+    leg this Inquiry earns.
+    """
     return lock, man, cfg
 
 
@@ -129,7 +141,8 @@ CASES = [
     ("7", "config.yaml froze without env.lock", no_lock_at_freeze, {}),
     ("8", "env.lock committed while still Searching", lock_before_config, {}),
     ("d", "ran on the desktop, no container", desktop_run, {}),
-    ("s", "env block written by the job", self_reported, {}),
+    ("h", "ran bare-metal, manifest hand-entered", hand_entered, {"authored_by": "noah"}),
+    ("s", "env block written from inside the container", self_reported, {}),
     ("b", "base bumped between freeze and measurement", base_drift, {}),
     ("c", "cache hit returned a foreign image", stale_cache, {}),
     ("n", "no observed driver", drop_driver, {}),
@@ -149,12 +162,15 @@ def run(key: str) -> None:
     print(f"CASE {key} — {label}")
     print("=" * 76)
 
-    freeze = contract.check_freeze(lock, cfg, **flags)
+    freeze_flags = {k: v for k, v in flags.items() if k == "cache_key_inputs"}
+    publish_flags = {k: v for k, v in flags.items() if k != "cache_key_inputs"}
+
+    freeze = contract.check_freeze(lock, cfg, **freeze_flags)
     print(contract.render(
         freeze, label="Freeze commit: config.yaml + env.lock.", subject="freeze 172"))
 
     if lock:
-        publish = contract.check_manifest(man, lock)
+        publish = contract.check_manifest(man, lock, **publish_flags)
         print(contract.render(
             publish,
             label="Publish: the run enters the record, or it does not.",

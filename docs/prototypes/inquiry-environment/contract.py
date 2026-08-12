@@ -90,10 +90,11 @@ REFUSALS = {
         "producing a result."
     ),
     "ENV_SELF_REPORTED": (
-        "The environment block was written by the job rather than by the runner. A "
+        "The environment block was written by the job, from inside the container. A "
         "container cannot verify its own digest from the inside, so a job reporting its "
-        "own image is reporting a string it was handed. The only party that can honestly "
-        "say what was pulled is the party that pulled it."
+        "own image is reporting a string it was handed. The honest reporter is THE PARTY "
+        "THAT PULLED — the CI runner in the cloud, the launch tool on the desktop. Which "
+        "one it is does not matter; being outside the container does."
     ),
     "ENV_DRIFT": (
         "The manifest's base digest is not the one env.lock froze. For a run in Measuring "
@@ -127,9 +128,26 @@ DIGEST = re.compile(r"^sha256:[0-9a-f]{64}$")
 PINNED_PACKAGE = re.compile(r"^[A-Za-z0-9._-]+==[^\s]+\s+--hash=sha256:[0-9a-f]{64}$")
 
 
+# A hazard is not a refusal. #9: an untestable hazard is DECLARED and attaches permanently
+# to every leg the Inquiry earns — a hazard you must test is a cost, a hazard you must name
+# is not, which is what keeps naming truthful. This one is appended by the gate rather than
+# written by anyone, so it cannot be forgotten by the party with the motive to forget it.
+HAZARDS = {
+    "environment_unattested": (
+        "The manifest was hand-entered rather than written by the party that pulled the "
+        "image, so no attested record exists of what this run executed on. Ancestry is "
+        "intact and the Register is unaffected — #56 derives Register from ancestry and "
+        "#63 exists to stop anything else moving it — but the environment claim rests on "
+        "a person's word. Attaches to every leg this Inquiry earns, and travels into the "
+        "coverage report someone reads at a stall."
+    ),
+}
+
+
 @dataclass
 class Verdict:
     refusals: list[tuple[str, str]] = field(default_factory=list)
+    hazards: list[str] = field(default_factory=list)
 
     @property
     def ok(self) -> bool:
@@ -137,6 +155,9 @@ class Verdict:
 
     def refuse(self, code: str, detail: str = "") -> None:
         self.refusals.append((code, detail))
+
+    def hazard(self, name: str) -> None:
+        self.hazards.append(name)
 
 
 def cache_key(base_digest: str, lock_sha: str) -> str:
@@ -199,7 +220,13 @@ def check_freeze(
 # Gate 2 — publish. The load-bearing one.
 # --------------------------------------------------------------------------
 
-def check_manifest(manifest: dict, lock: dict, *, state: str = "Measuring") -> Verdict:
+def check_manifest(
+    manifest: dict,
+    lock: dict,
+    *,
+    state: str = "Measuring",
+    authored_by: str = "app",
+) -> Verdict:
     v = Verdict()
     env = manifest.get("env")
 
@@ -209,6 +236,14 @@ def check_manifest(manifest: dict, lock: dict, *, state: str = "Measuring") -> V
 
     if env.get("reported_by") == "job":
         v.refuse("ENV_SELF_REPORTED")
+
+    # Hand-entered, and ALLOWED. The gate does not refuse it and does not touch the
+    # Register — it names a hazard. Authorship is what makes hand-entry visible, and #17
+    # already pays for that: once the App signs as itself, a manifest committed by Noah's
+    # account is a different object in git, permanently, in ancestry. The gate never has
+    # to detect a forgery, because there is nothing to forge — the mark is the author.
+    if authored_by != "app":
+        v.hazard("environment_unattested")
 
     frozen = str((lock.get("base") or {}).get("digest") or "")
     ran = str(env.get("base_digest") or "")
@@ -228,14 +263,19 @@ def check_manifest(manifest: dict, lock: dict, *, state: str = "Measuring") -> V
 
 def render(v: Verdict, *, label: str, subject: str) -> str:
     if v.ok:
-        return f"ACCEPTED — {subject}\n  {label}"
-    lines = [
-        f"REFUSED — {subject}",
-        f"  {len(v.refusals)} refusal(s). {label}",
-        "",
-    ]
-    for code, detail in v.refusals:
-        lines.append(f"  [{code}]{(' ' + detail) if detail else ''}")
-        lines.append(f"      {REFUSALS[code]}")
+        lines = [f"ACCEPTED — {subject}", f"  {label}"]
+    else:
+        lines = [
+            f"REFUSED — {subject}",
+            f"  {len(v.refusals)} refusal(s). {label}",
+            "",
+        ]
+        for code, detail in v.refusals:
+            lines.append(f"  [{code}]{(' ' + detail) if detail else ''}")
+            lines.append(f"      {REFUSALS[code]}")
+            lines.append("")
+    for name in v.hazards:
         lines.append("")
+        lines.append(f"  + untestable hazard appended to the Inquiry: {name}")
+        lines.append(f"      {HAZARDS[name]}")
     return "\n".join(lines)
