@@ -199,22 +199,43 @@ The commitment naming a set of Runs before any run in it produces a number — t
 configuration's SHA, the rule the seeds are drawn by, and the attrition policy. Its appearance
 is an Inquiry's second freeze event: the appearance of `config.yaml` freezes the instrument,
 the appearance of the declaration freezes the measurement. Declared, never produced, and never
-edited once committed. It carries no register, no metric and no decision rule — the first is
-derived and the other two are the charter's.
+edited once committed — a defective one is refused where it is committed, and an unwanted one
+is Withdrawn rather than corrected. It carries no register, no metric and no decision rule —
+the first is derived and the other two are the charter's.
 _Avoid_: Sweep, batch, campaign, preregistration, protocol
 
 <!-- #63. It exists because ancestry is a property of one result while the leak lives in the
      siblings never committed: twenty seeds run and one manifest published passes every
      ancestry check, and the data chose the result. Declaring the set is what makes an absence
-     visible — six declared and one published is a refusal rather than a silence. -->
+     visible — six declared and one published is a refusal rather than a silence.
+     #181 gave it a gate at the declaring commit, which is the only reader positioned to
+     see an edit: the register derives from the declaration's text as it stands, so an
+     amended master seed retroactively draws whichever seed was published. -->
+
+**Withdrawal**:
+The exit for a Run-Set Declaration that never dispatched. A committed file beside the
+declaration, naming it; the set then closes with no Runs, and the next declaration may follow
+it. Never an edit and never a deletion — the declaration and the withdrawal both stay, because
+a withdrawal is a link in the Run-Set Sequence rather than an escape from it. Unavailable once
+the set has recorded any account, carries no reason, and attaches a `withdrawn_unrun` hazard
+to every leg the Inquiry earns, always and without asking.
+_Avoid_: Cancellation, retraction, abandonment, void, rollback
+
+<!-- #181, on the dead end #182 left: a set with no Runs can never close, so its Inquiry
+     admits no successor, and the alternatives were deleting the declaration — erasing the
+     sequence — or buying Runs nobody wants. The hazard is unconditional because the only
+     exemption available would rest on a claim that nothing ran, and a claim of absence is
+     what #63 established cannot be verified. Agents may withdraw: it says nothing about a
+     hypothesis, so #60's custody argument does not reach it, and the hazard is the price. -->
 
 **Run-Set Sequence**:
 The Run-Set Declarations in one Inquiry, in order, each naming the one before it. A line and
 never a tree: a declaration names the most recent declaration in the Inquiry and that
-predecessor must have closed, so simultaneously declared sets cannot stand in for the siblings
-a declaration exists to make visible. The sequence carries no register of its own and moves no
-result's — what it carries is the shape of each link, and a link whose predecessor did not pass
-attaches a `redeclared_without_pass` hazard to every leg the result earns.
+predecessor must have closed — by its own accounts, or by Withdrawal where it has none — so
+simultaneously declared sets cannot stand in for the siblings a declaration exists to make
+visible. The sequence carries no register of its own and moves no result's — what it carries
+is the shape of each link, and a link whose predecessor did not pass attaches a
+`redeclared_without_pass` hazard to every leg the result earns.
 _Avoid_: Chain, series, family, run of runs, campaign
 
 <!-- #182. Two declarations against one frozen instrument are each individually confirmatory
