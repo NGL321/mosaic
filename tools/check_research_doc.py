@@ -52,7 +52,8 @@ DOCS = ROOT / "docs" / "research"
 
 EXIT_OK, EXIT_FAILED, EXIT_TOOL = 0, 1, 2
 
-FRONT_MATTER_KEYS = ["ticket", "map", "date", "kind", "tier", "session", "sources"]
+FRONT_MATTER_KEYS = ["ticket", "map", "date", "kind", "tier", "session", "sources",
+                     "debt_source", "debt_verification"]
 KINDS = {"survey", "verification", "question", "revision"}
 
 # The closed vocabulary a sub-question's verdict is stated in.
@@ -353,7 +354,7 @@ def _negative_space(d: Doc) -> tuple[bool, str]:
 
 def _debt_filed(d: Doc) -> tuple[bool, str]:
     """
-    Every debt item is a filed `debt:open` issue, and the front matter mirrors the numbers.
+    Every debt item is a filed issue, declares its kind, and is mirrored in front matter.
 
     The prototype accepted the word `unfiled` and a document passed by writing it five
     times, which is the gate PROTOCOL.md §5 argues is worse than none. There is no escape
@@ -361,27 +362,40 @@ def _debt_filed(d: Doc) -> tuple[bool, str]:
     debt has left work undone rather than hit a limitation. This is also what keeps the
     tracker the only place debt is ever checked — the front matter mirrors, never adds.
 
-    The hatch stayed open under a different spelling for one more round: any `#\\d+` counted,
+    The hatch stayed open under a different spelling for one more round: any `#<n>` counted,
     including the document's own ticket, so *"someone should re-read the #4 survey"* in a
-    document resolving #4 read as filed. A document's own ticket is excluded here. What is
-    still not checked is the semantic half — that the number is an issue, that it is open,
-    that it carries `debt:open` — and §5 of the contract now says so rather than implying CI
-    covers it.
+    document resolving #4 read as filed. A document's own ticket is excluded here.
+
+    #189 split the ledger into **Source Debt** and **Verification Debt**, so an item must
+    now say which it is, and the two front-matter keys mirror separately — a Source Debt
+    declared under `debt_verification` is caught. What is still not checked is the semantic
+    half: that the number is an issue, that it is open, and that its label agrees with the
+    declared kind. The kind is therefore self-declared, and what stops a mislabelled one is
+    not this check but custody — an agent may file a Source Debt and may only *propose* a
+    Verification Debt, so the kind CI cannot adjudicate is the one it never has to.
     """
-    s = d.section_like("verification debt", "debt")
+    s = d.section_like("debt", "verification debt")
     if s is None:
-        return False, "no Verification Debt section (write `None.` if there is none)"
+        return False, "no Debt section (write `None.` if there is none)"
     items = [ln for ln in s.body.split("\n") if RE_ITEM.match(ln)]
-    declared = sorted(int(n) for n in re.findall(r"\d+", d.front.get("debt", "")))
     own = {int(n) for n in re.findall(r"\d+", d.front.get("ticket", ""))}
+    declared = {
+        kind: sorted(int(n) for n in re.findall(r"\d+", d.front.get(key, "")))
+        for kind, key in (("source", "debt_source"), ("verification", "debt_verification"))
+    }
 
     def filed(line: str) -> set[int]:
         return {int(n) for n in RE_ISSUE.findall(line)} - own
 
+    def kind_of(line: str) -> str | None:
+        m = re.search(r"\b(source|verification)\b", line, re.I)
+        return m.group(1).lower() if m else None
+
     if not items:
-        if "none." in s.body.strip().lower()[:32] and not declared:
+        if "none." in s.body.strip().lower()[:32] and not any(declared.values()):
             return True, "no debt, declared"
         return False, "debt section present but nothing itemised"
+
     unfiled = [ln for ln in items if not filed(ln)]
     if unfiled:
         # Two causes, two messages. #50 retrofits the three documents on `main`, none of
@@ -395,10 +409,25 @@ def _debt_filed(d: Doc) -> tuple[bool, str]:
         else:
             why = "name no issue other than this document's own ticket"
         return False, f"{len(unfiled)}/{len(items)} debt items {why} — file them first"
-    cited = sorted(set().union(*(filed(ln) for ln in items)))
-    if declared != cited:
-        return False, f"front matter debt={declared or '[]'} does not mirror the section {cited}"
-    return True, f"{len(items)} items, all filed: {cited}"
+
+    untyped = [ln for ln in items if kind_of(ln) is None]
+    if untyped:
+        return False, (f"{len(untyped)}/{len(items)} debt items declare no kind — "
+                       "each must say Source or Verification")
+
+    cited: dict[str, set[int]] = {"source": set(), "verification": set()}
+    for ln in items:
+        cited[kind_of(ln)] |= filed(ln)
+
+    for kind in ("source", "verification"):
+        if declared[kind] != sorted(cited[kind]):
+            key = f"debt_{kind}"
+            return False, (f"front matter {key}={declared[kind] or '[]'} does not mirror "
+                           f"the section {sorted(cited[kind])}")
+
+    total = sorted(cited["source"] | cited["verification"])
+    return True, (f"{len(items)} items, all filed: source={sorted(cited['source'])} "
+                  f"verification={sorted(cited['verification'])}" if total else "no debt")
 
 
 def _no_hidden_record(d: Doc) -> tuple[bool, str]:
@@ -523,7 +552,7 @@ CHECKS: list[Check] = [
     Check("R3", "Verdict first, and stated", "blocking", _verdict_first),
     Check("R4", "Every sub-question carries a verdict", "blocking", _sub_question_verdicts),
     Check("R5", "What this does not establish", "blocking", _negative_space),
-    Check("R6", "Every debt item is a filed issue", "blocking", _debt_filed),
+    Check("R6", "Every debt item is filed and declares its kind", "blocking", _debt_filed),
     Check("R7", "No record content in HTML comments", "blocking", _no_hidden_record),
     Check("R8", "Proposals section, `None.` if none", "blocking", _proposals),
     Check("R9", "Primary-source appendix, all linked", "blocking", _appendix_sources),

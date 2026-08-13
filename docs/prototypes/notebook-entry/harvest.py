@@ -257,7 +257,8 @@ def issue_notes(day: str, used: dict[str, int]) -> list[Note]:
         if created != day and created != _next_day(day):
             continue
         labels = {lb["name"] for lb in it["labels"]}
-        kind = Kind.DEBT if ("custody:deferred" in labels or "debt:open" in labels) else Kind.ACTIVITY
+        debt_labels = {"custody:deferred", "debt:source", "debt:verification"}
+        kind = Kind.DEBT if (labels & debt_labels) else Kind.ACTIVITY
         if "debt:discharged" in labels:
             kind = Kind.MILESTONE
         cites = (Cite("issue", f"#{it['number']}", f"{GH}/issues/{it['number']}"),)
