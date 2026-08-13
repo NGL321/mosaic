@@ -1,0 +1,31 @@
+# PROTOTYPE — inquiries/172-formation-signature-grokking/runs/2026-08-20-s3f9c1.withdrawn.yaml
+#
+# THE WITHDRAWAL. The exit for a declared set that never dispatched.
+#
+# #182 requires a declaration's predecessor to have CLOSED, and nothing closes a set with
+# no Runs — the honest account is SET_INCOMPLETE, a downgrade over manifests that will
+# never exist. Without this file the Inquiry's runs/ is a dead end, and the two remaining
+# exits both cost something real: delete the declaration and erase the Run-Set Sequence,
+# or buy Runs nobody wants in order to close a set nobody wants.
+#
+# It is a NEW FILE, not an edit and not a deletion. A Run-Set Declaration is never edited
+# once committed, and a deletion erases the sequence the record exists to carry. Absence is
+# not a record — the whole of #63 in one line.
+#
+# It is a LINK IN THE SEQUENCE, not an escape from it. The withdrawn set stays in runs/
+# forever and the next declaration follows it. What withdrawal buys is closure, never
+# disappearance.
+#
+# There is no `reason:` field. #182 refused one on the declaration and the argument is the
+# same here: prose is an argument's front door, and the cause is visible in what follows.
+
+withdraws: s3f9c1
+inquiry: 172
+
+# No signature. #60 found nothing in an Inquiry is signed, because custody follows the
+# hypothesis and a withdrawal says nothing about one.
+#
+# No claim that nothing ran, either. The file cannot make that claim credible — a claim of
+# absence is exactly what #63 established cannot be verified — so it does not make it. The
+# gate checks the committed accounts instead, and attaches `withdrawn_unrun` to every
+# withdrawal without asking.

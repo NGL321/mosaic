@@ -1,0 +1,27 @@
+# PROTOTYPE — inquiries/172-formation-signature-grokking/runs/2026-08-21-w4a1d8.declared.yaml
+#
+# THE SUCCESSOR. Set s3f9c1 closed without clearing the decision rule; this is the second
+# attempt, and it says so before it runs rather than after.
+#
+# `follows:` is #182's field and the whole of the sequence mechanism. It reads nothing but
+# the directory listing and one name, which is why it is the cheapest of #181's five
+# defects and the one most obviously wanting a commit-time home: the point of the field is
+# that the declaring party commits to being the second attempt IN ADVANCE, and a refusal
+# arriving after the set has run is a refusal arriving after the fact it was meant to fix.
+#
+# There is no `reason:` field. The cause of a re-declaration is derivable from the
+# predecessor's own attestations, and a prose field is an argument's front door.
+
+set_id: w4a1d8
+inquiry: 172
+follows: s3f9c1
+config_sha: sha256:8f7e6d5c4b3a29180f7e6d5c4b3a29180f7e6d5c4b3a29180f7e6d5c4b3a2918
+
+draw:
+  rule: sha256-stream
+  master_seed: "172:w4a1d8"
+  count: 6
+
+attrition:
+  policy: next-from-rule
+  max_replacements: 2

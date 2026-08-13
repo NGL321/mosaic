@@ -1,0 +1,42 @@
+# PROTOTYPE — the kind-(1) form: an Inquiry over a dataset years older than itself.
+#
+# Nothing in this repository can precede an Allen Institute release from 2019. Ancestry
+# against the data is not weak here, it is MEANINGLESS — there is no commit that could be
+# an ancestor of bytes published before the repository existed.
+#
+# You cannot make old data new. You can manufacture a portion that has not been seen, and
+# that is the whole of the second form: the hold-out restores the ordering the register
+# needs, by construction rather than by anyone's word. The search and adequacy phase touch
+# only the exploratory portion; the discriminating measurement runs on records no run has
+# ever read.
+#
+# The split is derived by the same trick as the seed draw, pointed at records instead of
+# runs — a function of a committed salt, recomputable by anyone and choosable by nobody.
+# An enumerated split would be a choice, and a choice made by someone who has already seen
+# the data is the exploratory move wearing a confirmatory label.
+
+set_id: p7b2e4
+inquiry: 181
+config_sha: sha256:3a29180f7e6d5c4b3a29180f7e6d5c4b8f7e6d5c4b3a29180f7e6d5c4b3a2918
+
+draw:
+  rule: sha256-stream
+  master_seed: "181:p7b2e4"
+  count: 4
+
+attrition:
+  policy: next-from-rule
+  max_replacements: 1
+
+dataset:
+  source: allen-institute/visual-coding-2p
+  # The dataset is pinned the way the base image is. Unpinned, it is a tag rather than a
+  # digest — one layer up from #64's BASE_BY_TAG — and the bytes the hold-out was computed
+  # over could be repointed underneath the result.
+  checksum: sha256:c4b3a29180f7e6d5c4b3a29180f7e6d5c4b3a29180f7e6d5c4b3a29180f7e6d5
+  split:
+    rule: sha256-mod
+    salt: "181:p7b2e4:holdout"
+    fraction: 0.25
+  # record_ids come from the dataset's own manifest and are not copied here — the
+  # prototype's driver supplies them. What has to be committed is the RULE.
