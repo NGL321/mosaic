@@ -5,10 +5,28 @@ syllabus — the mathematics the programme's own results demand, in the order th
 
 ## Where the ledger is
 
-**The ledger is the issue tracker.** Verification Debt is a GitHub issue labelled
-[`debt:open`](https://github.com/NGL321/mosaic/issues?q=is%3Aissue+label%3Adebt%3Aopen), and
-that issue is the source of truth. There is no ledger file in this repository, by decision —
-see [#5](https://github.com/NGL321/mosaic/issues/5).
+**The ledger is the issue tracker.** A debt item is a GitHub issue, and that issue is the
+source of truth. There is no ledger file in this repository, by decision — see
+[#5](https://github.com/NGL321/mosaic/issues/5).
+
+**Two kinds, and the Curriculum reads only one of them.**
+[#189](https://github.com/NGL321/mosaic/issues/189) split the original single `debt:open`
+label, which held four populations of which only a fifth were Verification Debt:
+
+| Label | Kind | Debtor | Discharged by |
+|---|---|---|---|
+| [`debt:verification`](https://github.com/NGL321/mosaic/issues?q=is%3Aissue+label%3Adebt%3Averification+-label%3Adebt%3Adischarged) | **Verification Debt** — a derivation step Noah cannot defend unaided | Noah | learning, on this Curriculum |
+| [`debt:source`](https://github.com/NGL321/mosaic/issues?q=is%3Aissue+label%3Adebt%3Asource+-label%3Adebt%3Adischarged) | **Source Debt** — an assertion the record has not sourced | an agent | search, producing a **Source** |
+
+The labels are **not exclusive**: an assertion may be both unsourced and undefended, and
+carries both. The Curriculum schedules off `debt:verification` alone — which is what
+`CONTEXT.md`'s definition always said and what the single label never held.
+
+**What is not debt.** An **open problem** nobody can discharge is a Prospect, not a debt; an
+**unreproduced external result** is a Source plus a reproduction Inquiry; and work whose
+discharge is a *measurement* rather than a document is a task. All three left the ledger in
+#189. The test is *is there a debtor and a discharge procedure* — not whether the record is
+uncomfortable about something.
 
 The reasoning, briefly: a debt item is already an issue in everything but name. It blocks
 other work, it is discharged by someone doing something, it wants a thread, and it wants to
@@ -18,7 +36,8 @@ to keep in sync with the first, and the failure mode the design was chosen again
 bookkeeping heavy enough to be abandoned by month two.
 
 ```console
-gh issue list --label debt:open
+gh issue list --label debt:verification            # what Noah owes — the Curriculum's queue
+gh issue list --label debt:source                  # what an agent owes
 ```
 
 ## Why `open.md` exists anyway
@@ -49,15 +68,18 @@ That requires two things, both of them artifacts:
 1. A document in `docs/research/` that does the reading.
 2. The commit that promotes the **Provenance Tier** badge at the claim site.
 
-Then **remove `debt:open`, add `debt:discharged`**, close the issue, and cite the SHA that
-promoted the tier. The issue is retained, never deleted — a discharged debt is a record of
-what the programme did not know and when, which is the whole point of keeping it.
+Then **add `debt:discharged`**, close the issue, and cite the SHA that promoted the tier.
+**The kind label stays** — a discharged debt is a record of what the programme did not know
+and when, which is the whole point of keeping it, and that record is worth nothing if it no
+longer says *which* debt it was. The issue is retained, never deleted.
 
-**The label is the axis, not the issue state.** `snapshot_debt.py` groups on the label and
-cross-checks the state against it; an issue that is closed but still labelled `debt:open`,
-or that carries both labels, is reported as a bookkeeping error rather than quietly filed
-under whichever heading its state implies. Leaving both labels on is the easy mistake, which
-is why the instruction above says *remove* rather than *add*.
+**The kind is one axis and the state is another.** A bare `debt:source` or
+`debt:verification` is open; the same label beside `debt:discharged` is discharged. This
+replaces the old `debt:open` / `debt:discharged` pair, which spent one axis on a state and so
+had none left for the kind — the whole defect #189 was filed on. `snapshot_debt.py` groups on
+the kind and cross-checks `debt:discharged` against issue state; an issue that is closed and
+not discharged, or discharged and open, is reported as a bookkeeping error rather than quietly
+filed under whichever heading its state implies.
 
 ## Provenance Tiers
 

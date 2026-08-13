@@ -78,8 +78,8 @@ written:
    fail to shrink.
 
    **A deferred obligation is not Verification Debt**, in exactly the sense §5 already
-   distinguishes. Verification Debt (`debt:open`) is a derivation step the *programme* has
-   not checked; it is discharged by learning and outlives the charter by construction. A
+   distinguishes. Verification Debt (`debt:verification`) is a derivation step the *programme*
+   has not checked; it is discharged by learning and outlives the charter by construction. A
    deferred custody obligation is a *record-keeping* gap — a missing defence or session
    citation on an authored file — and it dies at the charter. Both live in issues; only the
    second blocks `1.0.0`.
@@ -109,7 +109,7 @@ load-bearing. So the tag is **computed, not chosen**.
 |---|---|---|
 | 1 | **A closed Hard Core** | the Hard Core stated as a finite list, with the Negative Heuristic binding on it from that point. Closed, not complete: it may be *wrong*, but it may not be *pending*. |
 | 2 | **A thin Protective Belt** | at least one rung, carrying its falsifier in Noah's own words (§5). Not the whole belt — one rung worth testing. |
-| 3 | **Restatement-level grasp of every part** | the **competence floor** (§5), declared: an unaided, intuitive restatement of every aspect of the programme. **Rigour is not required here.** What is missing below is Verification Debt (`debt:open`), scheduled through the Curriculum, which by construction outlives the charter. Open debt does not block the charter; open `custody:deferred` does. |
+| 3 | **Restatement-level grasp of every part** | the **competence floor** (§5), declared: an unaided, intuitive restatement of every aspect of the programme. **Rigour is not required here.** What is missing below is Verification Debt (`debt:verification`), scheduled through the Curriculum, which by construction outlives the charter. Open debt does not block the charter; open `custody:deferred` does. |
 | 4 | **An operational repository** | a restore path demonstrated **by restoring**, not by existing; and the programme's routine tasks runnable without improvisation. Nothing wider than those two things. |
 | 5 | **A first experiment, designed and executable** | the experiment names the rung it tests, and the toolchain runs it end to end at least once, on trivial input if need be. Its **results are not required**. |
 | 6 | **A public work product** | not new: §5's warrant table puts a public, human-authored deliverable on every MAJOR, and ratification is `core:`. An essay stating the programme and the direction intended for it satisfies this. |
@@ -429,9 +429,13 @@ root assertion about Noah is circular.
 
 - Defence terminates **at the floor**, not at first principles.
 - Whatever a derivation needs from below the floor is **Verification Debt** — filed as a
-  `debt:open` issue and discharged the way #5 settled it: a document in `docs/research/`
-  plus the commit promoting the tier. It is not a custody failure, and it does not block the
-  charter.
+  `debt:verification` issue and discharged the way #5 settled it: a document in
+  `docs/research/` plus the commit promoting the tier. It is not a custody failure, and it
+  does not block the charter. An assertion the record has simply never *sourced* is a
+  different debt with a different debtor — **Source Debt** (`debt:source`), owed by an agent
+  and discharged by search; the two were one label until
+  [#189](https://github.com/NGL321/mosaic/issues/189) separated them, and only this one is
+  measured against the floor.
 - Until the floor is declared, the defence obligation is **undecidable rather than
   satisfied**. The deficiency reports itself instead of being papered over.
 
