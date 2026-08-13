@@ -175,13 +175,51 @@ _Avoid_: Experiment, job, trial, iteration
 <!-- One Run is several CI jobs: #58's checkpoint-and-resume, forced by GITHUB_TOKEN's
      24-hour expiry, resumes as a fresh job. A job is a dispatch event, not a unit of evidence. -->
 
+**Run-Set Declaration**:
+The commitment naming a set of Runs before any run in it produces a number — the frozen
+configuration's SHA, the rule the seeds are drawn by, and the attrition policy. Its appearance
+is an Inquiry's second freeze event: the appearance of `config.yaml` freezes the instrument,
+the appearance of the declaration freezes the measurement. Declared, never produced, and never
+edited once committed. It carries no register, no metric and no decision rule — the first is
+derived and the other two are the charter's.
+_Avoid_: Sweep, batch, campaign, preregistration, protocol
+
+<!-- #63. It exists because ancestry is a property of one result while the leak lives in the
+     siblings never committed: twenty seeds run and one manifest published passes every
+     ancestry check, and the data chose the result. Declaring the set is what makes an absence
+     visible — six declared and one published is a refusal rather than a silence. -->
+
+**Run-Set Sequence**:
+The Run-Set Declarations in one Inquiry, in order, each naming the one before it. A line and
+never a tree: a declaration names the most recent declaration in the Inquiry and that
+predecessor must have closed, so simultaneously declared sets cannot stand in for the siblings
+a declaration exists to make visible. The sequence carries no register of its own and moves no
+result's — what it carries is the shape of each link, and a link whose predecessor did not pass
+attaches a `redeclared_without_pass` hazard to every leg the result earns.
+_Avoid_: Chain, series, family, run of runs, campaign
+
+<!-- #182. Two declarations against one frozen instrument are each individually confirmatory
+     and the sequence may still be a search, because only the seeds can have changed. The count
+     was always in the record — every declaration is committed — so nothing needed a third
+     freeze level; what was missing was a reader. Whether a sequence *is* a search is Noah's
+     reading at acknowledgement and no agent's: the check derives the shape and never a verdict. -->
+
 **Register**:
-Which of two modes a result was produced in. *Confirmatory* if its metric and decision rule
-are ancestors of the data they judge; *exploratory* otherwise. Exploratory results are
-first-class in the record and barred from the Protective Belt; their only route in is to
-become the committed hypothesis of a new Inquiry. A property of a result, never of an
-Inquiry — one Inquiry ordinarily produces both.
+Which of two modes a result was produced in. *Confirmatory* if the run set it belongs to was
+declared before any run in that set produced a number; *exploratory* otherwise. Exploratory
+results are first-class in the record and barred from the Protective Belt; their only route in
+is to become the committed hypothesis of a new Inquiry. A property of a **declared set** of
+Runs — never of one Run, which cannot see whether its siblings were named in advance, and never
+of an Inquiry, which ordinarily produces both. Derived and stored nowhere: a pure function of
+committed text, rendered into the coverage report and the Lab Notebook entry and written into
+`inquiries/` never.
 _Avoid_: Preregistered, post-hoc, mode, class, tier
+
+<!-- #56 derived it from ancestry rather than declaration; #63 moved what it attaches to up one
+     level, because ancestry orders commits and never a commit against the data. #182 left it
+     there: the second set against one frozen instrument was declared before its own data too,
+     so it is confirmatory, and what the sequence is worth is carried by the Run-Set Sequence
+     instead of folded into a word that would then mean two things. -->
 
 ### Research substance
 
