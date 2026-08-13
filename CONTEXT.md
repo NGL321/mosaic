@@ -49,6 +49,25 @@ A logged step in a claim's derivation that Noah cannot yet defend unaided. Disch
 not by argument.
 _Avoid_: TODO, gap, caveat
 
+**Source**:
+One piece of external literature, at a fixed version, together with the claims Mosaic has taken
+from it. External evidence **steers and never legs**: **Register** is derived from ancestry, and
+Mosaic has no ancestry over another programme's data, so a Source can never be confirmatory — by
+construction rather than by policy. Warrant is generated, never received; the route to a leg is
+**reproduction**, which is an Inquiry and produces a *new* claim rather than promoting this one,
+so the record shows that Mosaic checked rather than trusted. Each claim is held twice — verbatim
+and in this repository's own vocabulary — and is frozen at admission, a poor rendering being
+superseded by another claim and never edited.
+_Avoid_: Citation, reference, paper, literature, prior work, testimony
+
+<!-- Lives in `literature/author-year-slug/`, a sibling of `inquiries/` and `conjectures/`;
+     `literature/README.md` holds the rest. Fixed in #167, which also found that the instrument
+     a paper supplies needs no Source at all — an Adequacy Criterion is blind to an instrument's
+     provenance, and that blindness is where the saving actually comes from. The reading of a
+     Source is machine-produced until Noah reads the paper, so its Provenance Tier is derived
+     from the sourcing debt's state rather than stored; the debt kinds themselves are being
+     separated on the founding-charter map. -->
+
 **Lab Notebook**:
 The public, dated audit trail of the programme's process, living in this repo — in effect a rich
 commit history. Entries are largely generated — by working sessions, agent task completion, and
