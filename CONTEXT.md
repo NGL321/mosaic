@@ -49,6 +49,23 @@ A logged step in a claim's derivation that Noah cannot yet defend unaided. Disch
 not by argument.
 _Avoid_: TODO, gap, caveat
 
+**Source Debt**:
+An assertion in the record that has not been sourced. Discharged by producing a **Source** — so the
+debtor is an agent and the work is search, where Verification Debt's debtor is Noah and the work is
+learning. The two are the only kinds of debt the ledger holds, and they are **not exclusive**: one
+assertion may be both unsourced and undefended, and carries both labels. A **null result discharges
+it too, and is its most valuable output** — that no such source exists means the assertion was
+confabulated, and it is struck rather than sourced.
+_Avoid_: Citation debt, unread, missing reference
+
+<!-- Split from `Verification Debt` in #189, which surveyed the single `debt:open` label and found
+     four populations under it, only a fifth of them Verification Debt as defined above. What left
+     the ledger entirely: **open problems** (nobody owes them and nobody can discharge them — they
+     are Prospects), **unreproduced external results** (a Source plus a reproduction Inquiry, which
+     produces a *new* claim rather than repairing this one), and six **tasks** whose discharge is a
+     measurement and so yields no document. The test that expels them is *is there a debtor and a
+     discharge procedure*; the test that separates the two survivors is *who owes it*. -->
+
 **Source**:
 One piece of external literature, at a fixed version, together with the claims Mosaic has taken
 from it. External evidence **steers and never legs**: **Register** is derived from ancestry, and
@@ -65,8 +82,8 @@ _Avoid_: Citation, reference, paper, literature, prior work, testimony
      a paper supplies needs no Source at all — an Adequacy Criterion is blind to an instrument's
      provenance, and that blindness is where the saving actually comes from. The reading of a
      Source is machine-produced until Noah reads the paper, so its Provenance Tier is derived
-     from the sourcing debt's state rather than stored; the debt kinds themselves are being
-     separated on the founding-charter map. -->
+     from the sourcing debt's state rather than stored. That sourcing debt is now named: see
+     **Source Debt** above, separated from Verification Debt in #189. -->
 
 **Lab Notebook**:
 The public, dated audit trail of the programme's process, living in this repo — in effect a rich
@@ -498,7 +515,9 @@ _Avoid_: Structure, regularity, stability, criticality
 [#13](https://github.com/NGL321/mosaic/issues/13), which is **evidence, not warrant**; the tier
 does not move until Noah does the reading. See
 [`curriculum/README.md`](curriculum/README.md#provenance-tiers) for why. Open debt:
-[`label:debt:open`](https://github.com/NGL321/mosaic/issues?q=is%3Aissue+label%3Adebt%3Aopen).
+[`label:debt:source`](https://github.com/NGL321/mosaic/issues?q=is%3Aissue+label%3Adebt%3Asource+-label%3Adebt%3Adischarged)
+and
+[`label:debt:verification`](https://github.com/NGL321/mosaic/issues?q=is%3Aissue+label%3Adebt%3Averification+-label%3Adebt%3Adischarged).
 
 Verified as written under [#13](https://github.com/NGL321/mosaic/issues/13): Still et al. (2012),
 Tishby et al. (1999), Still (2014), Pearl (1988), Friston (2013; 2019), Piaget, Piaget & García

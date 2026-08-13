@@ -98,38 +98,60 @@ def _issue(number: int, state: str, *labels: str) -> dict:
     }
 
 
-def test_partition_splits_on_label_not_state() -> None:
+def test_partition_splits_on_kind_label_not_state() -> None:
     setup_function()
     live, done = sd.partition(
-        [_issue(1, "CLOSED", sd.OPEN_LABEL), _issue(2, "OPEN", sd.DONE_LABEL)]
+        [
+            _issue(1, "CLOSED", sd.VERIFICATION_LABEL),
+            _issue(2, "OPEN", sd.SOURCE_LABEL, sd.DONE_LABEL),
+        ]
     )
-    # The label is authoritative, so a closed debt:open issue is still open debt.
-    assert [i["number"] for i in live] == [1]
+    # The label is authoritative, so a closed-but-undischarged issue is still open debt.
+    assert [i["number"] for i in live[sd.VERIFICATION_LABEL]] == [1]
     assert [i["number"] for i in done] == [2]
     assert len(sd._problems) == 2  # both disagreements reported, neither hidden
 
 
-def test_partition_files_a_double_labelled_issue_as_open_and_warns() -> None:
+def test_partition_files_a_both_kinds_issue_under_each() -> None:
     setup_function()
-    live, done = sd.partition([_issue(1, "CLOSED", sd.OPEN_LABEL, sd.DONE_LABEL)])
-    assert [i["number"] for i in live] == [1]
+    live, done = sd.partition(
+        [_issue(1, "OPEN", sd.SOURCE_LABEL, sd.VERIFICATION_LABEL)]
+    )
+    # An assertion may be unsourced *and* undefended; #189 made the kinds non-exclusive,
+    # so neither wins arbitrarily and no warning is due.
+    assert [i["number"] for i in live[sd.SOURCE_LABEL]] == [1]
+    assert [i["number"] for i in live[sd.VERIFICATION_LABEL]] == [1]
     assert done == []
-    assert any("both" in p for p in sd._problems)
+    assert sd._problems == []
 
 
-def test_partition_skips_and_warns_on_an_unlabelled_issue() -> None:
+def test_partition_reports_the_retired_open_label() -> None:
+    setup_function()
+    live, done = sd.partition(
+        [_issue(1, "OPEN", sd.LEGACY_LABEL, sd.SOURCE_LABEL)]
+    )
+    # Retired by #189. It still files correctly on its kind, but it is never silent.
+    assert [i["number"] for i in live[sd.SOURCE_LABEL]] == [1]
+    assert any(sd.LEGACY_LABEL in problem for problem in sd._problems)
+
+
+def test_partition_skips_and_warns_on_an_issue_with_no_kind() -> None:
     setup_function()
     live, done = sd.partition([_issue(1, "OPEN")])
-    assert (live, done) == ([], [])
+    assert (all(not g for g in live.values()), done) == (True, [])
     assert len(sd._problems) == 1
 
 
 def test_partition_is_quiet_when_labels_and_state_agree() -> None:
     setup_function()
     live, done = sd.partition(
-        [_issue(1, "OPEN", sd.OPEN_LABEL), _issue(2, "CLOSED", sd.DONE_LABEL)]
+        [
+            _issue(1, "OPEN", sd.VERIFICATION_LABEL),
+            _issue(2, "CLOSED", sd.SOURCE_LABEL, sd.DONE_LABEL),
+        ]
     )
-    assert ([i["number"] for i in live], [i["number"] for i in done]) == ([1], [2])
+    assert [i["number"] for i in live[sd.VERIFICATION_LABEL]] == [1]
+    assert [i["number"] for i in done] == [2]
     assert sd._problems == []
 
 
@@ -138,7 +160,7 @@ def test_partition_is_quiet_when_labels_and_state_agree() -> None:
 
 def test_render_does_not_duplicate_an_issue_present_twice() -> None:
     setup_function()
-    i = _issue(1, "OPEN", sd.OPEN_LABEL)
+    i = _issue(1, "OPEN", sd.SOURCE_LABEL)
     out = sd.render([i])
     assert out.count("https://example.invalid/1") == 2  # table row + detail heading
 

@@ -2,27 +2,132 @@
      The ledger is the issue tracker; this file is a committed snapshot of it.
      Regenerate with: python tools/snapshot_debt.py -->
 
-# Verification Debt — open
+# Debt — open
 
-Snapshot of [`label:debt:open`](https://github.com/NGL321/mosaic/issues?q=is%3Aissue+label%3Adebt%3Aopen) taken 2026-07-29. Rows are grouped by **label**,
-which is authoritative; see [`README.md`](README.md).
+Snapshot of [`debt:verification` and `debt:source`](https://github.com/NGL321/mosaic/issues?q=is%3Aissue+label%3Adebt%3Averification%2Cdebt%3Asource) taken 2026-08-12. Rows are
+grouped by **kind label**, which is authoritative; `debt:discharged` beside a kind is
+the state. See [`README.md`](README.md), and #189 for why there are two kinds.
 
 The tracker is the source of truth. This file exists so that a clone of the
 repository contains the programme's debt, and so `git log` can answer what the
 programme owed on a given date.
 
 
-**5 open · 0 discharged**
+**23 open · 0 discharged**
+
+## Verification Debt — owed by Noah, discharged by learning
+
+| # | holds down | curriculum |
+|---|---|---|
+| [#32](https://github.com/NGL321/mosaic/issues/32) | `Least Action` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) · `Representation` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) | Stochastic thermodynamics; nonequilibrium statistical mechanics. |
+| [#137](https://github.com/NGL321/mosaic/issues/137) | `Transport` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) | Hodge theory on cell complexes; cellular sheaves and their Laplacians. This is the largest single block of new mathematics `Transport` implies, and nothing else in the vocabulary depends on it yet. Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named. |
+| [#138](https://github.com/NGL321/mosaic/issues/138) | `Least Action` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) | Statistical mechanics to the level of the fluctuation theorems. Cheaper than [#32](https://github.com/NGL321/mosaic/issues/32) and a reasonable warm-up for it. Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named. |
+| [#139](https://github.com/NGL321/mosaic/issues/139) | `Inference Engine` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) · [the individuation document](https://github.com/NGL321/mosaic/blob/main/docs/research/2026-07-28-markov-blanket-individuation.md) | The root of this document's dependency chain, and the first block the Curriculum should schedule from it. Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named. |
+| [#140](https://github.com/NGL321/mosaic/issues/140) | [the individuation document](https://github.com/NGL321/mosaic/blob/main/docs/research/2026-07-28-markov-blanket-individuation.md) | Blocked on the information theory in the item above. This is the largest genuinely mathematical block the recommendation creates. Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named. |
+| [#141](https://github.com/NGL321/mosaic/issues/141) | `Inference Engine` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) · [the individuation document](https://github.com/NGL321/mosaic/blob/main/docs/research/2026-07-28-markov-blanket-individuation.md) | Linear SDEs and the stationary Fokker-Planck equation. Note the credit recorded in the document: the non-equilibrium steady-state machinery is needed **once**, to verify this counterexample, and is not built upon afterwards. Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named. |
+| [#142](https://github.com/NGL321/mosaic/issues/142) | [the individuation document](https://github.com/NGL321/mosaic/blob/main/docs/research/2026-07-28-markov-blanket-individuation.md) | Schedule adjacent to [#99](https://github.com/NGL321/mosaic/issues/99) — the same reading serves both, and doing them apart would be doing it twice. Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named. |
+| [#143](https://github.com/NGL321/mosaic/issues/143) | `Inference Engine` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) · [the individuation document](https://github.com/NGL321/mosaic/blob/main/docs/research/2026-07-28-markov-blanket-individuation.md) | Small, and high value per hour. A good second block after the information-theory foundations. Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named. |
+
+## Source Debt — owed by an agent, discharged by search
 
 | # | holds down | curriculum |
 |---|---|---|
 | [#29](https://github.com/NGL321/mosaic/issues/29) | `Schema Dynamics` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) | Cortical neuroanatomy — primary literature. |
 | [#30](https://github.com/NGL321/mosaic/issues/30) | `Schema` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) | History of developmental psychology — primary sources, French. |
 | [#31](https://github.com/NGL321/mosaic/issues/31) | `Schema` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) | Reading French primary sources. |
-| [#32](https://github.com/NGL321/mosaic/issues/32) | `Least Action` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) · `Representation` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) | Stochastic thermodynamics; nonequilibrium statistical mechanics. |
 | [#33](https://github.com/NGL321/mosaic/issues/33) | `Extraction` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) · `Closure` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) | Information theory; Markov chain lumpability. |
+| [#68](https://github.com/NGL321/mosaic/issues/68) | — | — |
+| [#70](https://github.com/NGL321/mosaic/issues/70) | — | — |
+| [#71](https://github.com/NGL321/mosaic/issues/71) | — | — |
+| [#97](https://github.com/NGL321/mosaic/issues/97) | — | — |
+| [#130](https://github.com/NGL321/mosaic/issues/130) | — | — |
+| [#131](https://github.com/NGL321/mosaic/issues/131) | — | — |
+| [#135](https://github.com/NGL321/mosaic/issues/135) | `Representation` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) | None. This is a library errand, not a reading list. Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named. |
+| [#146](https://github.com/NGL321/mosaic/issues/146) | `Schema` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) · [the individuation document](https://github.com/NGL321/mosaic/blob/main/docs/research/2026-07-28-markov-blanket-individuation.md) §5.2 | Sits on the Shalizi & Crutchfield theorem block; schedule after it. Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named. |
+| [#149](https://github.com/NGL321/mosaic/issues/149) | [the cost basis](https://github.com/NGL321/mosaic/blob/main/docs/research/2026-07-29-automation-cost-and-quota-basis.md) §1.4 · [#24](https://github.com/NGL321/mosaic/issues/24) | None. Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named. |
+| [#150](https://github.com/NGL321/mosaic/issues/150) | [the cost basis](https://github.com/NGL321/mosaic/blob/main/docs/research/2026-07-29-automation-cost-and-quota-basis.md) §4 · [#24](https://github.com/NGL321/mosaic/issues/24) | None. Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named. |
+| [#151](https://github.com/NGL321/mosaic/issues/151) | [the cost basis](https://github.com/NGL321/mosaic/blob/main/docs/research/2026-07-29-automation-cost-and-quota-basis.md) §5 · [#24](https://github.com/NGL321/mosaic/issues/24) | None. Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named. |
+
 
 ---
+
+### [#32 — \[debt\] Still et al. (2012) Eq. (14) is not defensible unaided](https://github.com/NGL321/mosaic/issues/32)
+
+**Holds down.** `Least Action` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) · `Representation` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md)
+
+**Discharged by.** Rederive Eq. (14) from the paper. State where the no-feedback assumption enters, and what it costs Mosaic if it fails.
+
+**Curriculum.** Stochastic thermodynamics; nonequilibrium statistical mechanics.
+
+### [#137 — \[debt\] The sheaf Laplacian and its O(n)-bundle specialisation are not defensible unaided](https://github.com/NGL321/mosaic/issues/137)
+
+**Holds down.** `Transport` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md)
+
+**Discharged by.** Work Hansen & Ghrist §§3.5–3.6 through, including the two qualifications #13 flagged as worth carrying, until the specialisation can be restated on a whiteboard.
+
+**Curriculum.** Hodge theory on cell complexes; cellular sheaves and their Laplacians. This is the largest single block of new mathematics `Transport` implies, and nothing else in the vocabulary depends on it yet.
+
+Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named.
+
+### [#138 — \[debt\] Landauer's bound versus the second law — the gap the `_After_` line now promises is understood](https://github.com/NGL321/mosaic/issues/138)
+
+**Holds down.** `Least Action` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md)
+
+**Discharged by.** Read Bennett on the reversibility of computation and Norton's critique of the Landauer bound's derivations, far enough to state what is proved, what is conjectured, and where Mosaic's use sits.
+
+**Curriculum.** Statistical mechanics to the level of the fluctuation theorems. Cheaper than [#32](https://github.com/NGL321/mosaic/issues/32) and a reasonable warm-up for it.
+
+Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named.
+
+### [#139 — \[debt\] Information theory to the data-processing inequality and sufficient statistics is unowned](https://github.com/NGL321/mosaic/issues/139)
+
+**Holds down.** `Inference Engine` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) · [the individuation document](https://github.com/NGL321/mosaic/blob/main/docs/research/2026-07-28-markov-blanket-individuation.md)
+
+**Discharged by.** Cover & Thomas, *Elements of Information Theory*, 2nd ed., ch. 2, worked rather than read.
+
+**Curriculum.** The root of this document's dependency chain, and the first block the Curriculum should schedule from it.
+
+Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named.
+
+### [#140 — \[debt\] Shalizi & Crutchfield Theorems 1, 2, 3 and 5 have not been reproved from the paper](https://github.com/NGL321/mosaic/issues/140)
+
+**Holds down.** [the individuation document](https://github.com/NGL321/mosaic/blob/main/docs/research/2026-07-28-markov-blanket-individuation.md)
+
+**Discharged by.** Reprove Theorems 1, 2, 3 and 5 from the paper, and Lemma 7 by both routes.
+
+**Curriculum.** Blocked on the information theory in the item above. This is the largest genuinely mathematical block the recommendation creates.
+
+Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named.
+
+### [#141 — \[debt\] The Biehl-Pollock-Kanai Ornstein-Uhlenbeck counterexample cannot be reconstructed](https://github.com/NGL321/mosaic/issues/141)
+
+**Holds down.** `Inference Engine` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) · [the individuation document](https://github.com/NGL321/mosaic/blob/main/docs/research/2026-07-28-markov-blanket-individuation.md)
+
+**Discharged by.** Reconstruct the counterexample from Appendix A, end to end.
+
+**Curriculum.** Linear SDEs and the stationary Fokker-Planck equation. Note the credit recorded in the document: the non-equilibrium steady-state machinery is needed **once**, to verify this counterexample, and is not built upon afterwards.
+
+Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named.
+
+### [#142 — \[debt\] Excess entropy and entropy convergence are used but not owned](https://github.com/NGL321/mosaic/issues/142)
+
+**Holds down.** [the individuation document](https://github.com/NGL321/mosaic/blob/main/docs/research/2026-07-28-markov-blanket-individuation.md)
+
+**Discharged by.** Crutchfield & Feldman (2003) §§III-V, worked.
+
+**Curriculum.** Schedule adjacent to [#99](https://github.com/NGL321/mosaic/issues/99) — the same reading serves both, and doing them apart would be doing it twice.
+
+Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named.
+
+### [#143 — \[debt\] Subextensivity of predictive information is asserted, not derived](https://github.com/NGL321/mosaic/issues/143)
+
+**Holds down.** `Inference Engine` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) · [the individuation document](https://github.com/NGL321/mosaic/blob/main/docs/research/2026-07-28-markov-blanket-individuation.md)
+
+**Discharged by.** Bialek, Nemenman & Tishby (2001) §II, derived rather than cited.
+
+**Curriculum.** Small, and high value per hour. A good second block after the information-theory foundations.
+
+Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named.
 
 ### [#29 — \[debt\] Mountcastle (1957; 1978) has not been read in the original](https://github.com/NGL321/mosaic/issues/29)
 
@@ -48,14 +153,6 @@ programme owed on a given date.
 
 **Curriculum.** Reading French primary sources.
 
-### [#32 — \[debt\] Still et al. (2012) Eq. (14) is not defensible unaided](https://github.com/NGL321/mosaic/issues/32)
-
-**Holds down.** `Least Action` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) · `Representation` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md)
-
-**Discharged by.** Rederive Eq. (14) from the paper. State where the no-feedback assumption enters, and what it costs Mosaic if it fails.
-
-**Curriculum.** Stochastic thermodynamics; nonequilibrium statistical mechanics.
-
 ### [#33 — \[debt\] Extraction and Closure cite four sources from recall, not warrant](https://github.com/NGL321/mosaic/issues/33)
 
 **Holds down.** `Extraction` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) · `Closure` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md)
@@ -63,4 +160,102 @@ programme owed on a given date.
 **Discharged by.** Read each. Confirm the departures claimed against them are real. This is the same job #13 did, on the section it did not cover.
 
 **Curriculum.** Information theory; Markov chain lumpability.
+
+### [#68 — \[debt\] Modal's acceptance of a container image by digest is undocumented](https://github.com/NGL321/mosaic/issues/68)
+
+**Holds down.** —
+
+**Discharged by.** —
+
+**Curriculum.** —
+
+### [#70 — \[debt\] No provider-enforced monthly spend cap was established for the recommended tier](https://github.com/NGL321/mosaic/issues/70)
+
+**Holds down.** —
+
+**Discharged by.** —
+
+**Curriculum.** —
+
+### [#71 — \[debt\] Modal publishes no egress or bandwidth price, so the Drive publish leg is unpriced](https://github.com/NGL321/mosaic/issues/71)
+
+**Holds down.** —
+
+**Discharged by.** —
+
+**Curriculum.** —
+
+### [#97 — \[debt\] Obstruction's gauge-theory and sheaf-cohomology citations were never verified](https://github.com/NGL321/mosaic/issues/97)
+
+**Holds down.** —
+
+**Discharged by.** —
+
+**Curriculum.** —
+
+### [#130 — \[debt\] Kauffman's own priority claim for the edge-of-chaos hypothesis cites a work absent from his bibliography ("myself (1985c)")](https://github.com/NGL321/mosaic/issues/130)
+
+**Holds down.** —
+
+**Discharged by.** —
+
+**Curriculum.** —
+
+### [#131 — \[debt\] The two closed-access nodes of the sigma-to-Lyapunov citation chain are unread](https://github.com/NGL321/mosaic/issues/131)
+
+**Holds down.** —
+
+**Discharged by.** —
+
+**Curriculum.** —
+
+### [#135 — \[debt\] Tishby, Pereira & Bialek was read as the 2000 arXiv posting, not the 1999 proceedings](https://github.com/NGL321/mosaic/issues/135)
+
+**Holds down.** `Representation` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md)
+
+**Discharged by.** Consult the Allerton 1999 proceedings volume and confirm the year, the pagination, and that the proceedings text says what the arXiv posting says.
+
+**Curriculum.** None. This is a library errand, not a reading list.
+
+Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named.
+
+### [#146 — \[debt\] Shalizi (2003) Lemma 2 (Patch Composition) and the lightcone construction are unread](https://github.com/NGL321/mosaic/issues/146)
+
+**Holds down.** `Schema` — [`CONTEXT.md`](https://github.com/NGL321/mosaic/blob/main/CONTEXT.md) · [the individuation document](https://github.com/NGL321/mosaic/blob/main/docs/research/2026-07-28-markov-blanket-individuation.md) §5.2
+
+**Discharged by.** Read Shalizi (2003), Lemma 2 and the lightcone construction around it, and confirm the composition result holds in the form `Schema`'s nesting claim needs.
+
+**Curriculum.** Sits on the Shalizi & Crutchfield theorem block; schedule after it.
+
+Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named.
+
+### [#149 — \[debt\] Whether Antigravity CLI can authenticate in an ephemeral CI runner is unresolved](https://github.com/NGL321/mosaic/issues/149)
+
+**Holds down.** [the cost basis](https://github.com/NGL321/mosaic/blob/main/docs/research/2026-07-29-automation-cost-and-quota-basis.md) §1.4 · [#24](https://github.com/NGL321/mosaic/issues/24)
+
+**Discharged by.** An Antigravity terms-of-service page or authentication doc describing a non-interactive credential, read directly and dated. A first-party statement that no such path exists discharges this just as well.
+
+**Curriculum.** None.
+
+Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named.
+
+### [#150 — \[debt\] The Gemini API free tier's numeric rate limits are behind auth and were never read](https://github.com/NGL321/mosaic/issues/150)
+
+**Holds down.** [the cost basis](https://github.com/NGL321/mosaic/blob/main/docs/research/2026-07-29-automation-cost-and-quota-basis.md) §4 · [#24](https://github.com/NGL321/mosaic/issues/24)
+
+**Discharged by.** A signed-in read of the AI Studio limits page, recorded with a retrieval date.
+
+**Curriculum.** None.
+
+Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named.
+
+### [#151 — \[debt\] Gemini context-caching prices were never retrieved, so the Gemini-vs-Sonnet ranking is not established](https://github.com/NGL321/mosaic/issues/151)
+
+**Holds down.** [the cost basis](https://github.com/NGL321/mosaic/blob/main/docs/research/2026-07-29-automation-cost-and-quota-basis.md) §5 · [#24](https://github.com/NGL321/mosaic/issues/24)
+
+**Discharged by.** The caching section of `ai.google.dev/gemini-api/docs/pricing`, read directly and dated, and the §5 table recomputed with it.
+
+**Curriculum.** None.
+
+Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named.
 
