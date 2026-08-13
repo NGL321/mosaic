@@ -126,9 +126,9 @@ _Avoid_: Seed, idea, lead, hunch, backlog item
 A node posted at a distance from the Hard Core and the admitted Protective Belt because Noah
 suspects it is true and cannot yet show it. Noah's prose, by hand, always — agents may propose
 one as a Prospect and may never post one. It is the unit that holds a token allocation, a spend
-ceiling, a stall tolerance, and the formal system its Inquiries reason into. Retiring one is his
-alone: a conjecture is a belief he holds, so a silent retirement would leave him believing what
-the programme has abandoned.
+ceiling, a stall tolerance, a delegation tolerance, and the formal system its Inquiries reason
+into. Retiring one is his alone: a conjecture is a belief he holds, so a silent retirement would
+leave him believing what the programme has abandoned.
 _Avoid_: Hypothesis, direction, line, thesis, guess
 
 <!-- The Hard Core is premise-only in a conjecture's system: it may support a derivation and may
@@ -239,6 +239,25 @@ _Avoid_: Preregistered, post-hoc, mode, class, tier
      there: the second set against one frozen instrument was declared before its own data too,
      so it is confirmatory, and what the sequence is worth is carried by the Run-Set Sequence
      instead of folded into a word that would then mean two things. -->
+
+**Delegation Depth**:
+How far a Conjecture's search has run ahead of Noah: the number of Inquiries between its furthest
+live premise chain and the nearest Inquiry he has acknowledged, its own posting counting as zero.
+A shortest distance to a reviewed ancestor and never a running count, so one acknowledgement pulls
+every Inquiry premised on that result back at once. Measured over one Conjecture's premise graph,
+while being reviewed is a property of the **Inquiry** — an acknowledgement clears that Inquiry
+under every Conjecture referencing it, because what it demonstrates is understanding of the node
+and not of the relation. Exceeding the Conjecture's declared **delegation tolerance** stops it
+opening new Inquiries; work already running finishes. Derived and stored nowhere.
+_Avoid_: Provenance drift, autonomy score, chain length, generation count, staleness
+
+<!-- #65. It governs steering and never warrant: #61's eligibility fragment already refuses a
+     machine-only chain a leg by typing, so a deep T3 lineage is legitimate and only needs to be
+     visible. A Source never resets it — citation buys no attention, one level over #167's
+     citation buys no warrant. Distinct from PROTOCOL §2's degeneration signal, which reads the
+     belt against the evidence under it: a programme adding no rungs at all while agents search
+     hard is §2-silent and maximally delegated. Discharged by reading rather than by amendment,
+     which makes it the one governor whose remedy is free. -->
 
 ### Research substance
 
