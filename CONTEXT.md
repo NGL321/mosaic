@@ -301,10 +301,17 @@ it does not.
 
 **Inference Engine**: ⟦T3⟧
 A system delineated by a Markov blanket whose internal state carries predictive information about
-states beyond that blanket — over and above what its current boundary state carries. Being an
-engine is a matter of degree — measured by **Extraction**, below — and many blanketed systems are
-not one at all. The degree is **not a scalar**: an engine's Extraction is one number, but the
-**Closure** of each of its schemas is another, and the two move independently.
+states beyond that blanket — over and above what its **current** boundary state carries. The
+internal state is the system's parameters as much as its momentary activity, and the surplus over
+the current boundary is whatever it has retained of its past, its training included: a blanket
+screens inside from outside given the boundary's *history*, so a retained past is the only route
+by which an internal state can hold what the present boundary does not. The target may lie at any
+horizon, the present included — an engine naming what is outside it now qualifies on the same
+terms as one predicting ten steps ahead; what differs is what the retained past is spent on, not
+whether it was needed. Being an engine is a matter of degree — measured by **Extraction**, below —
+and many blanketed systems are not one at all. The degree is **not a scalar**: an engine's
+Extraction is one number, but the **Closure** of each of its schemas is another, and the two move
+independently.
 _Avoid_: Agent, model, module, particle, node
 _After_: Pearl (1988) for the blanket as conditional independence; Friston for its use as the
 boundary of a thing.
