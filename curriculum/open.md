@@ -4,7 +4,7 @@
 
 # Debt — open
 
-Snapshot of [`debt:verification` and `debt:source`](https://github.com/NGL321/mosaic/issues?q=is%3Aissue+label%3Adebt%3Averification%2Cdebt%3Asource) taken 2026-08-12. Rows are
+Snapshot of [`debt:verification` and `debt:source`](https://github.com/NGL321/mosaic/issues?q=is%3Aissue+label%3Adebt%3Averification%2Cdebt%3Asource) taken 2026-08-13. Rows are
 grouped by **kind label**, which is authoritative; `debt:discharged` beside a kind is
 the state. See [`README.md`](README.md), and #189 for why there are two kinds.
 
@@ -13,7 +13,7 @@ repository contains the programme's debt, and so `git log` can answer what the
 programme owed on a given date.
 
 
-**23 open · 0 discharged**
+**25 open · 15 discharged**
 
 ## Verification Debt — owed by Noah, discharged by learning
 
@@ -47,6 +47,8 @@ programme owed on a given date.
 | [#149](https://github.com/NGL321/mosaic/issues/149) | [the cost basis](https://github.com/NGL321/mosaic/blob/main/docs/research/2026-07-29-automation-cost-and-quota-basis.md) §1.4 · [#24](https://github.com/NGL321/mosaic/issues/24) | None. Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named. |
 | [#150](https://github.com/NGL321/mosaic/issues/150) | [the cost basis](https://github.com/NGL321/mosaic/blob/main/docs/research/2026-07-29-automation-cost-and-quota-basis.md) §4 · [#24](https://github.com/NGL321/mosaic/issues/24) | None. Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named. |
 | [#151](https://github.com/NGL321/mosaic/issues/151) | [the cost basis](https://github.com/NGL321/mosaic/blob/main/docs/research/2026-07-29-automation-cost-and-quota-basis.md) §5 · [#24](https://github.com/NGL321/mosaic/issues/24) | None. Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named. |
+| [#205](https://github.com/NGL321/mosaic/issues/205) | — | — |
+| [#206](https://github.com/NGL321/mosaic/issues/206) | — | — |
 
 
 ---
@@ -259,3 +261,40 @@ Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the 
 
 Filed by [#50](https://github.com/NGL321/mosaic/issues/50), which retrofits the three pre-contract research documents to the [output contract](https://github.com/NGL321/mosaic/blob/main/docs/research/README.md). The debt was itemised in prose and never filed; R6 requires it named.
 
+### [#205 — \[debt\] The Physica A paper that would confirm the heterogeneous-bias criticality correction was never reached](https://github.com/NGL321/mosaic/issues/205)
+
+**Holds down.** —
+
+**Discharged by.** Reaching the paper (or an equivalent primary treatment of heterogeneous-bias RBN ensembles) and reporting whether it confirms or replaces the `−2·Var(p)` correction — or by an itemised negative recording every route above with its status code.
+
+**Curriculum.** —
+
+### [#206 — \[debt\] Whether Manicka et al.'s c1 = 3.94 is derived or fitted was never read from the paper](https://github.com/NGL321/mosaic/issues/206)
+
+**Holds down.** —
+
+**Discharged by.** Reading Manicka et al. (2022)'s derivation sections and reporting which of the two branches holds, plus a statement on `k_e`'s computability at Mosaic's in-degrees.
+
+Should be worked with the Physica A retrieval split out of [#128](https://github.com/NGL321/mosaic/issues/128) — the two are the same measurement disagreement approached from the connectivity side and the bias side, and both bear on the same 63 Cell Collective models.
+
+Part of #1.
+
+**Curriculum.** —
+
+## Discharged
+
+- [#45 — \[debt\] Culík & Yu (1988) undecidability proof has not been read](https://github.com/NGL321/mosaic/issues/45)
+- [#46 — \[debt\] Hiraoka et al. (2026) HDLSS asymptotics were read at theorem-statement depth](https://github.com/NGL321/mosaic/issues/46)
+- [#48 — \[debt\] Žunkovič & Ilievski (2024) critical exponents are taken on the paper's authority](https://github.com/NGL321/mosaic/issues/48)
+- [#49 — \[debt\] Tang et al. (2026) correlations are quoted, not recomputed](https://github.com/NGL321/mosaic/issues/49)
+- [#75 — \[debt\] vast.ai cannot be priced from first-party documentation at all](https://github.com/NGL321/mosaic/issues/75)
+- [#98 — \[debt\] Pesin's identity and the equivalence of the Order axis's estimators are unread](https://github.com/NGL321/mosaic/issues/98)
+- [#100 — \[debt\] Kauffman's ordered/chaotic regimes, cited on the Edge of Chaos Bound, were not reached in the original](https://github.com/NGL321/mosaic/issues/100)
+- [#105 — \[debt\] E = 0 implies i.i.d. is derived here, never read in a source](https://github.com/NGL321/mosaic/issues/105)
+- [#106 — \[debt\] The skew Bernoulli map's generating partition and Kolmogorov-Sinai entropy are asserted, not read](https://github.com/NGL321/mosaic/issues/106)
+- [#111 — \[debt\] Tang et al.'s reported p-values cannot be reconstructed — the sample size behind each is unstated](https://github.com/NGL321/mosaic/issues/111)
+- [#114 — \[debt\] Culik, Pachl & Yu (1987), CS-87-47, is cited-not-read under Culík & Yu's Theorem 1](https://github.com/NGL321/mosaic/issues/114)
+- [#116 — \[debt\] The survey's 'rule 30 as an MPO with bond dimension 4' is not in Žunkovič & Ilievski](https://github.com/NGL321/mosaic/issues/116)
+- [#120 — \[debt\] No primary source states E = 0 iff i.i.d. as a theorem; Mosaic's proof is its own](https://github.com/NGL321/mosaic/issues/120)
+- [#121 — \[debt\] Kauffman's later ordered/chaotic trichotomy is still unread — Origins of Order is unreachable](https://github.com/NGL321/mosaic/issues/121)
+- [#123 — \[debt\] The branching parameter's correspondence to Lyapunov exponents has untraced provenance](https://github.com/NGL321/mosaic/issues/123)
