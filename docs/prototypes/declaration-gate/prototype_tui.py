@@ -43,15 +43,22 @@ DATASET = "2026-08-14-p7b2e4.declared.yaml"     # kind (1), over a 2019 release
 SLUGS = {172: "formation-signature-grokking", 181: "visual-coding-holdout"}
 
 
-# The directory as the successor finds it: one closed predecessor.
-CLOSED_PREDECESSOR = [{"set_id": "s3f9c1", "closed": True, "salt": None}]
-OPEN_PREDECESSOR = [{"set_id": "s3f9c1", "closed": False, "salt": None}]
+WITHDRAWAL = "2026-08-20-s3f9c1.withdrawn.yaml"
+
+# The directory as the successor finds it. `accounts` is how many Runs in that set have
+# recorded a result or an attested non-completion — the fact that decides whether the set
+# can still be withdrawn.
+CLOSED_PREDECESSOR = [{"set_id": "s3f9c1", "closed": True, "salt": None, "accounts": 6}]
+OPEN_PREDECESSOR = [{"set_id": "s3f9c1", "closed": False, "salt": None, "accounts": 4}]
+ABANDONED = [{"set_id": "s3f9c1", "closed": False, "salt": None, "accounts": 0}]
+WITHDRAWN = [{"set_id": "s3f9c1", "closed": True, "salt": None, "accounts": 0,
+              "withdrawn": True}]
 TWO_CLOSED = [
-    {"set_id": "s3f9c1", "closed": True, "salt": None},
-    {"set_id": "w4a1d8", "closed": True, "salt": None},
+    {"set_id": "s3f9c1", "closed": True, "salt": None, "accounts": 6},
+    {"set_id": "w4a1d8", "closed": True, "salt": None, "accounts": 6},
 ]
 CLOSED_DATASET_SET = [
-    {"set_id": "p7b2e4", "closed": True, "salt": "181:p7b2e4:holdout"},
+    {"set_id": "p7b2e4", "closed": True, "salt": "181:p7b2e4:holdout", "accounts": 4},
 ]
 
 
@@ -106,6 +113,10 @@ def stale_config(d):
     d["config_sha"] = "sha256:" + "0" * 64
 
 
+def unmatched(d):
+    d["withdraws"] = "k1n9z2"
+
+
 def two_at_once(d):
     d.pop("attrition")
     d["register"] = "exploratory"
@@ -121,7 +132,11 @@ CASES = [
     ("p", "a second set that names no predecessor", SUCCESSOR, CLOSED_PREDECESSOR, no_follows, "add"),
     ("o", "a second set declared while the first is still open", SUCCESSOR, OPEN_PREDECESSOR, None, "add"),
     ("j", "a third set that follows the first, not the second", SUCCESSOR, TWO_CLOSED, follows_older, "add"),
-    ("d", "a predecessor declared and then abandoned, unrun", SUCCESSOR, OPEN_PREDECESSOR, None, "add"),
+    ("d", "a predecessor declared and then abandoned, unrun", SUCCESSOR, ABANDONED, None, "add"),
+    ("w", "the withdrawal that closes the abandoned set", WITHDRAWAL, ABANDONED, None, "withdraw"),
+    ("W", "a withdrawal aimed at a set that has run", WITHDRAWAL, OPEN_PREDECESSOR, None, "withdraw"),
+    ("U", "a withdrawal naming a set that does not exist", WITHDRAWAL, TWO_CLOSED, unmatched, "withdraw"),
+    ("v", "the successor, after the withdrawal", SUCCESSOR, WITHDRAWN, None, "add"),
     ("A", "an existing declaration, edited", FIRST, CLOSED_PREDECESSOR, None, "modify"),
     ("S", "kind (1): a successor reusing the same hold-out salt", DATASET, CLOSED_DATASET_SET, reused_salt, "add"),
     ("F", "kind (1): a successor with a fresh salt", DATASET, CLOSED_DATASET_SET, fresh_salt, "add"),
@@ -143,12 +158,19 @@ def run(key: str) -> None:
     print(f"CASE {key} — {label}")
     print("=" * 76)
     path = f"inquiries/{decl['inquiry']}-{SLUGS[decl['inquiry']]}/runs/{name}"
-    print(f"  commit {mode}s  {path}")
-    print(f"  runs/ already holds  {[s['set_id'] for s in siblings] or 'nothing'}")
+    verb = {"add": "adds", "modify": "modifies", "withdraw": "adds"}[mode]
+    print(f"  commit {verb}  {path}")
+    held = ", ".join(f"{s['set_id']} ({s['accounts']} accounts)" for s in siblings)
+    print(f"  runs/ already holds  {held or 'nothing'}")
     print()
 
-    v = gate.check_declaration(decl, siblings, mode)
-    print(gate.render(v, subject=f"set {decl['set_id']}"))
+    if mode == "withdraw":
+        v = gate.check_withdrawal(decl, siblings)
+        subject = f"the withdrawal of set {decl['withdraws']}"
+    else:
+        v = gate.check_declaration(decl, siblings, mode)
+        subject = f"set {decl['set_id']}"
+    print(gate.render(v, subject=subject))
     print(f"\n  exit {v.exit_code}")
 
     if key == "h":
@@ -174,18 +196,33 @@ def run(key: str) -> None:
         )
     if key == "d":
         print(
-            "\n  Mechanically identical to case `o`, and a different problem. s3f9c1 was\n"
-            "  declared and then abandoned — the config was wrong, the Inquiry moved on,\n"
-            "  nothing ever ran. #182 requires the predecessor to have CLOSED, and nothing\n"
-            "  closes a set with no runs: SET_INCOMPLETE is a downgrade over manifests\n"
-            "  that will never exist. So the Inquiry's runs/ is a dead end, and the only\n"
-            "  exits are to delete the declaration — which the gate would refuse as an\n"
-            "  amendment, and which erases the sequence #182 exists to record — or to run\n"
-            "  a set nobody wants in order to close it.\n"
-            "\n  THE GATE DID NOT CAUSE THIS. #182's line has no termination rule and the\n"
-            "  gate is only where it becomes visible: before the gate, the dead end is\n"
-            "  found at set close, after the successor has run. Open question, on the\n"
-            "  ticket."
+            "\n  The dead end. s3f9c1 was declared and then abandoned — the config was\n"
+            "  wrong, the Inquiry moved on, nothing ever ran. #182 requires the\n"
+            "  predecessor to have CLOSED, and nothing closes a set with no Runs:\n"
+            "  SET_INCOMPLETE is a downgrade over manifests that will never exist.\n"
+            "\n  Note the refusal names the exit rather than only the fault — `accounts`\n"
+            "  is 0, so the gate can tell this apart from case `o`, where the predecessor\n"
+            "  is genuinely still running and waiting is the fix. Same shape, different\n"
+            "  advice, and the difference is committed text. Press `w`."
+        )
+    if key == "w":
+        print(
+            "\n  What makes this safe is not that the withdrawal is verified. It is not:\n"
+            "  a party can dispatch, read a number off streaming logs, record nothing and\n"
+            "  withdraw — `cancellation_peek` one level up, a whole set instead of one Run.\n"
+            "\n  What makes it safe is that nothing is hidden. The withdrawn set stays in\n"
+            "  runs/ as a link of its own shape, and the hazard attaches to EVERY\n"
+            "  withdrawal without asking, because the only alternative is exempting a set\n"
+            "  on a claim that nothing ran — and a claim of absence is exactly what #63\n"
+            "  established cannot be verified. A rule satisfiable by saying a word is #26\n"
+            "  R6, which is the failure this whole line of tickets keeps refusing."
+        )
+    if key == "v":
+        print(
+            "\n  The successor is admitted, and #9's remedy clause is what a hazarded claim\n"
+            "  gets: a corroboration Inquiry reaching the same result without the hazard.\n"
+            "  So withdrawal is never free — it is priced in the belt graph rather than\n"
+            "  rationed by a gatekeeper, which is #182's posture on the search-shaped link."
         )
     if key == "A":
         print(

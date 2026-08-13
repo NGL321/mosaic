@@ -8,15 +8,14 @@ Nothing runs it, nothing depends on it, and it never touches GitHub, git, or the
 python docs/prototypes/declaration-gate/prototype_tui.py
 ```
 
-- `gate.py` — the check: seven **refusals**, and the `READS` table that decides which
-  findings are entitled to fire here at all.
-- `prototype_tui.py` — sixteen cases. `p` is the one the ticket exists for; `h` and `c`
-  are the two the gate **accepts** and the reason the partition is written as data; `d` is
-  the hole the gate did not cause and is the first thing to see; `B` prices the posture
-  question instead of arguing it.
+- `gate.py` — the checks: eleven **refusals**, one **hazard**, and the `READS` table that
+  decides which findings are entitled to fire here at all.
+- `prototype_tui.py` — twenty cases. `p` is the one the ticket exists for; `h` and `c` are
+  the two the gate **accepts** and the reason the partition is written as data; `d`→`w`→`v`
+  is the dead end and its exit; `B` prices the posture question instead of arguing it.
 - `example/` — the two declarations from [#63](https://github.com/NGL321/mosaic/issues/63)'s
-  prototype, plus the successor carrying [#182](https://github.com/NGL321/mosaic/issues/182)'s
-  `follows:`.
+  prototype, the successor carrying [#182](https://github.com/NGL321/mosaic/issues/182)'s
+  `follows:`, and the withdrawal.
 
 ## The question
 
@@ -91,8 +90,8 @@ criterion rather than a rationalisation.
 emitting the same sentence: the absent field, the wrong predecessor, and the predecessor
 that has not closed. They are not fixed the same way — the first is a missing line, the
 second a wrong line, and the third is not a defect in the declaration at all but a
-declaration arriving too early, fixed by waiting. The gate emits the condition alongside
-the name.
+declaration arriving too early. Split into three names, and the third is what led to the
+withdrawal below.
 
 **7. The posture question, priced rather than argued (case `B`).** Bypass the gate — commit
 the declaration to a branch nobody opened a pull request for — and the same finding arrives
@@ -116,16 +115,57 @@ carries the same code. Exit 1 means `exploratory` in the register check, which i
 error and is not the gate's to pronounce — no run has produced a number yet, and the
 declaration in front of it may be a perfectly good exploratory one.
 
-## Found and not fixed
+## The withdrawal — found by driving it, and settled
 
-**A declaration that is abandoned before it runs is a dead end** (case `d`). #182 requires
-the predecessor to have **closed**, and nothing closes a set with no runs: the honest
-account is `SET_INCOMPLETE`, a downgrade over manifests that will never exist. The
-Inquiry's `runs/` then admits no further declaration. The two exits both cost something —
-delete the declaration, which the gate refuses as an amendment and which erases the
-sequence #182 exists to record; or run a set nobody wants in order to close it.
+**A declaration abandoned before it runs is a dead end** (case `d`). #182 requires the
+predecessor to have **closed**, and nothing closes a set with no Runs: the honest account
+is `SET_INCOMPLETE`, a downgrade over manifests that will never exist. The Inquiry's
+`runs/` then admits no further declaration, and the two available exits both cost
+something real — delete the declaration, which erases the Run-Set Sequence #182 exists to
+record, or buy Runs nobody wants in order to close a set nobody wants.
 
-The gate did not cause this. #182's line has no termination rule, and the gate is only
-where it becomes visible: without it the dead end is found at set close, after the
-successor has already run. Raised on the ticket rather than settled here, because *what
-closes an unrun set* is #182's question and not this one's.
+The gate did not cause this; #182's line has no termination rule. But the gate is where it
+becomes visible early, so it is where the exit belongs. **Ruled on #181: a withdrawal**
+(case `w`).
+
+It is a **new committed file** beside the declaration, `<date>-<set_id>.withdrawn.yaml`,
+and each of the three things it is *not* is a rule already on the books: not an edit (a
+declaration is never edited once committed), not a deletion (absence is not a record), not
+a waiver (Noah's ruling below, and inert regardless). It carries no `reason:`, on #182's
+ruling that prose is an argument's front door, and no signature, on #60's finding that
+nothing in an Inquiry is signed.
+
+**It is a link in the sequence, not an escape from it.** The withdrawn set stays in `runs/`
+permanently and the successor follows it. #182 already defines link shapes and already
+attaches a hazard to a search-shaped one, so withdrawal is the fourth shape and needs no
+new machinery.
+
+**The hazard attaches to every withdrawal, and asks nothing.** A withdrawal cannot be
+verified: a party can dispatch, read a number off streaming logs, record nothing and
+withdraw — `cancellation_peek` one level up, a whole set rather than one Run. The
+alternative to attaching unconditionally is exempting a set on a **claim that nothing ran**,
+which is a claim of absence — the exact thing #63 established cannot be verified, and a
+rule satisfiable by saying a word (#26 R6). So `withdrawn_unrun` attaches always, and what
+makes that safe is not verification but visibility: the link is committed, countable, and
+#9's remedy clause gives a hazarded claim the corroboration Inquiry it needs. **Priced in
+the belt graph rather than rationed by a gatekeeper**, which is #182's posture exactly.
+
+**Withdrawal cannot reach a set that has run** (`WITHDRAWAL_AFTER_RUN`, case `W`). A set
+with any account recorded — a result or an attested non-completion — closes the ordinary
+way. Otherwise withdrawal would be an undo on a measurement in progress. The fact that
+decides it is committed text, so the check stays inside the partition.
+
+## Two more rulings from Noah on this ticket
+
+**No waiver.** Not because the gate is sacred, but because a waiver is **inert**: waive it
+and the register still refuses at close, so the waiver buys nothing except the spent
+budget. This is the one gate in the suite whose exemption mechanism would be pure
+ceremony.
+
+**`NO_PREDECESSOR` splits into three names** — `NO_PREDECESSOR_NAMED`,
+`PREDECESSOR_NOT_MOST_RECENT`, `PREDECESSOR_NOT_CLOSED`. Naming is cheap, and one name
+across three conditions pushes the case analysis onto whoever reads the refusal. The third
+is the one that earns the split twice over: it is not a defect in the declaration at all,
+and its two sub-cases have opposite advice — wait, if the predecessor is running; withdraw,
+if it can never close. The gate tells them apart on the account count, which is committed
+text.

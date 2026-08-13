@@ -71,9 +71,19 @@ READS = {
     "NO_ATTRITION_POLICY": "declaration",
     "DATASET_UNPINNED": "declaration",
     # ---- refusals that read the declaration and its siblings in runs/ -----
-    "NO_PREDECESSOR": "siblings",
+    #
+    # #182's NO_PREDECESSOR is SPLIT INTO THREE, on Noah's ruling that naming is cheap and
+    # an intuitive name heads off the case analysis a single name pushes onto whoever
+    # reads the refusal. Driving the gate is what showed the three were unlike: a missing
+    # line, a wrong line, and a declaration that is not defective at all but early.
+    "NO_PREDECESSOR_NAMED": "siblings",
+    "PREDECESSOR_NOT_MOST_RECENT": "siblings",
+    "PREDECESSOR_NOT_CLOSED": "siblings",
     "HOLDOUT_SALT_REUSED": "siblings",
     "DECLARATION_AMENDED": "siblings",
+    # ---- the withdrawal, and the two ways it is misused --------------------
+    "WITHDRAWAL_AFTER_RUN": "siblings",
+    "WITHDRAWAL_UNMATCHED": "siblings",
     # ---- refusals that cannot fire until runs exist ------------------------
     "SET_UNDECLARED": "manifests",
     # ---- downgrades: the register DERIVES, to exploratory. Never movable, --
@@ -123,17 +133,38 @@ REFUSALS = {
         "tag rather than a digest — one layer up from #64's BASE_BY_TAG — and the bytes "
         "the hold-out was computed over can be repointed underneath the result."
     ),
-    "NO_PREDECESSOR": (
-        "A declaration in a non-empty `runs/` names no predecessor, or names one that is "
-        "not the most recent declaration in the Inquiry, or names one that has not closed. "
-        "#182: the declaring party commits to being the *n*th attempt in advance, exactly "
-        "as #63's declaration commits to the set in advance. A line, never a tree."
+    "NO_PREDECESSOR_NAMED": (
+        "A declaration in a non-empty `runs/` carries no `follows:` field. #182: the "
+        "declaring party commits to being the *n*th attempt in advance, exactly as #63's "
+        "declaration commits to the set in advance. Add the field naming the most recent "
+        "declaration in this Inquiry."
+    ),
+    "PREDECESSOR_NOT_MOST_RECENT": (
+        "`follows:` names a declaration that is not the most recent in this Inquiry. #182: "
+        "a line, never a tree — a branch point lets sets be declared in parallel, which is "
+        "#63's leak exactly, since everything declared in advance and one thing reported "
+        "stops meaning anything."
+    ),
+    "PREDECESSOR_NOT_CLOSED": (
+        "The predecessor named has not closed. NOTHING IS WRONG WITH THIS DECLARATION — it "
+        "is early, and waiting fixes it. The exception is a predecessor that can never "
+        "close because it has no Runs at all; see WITHDRAWAL below, which is the exit."
     ),
     "HOLDOUT_SALT_REUSED": (
         "A successor declaration reuses its predecessor's byte-identical hold-out salt. "
         "#182 refuses this outright: the successor's data had already been read before the "
         "declaration meant to judge it existed. Not a sequence defect — a hold-out defect, "
         "and unlike a seed a hold-out cannot be redrawn."
+    ),
+    "WITHDRAWAL_AFTER_RUN": (
+        "A withdrawal names a set that has already recorded an account — a result or an "
+        "attested non-completion. A set that has run closes the ordinary way, through its "
+        "own accounts. Withdrawal is the exit for a set that never dispatched, and letting "
+        "it reach a set that did would make it an undo on a measurement in progress."
+    ),
+    "WITHDRAWAL_UNMATCHED": (
+        "A withdrawal names no declaration in this Inquiry's `runs/`. It is a link in the "
+        "Run-Set Sequence and a link needs both ends."
     ),
     "DECLARATION_AMENDED": (
         "An existing declaration was modified. The declaration is a commitment, and a "
@@ -146,10 +177,27 @@ REFUSALS = {
 }
 
 
+# A hazard is not a refusal. #9: an untestable hazard is declared and attaches permanently
+# to every leg the Inquiry earns. #64 and #63 both established the gate appending one
+# itself, so it cannot be omitted by the party with a motive to omit it.
+HAZARDS = {
+    "withdrawn_unrun": (
+        "A declared set in this Inquiry was withdrawn with no account recorded against it. "
+        "This is `cancellation_peek` one level up: logs stream, so a party can read a "
+        "number and then record nothing at all — the whole set abandoned rather than one "
+        "run cancelled. The hazard attaches to EVERY withdrawal and asks no questions, "
+        "because the alternative is exempting a set on a claim that nothing ran, and a "
+        "claim of absence is exactly what #63 established cannot be verified. Marked "
+        "rather than prevented; countable, because every withdrawal is a committed link."
+    ),
+}
+
+
 @dataclass
 class Verdict:
-    # (name, why, which condition tripped — see NO_PREDECESSOR below)
+    # (name, why, which condition tripped)
     refusals: list[tuple[str, str, str]] = field(default_factory=list)
+    hazards: list[tuple[str, str]] = field(default_factory=list)
     notes: list[str] = field(default_factory=list)
 
     @property
@@ -169,7 +217,7 @@ class Verdict:
 # in `runs/` — no git history, no manifests, no network, no runner.
 #
 # `siblings` is the directory listing at the parent commit, in commit order, each entry:
-#     {"set_id", "closed": bool, "salt": str | None}
+#     {"set_id", "closed": bool, "salt": str | None, "accounts": int, "withdrawn": bool}
 # All of it is committed text; `closed` is derivable from the predecessor's own manifests
 # and attestations (#182 ruling 2), and is passed in resolved here to keep the prototype
 # free of a manifest reader it does not need.
@@ -213,13 +261,17 @@ def check_declaration(decl: dict, siblings: list[dict], mode: str = "add") -> Ve
         follows = decl.get("follows")
         most_recent = siblings[-1]
         if follows is None:
-            refuse("NO_PREDECESSOR", f"no `follows:` field; runs/ already holds {len(siblings)}")
+            refuse("NO_PREDECESSOR_NAMED", f"runs/ already holds {len(siblings)}")
         elif follows != most_recent["set_id"]:
-            refuse("NO_PREDECESSOR",
+            refuse("PREDECESSOR_NOT_MOST_RECENT",
                    f"follows `{follows}`; the most recent is `{most_recent['set_id']}`")
         elif not most_recent["closed"]:
-            refuse("NO_PREDECESSOR",
-                   f"`{most_recent['set_id']}` has not closed — a line, never a tree")
+            hint = " — it has no accounts and cannot close; withdraw it" \
+                if not most_recent.get("accounts") else ""
+            refuse("PREDECESSOR_NOT_CLOSED", f"`{most_recent['set_id']}` is still open{hint}")
+
+        if any(s.get("withdrawn") for s in siblings):
+            v.hazards.append(("withdrawn_unrun", HAZARDS["withdrawn_unrun"]))
 
         salt = ((dataset or {}).get("split") or {}).get("salt")
         if salt is not None and any(s.get("salt") == salt for s in siblings):
@@ -233,14 +285,65 @@ def check_declaration(decl: dict, siblings: list[dict], mode: str = "add") -> Ve
     return v
 
 
+# --------------------------------------------------------------------------
+# The withdrawal — the exit for a declared set that never dispatched.
+#
+# #182 requires a declaration's predecessor to have CLOSED, and nothing closes a set with
+# no Runs: the honest account is SET_INCOMPLETE, a downgrade over manifests that will never
+# exist. Without an exit the Inquiry's runs/ is a dead end.
+#
+# THREE THINGS IT IS NOT, and each one is a rule already on the books:
+#
+#   - not an edit to the declaration      (a declaration is never edited once committed)
+#   - not a deletion                      (that erases the Run-Set Sequence #182 exists to
+#                                          record — absence is not a record)
+#   - not a waiver                        (Noah's ruling on this ticket, and inert anyway:
+#                                          the register still refuses at close)
+#
+# So it is a NEW COMMITTED FILE beside the declaration, and a LINK IN THE SEQUENCE rather
+# than an escape from it. #182 already defines link shapes and already attaches a hazard to
+# a search-shaped one; a withdrawal is the fourth shape and needs no new machinery.
+#
+# It carries no `reason:`, on #182's ruling that prose is an argument's front door.
+# --------------------------------------------------------------------------
+
+def check_withdrawal(withdrawal: dict, siblings: list[dict]) -> Verdict:
+    v = Verdict()
+
+    def refuse(name: str, condition: str = "") -> None:
+        v.refusals.append((name, REFUSALS[name], condition))
+
+    target = withdrawal.get("withdraws")
+    match = next((s for s in siblings if s["set_id"] == target), None)
+
+    if match is None:
+        refuse("WITHDRAWAL_UNMATCHED", f"no declaration `{target}` in runs/")
+        return v
+
+    if match.get("accounts"):
+        refuse("WITHDRAWAL_AFTER_RUN",
+               f"`{target}` has {match['accounts']} account(s) recorded")
+        return v
+
+    # Accepted. The set closes, the successor is admitted, and the hazard travels.
+    v.hazards.append(("withdrawn_unrun", HAZARDS["withdrawn_unrun"]))
+    v.notes.append(
+        f"`{target}` closes as WITHDRAWN. It stays in the Run-Set Sequence permanently as "
+        "a link of that shape, so the next declaration follows it rather than replacing it."
+    )
+    return v
+
+
 def render(v: Verdict, subject: str) -> str:
     lines = []
     if not v.refusals:
         lines.append(f"  ACCEPTED — {subject} may be committed.")
-        lines.append(
-            "  The gate says nothing about the register. It will derive to confirmatory "
-            "or exploratory\n  at set close, from runs that do not exist yet."
-        )
+        if not v.hazards:
+            lines.append(
+                "  The gate says nothing about the register. It will derive to confirmatory "
+                "or exploratory\n  at set close, from runs that do not exist yet."
+            )
+        lines.append("")
     else:
         lines.append(f"  REFUSED — {subject} does not enter the tree.")
         lines.append("")
@@ -251,8 +354,14 @@ def render(v: Verdict, subject: str) -> str:
             for chunk in _wrap(why):
                 lines.append(f"      {chunk}")
             lines.append("")
+    for name, why in v.hazards:
+        lines.append(f"  HAZARD  {name}   [attached by the gate, not declared by anyone]")
+        for chunk in _wrap(why):
+            lines.append(f"      {chunk}")
+        lines.append("")
     for note in v.notes:
-        lines.append("  note: " + note)
+        for chunk in _wrap("note: " + note):
+            lines.append("  " + chunk)
     return "\n".join(lines)
 
 
@@ -287,5 +396,11 @@ def partition_table() -> str:
             lines.append(f"                   {name}")
         lines.append("")
     movable = sum(len(buckets.get(r, [])) for r in MOVABLE)
-    lines.append(f"  {movable} of {len(READS)} findings move. #181 named five of them.")
+    lines.append(
+        f"  {movable} of {len(READS)} fire at the declaring commit. Counted as #63 and #182"
+    )
+    lines.append(
+        "  left them — before NO_PREDECESSOR split three ways and before the withdrawal —"
+    )
+    lines.append("  seven of twenty-one move, and #181 named five of those.")
     return "\n".join(lines)
