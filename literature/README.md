@@ -192,14 +192,33 @@ map's premise 7, and the DUA-class policy behind that is the founding-charter ma
 **External theorems.** Not reproduced but *checked*, which is
 [#163](https://github.com/NGL321/mosaic/issues/163)'s territory and deliberately deferred.
 
-## Nothing here yet
+## What is here
 
-Deliberately. A Source is admitted by an Inquiry or a literature-research task that needs the
-claim, and neither exists yet — [#7](https://github.com/NGL321/mosaic/issues/7) has not named the
-first Protective Belt claim and no Conjecture has been posted. Seeding a plausible Source here
-would import a claim nothing is steering by, which is the growth surface above with none of the
-budget that punishes it.
+Three, all admitted on 2026-08-13 by [#199](https://github.com/NGL321/mosaic/issues/199). None was
+seeded: each is a claim the record was **already steering by**, filed as a debt item under a label
+that could not hold it, and each arrived with the reading already done.
 
-One live case is already waiting: [#144](https://github.com/NGL321/mosaic/issues/144) records the
-Krakauer identity `A* − A = NTIC` as *unreproduced*, which is a Source and a reproduction Inquiry
-misfiled as a debt item. It is named in the re-labelling handed to the founding-charter map.
+| Source | the claims Mosaic took | reading debt | reproduction |
+|---|---|---|---|
+| [`krakauer-2020-individuality`](krakauer-2020-individuality/README.md) | the individuation criterion, and closure ⇒ sufficiency | [#209](https://github.com/NGL321/mosaic/issues/209) | Prospect — [#109](https://github.com/NGL321/mosaic/issues/109) |
+| [`damrich-2024-spectral-ph`](damrich-2024-spectral-ph/README.md) | the PH failure thresholds under high-dimensional noise | [#210](https://github.com/NGL321/mosaic/issues/210) | **done** — [#47](https://github.com/NGL321/mosaic/issues/47), [PR #157](https://github.com/NGL321/mosaic/pull/157) |
+| [`tang-2026-topological-signatures`](tang-2026-topological-signatures/README.md) | the H₁ trajectory signature of grokking, and three correlations | [#211](https://github.com/NGL321/mosaic/issues/211) | Prospect on the trajectory only — [#109](https://github.com/NGL321/mosaic/issues/109) |
+
+**The pair earned its keep immediately.** Holding `Quoted` beside `Rendered` caught, on the first
+Source admitted, that the identity `A* − A = NTIC` which
+[#144](https://github.com/NGL321/mosaic/issues/144) called *"the individuation criterion"* is **not
+stated in Krakauer et al. at all** — it is one line of algebra from three of the paper's definitions
+— that the expansion *"non-trivial informational closure"* does not appear in that paper, and that
+the sentence Mosaic had been quoting as *"a system **partition** that is a sufficient predictor of
+its own future"* says *"a system"*. None of that was visible while the claim lived as a debt item's
+prose summary. It cost one afternoon of re-reading, several inferential steps back from anything
+Noah had been asked to sign.
+
+Nothing here is confirmatory, and the shelf's growth is still ungated for the reason given above.
+
+## Still to come
+
+The first Source admitted *by an Inquiry* is still ahead: [#7](https://github.com/NGL321/mosaic/issues/7)
+has not named the first Protective Belt claim and no Conjecture has been posted. The three above were
+admitted by a ledger correction rather than by work that needed them, which is the unusual case and
+not the pattern to copy.
