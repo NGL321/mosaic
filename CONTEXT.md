@@ -122,6 +122,18 @@ Mosaic's learning track, scheduled off the Verification Debt ledger rather than 
 the mathematics the programme's own results demand, in the order they demand it.
 _Avoid_: Study plan, coursework
 
+**Competence Floor**:
+What Noah can restate unaided — the terminus of the defence obligation
+([`PROTOCOL.md`](PROTOCOL.md) §5) and the zero point Verification Debt is measured against. A
+derivation step below this line is Verification Debt, not a custody failure. *Restatement-level*
+is the bar: state it, say what it is for, and say what breaks if it is false, without reference.
+Not derivation — a derivation is this same bar held over every item in its stack. **Bounded by the
+programme**: an item is on the floor because some recorded derivation stands on it, never because
+it is known, so the floor says what carries Mosaic and not what Noah knows. Enumerated in
+[`curriculum/FLOOR.md`](curriculum/FLOOR.md), which is an authored file; the claim is falsifiable
+on demand, and any reader may name an item and ask for its defence.
+_Avoid_: Baseline, prerequisites, background
+
 ### Delegated inquiry
 
 **Prospect**:
