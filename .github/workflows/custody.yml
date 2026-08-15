@@ -18,6 +18,7 @@ on:
     paths:
       - CONTEXT.md
       - CHARTER.md
+      - curriculum/FLOOR.md
 
 # The script only reads git history.
 permissions:
