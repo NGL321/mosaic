@@ -52,12 +52,25 @@ WORKFLOW = ROOT / ".github" / "workflows" / "custody.yml"
 # charter is written it lands where this check and the workflow's `paths:` filter
 # can both see it. A charter under any other name would leave this check green
 # and covering nothing.
-AUTHORED = frozenset({"CONTEXT.md", "CHARTER.md"})
+#
+# `curriculum/FLOOR.md` holds the competence floor's items — §5 exception 1,
+# human-authored outright, and the one authored file that changes on a schedule
+# (it rises whenever a debt:verification discharges). Added under #215 for the
+# same reason `CHARTER.md` is named above: an authored file outside this set
+# commits under no coverage at all, and the check stays green while doing so.
+AUTHORED = frozenset({"CONTEXT.md", "CHARTER.md", "curriculum/FLOOR.md"})
 
-# Identities that are agents. Empty until #24 gives agents their own identity —
-# until then the IDENTITY obligation is undecidable rather than satisfied, and
-# this script says so instead of passing silently.
-AGENT_IDENTITIES: frozenset[str] = frozenset()
+# Identities that are agents — the commit author name (`%an`) GitHub writes for
+# the App's bot account, registered under #175. One element, and it stays one as
+# roles multiply: #24 ruled roles are identities *inside* the App, not Apps of
+# their own, so nothing here needs editing when a role is added.
+#
+# This is half the IDENTITY obligation, and the weaker half. #24's boundary is a
+# signature, not a name, and a name is exactly what an unsigned commit can claim
+# for free. The signature test that decides whether a commit was written by the
+# party it names belongs to the CI gate suite; until it lands, a commit that
+# merely *says* it is human is taken at its word here.
+AGENT_IDENTITIES: frozenset[str] = frozenset({"mosaic-agent-collaborator[bot]"})
 
 AGENT_CO_AUTHOR_MARKERS = ("claude", "gpt-", "copilot", "gemini", "[bot]")
 
