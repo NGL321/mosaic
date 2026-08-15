@@ -6,7 +6,8 @@ kind: question
 tier: T3
 session: unrecorded
 sources: 23
-debt: [148, 149, 150, 151, 152]
+debt_source: [149, 150, 151]
+debt_verification: []
 supersedes: null
 ---
 
@@ -429,8 +430,8 @@ item is marked **Unresolved** rather than filled from memory.
 ### Open gaps
 
 - **Not investigated, and each is a live option for [#24](https://github.com/NGL321/mosaic/issues/24):** Vertex AI / Gemini Enterprise Agent Platform pricing for Claude models, GitHub Models, and self-hosted runners on owned hardware. None was in this ticket's scope. Recorded so a later reader does not mistake absence for a negative finding.
-- **How much subscription quota a Claude Pro or Max plan carries, numerically.** Not computable from public documentation at all — Anthropic publishes limits only as unlabelled multiples. This is the only remaining unknown on the recommended path, and it is an experiment rather than a reading — [#148](https://github.com/NGL321/mosaic/issues/148).
-- **Whether the assumed workload resembles a real research run.** The §5.1 model was constructed to be priced, not measured against anything. One instrumented run closes this and [#148](https://github.com/NGL321/mosaic/issues/148) together — [#152](https://github.com/NGL321/mosaic/issues/152).
+- **How much subscription quota a Claude Pro or Max plan carries, numerically.** Not computable from public documentation at all — Anthropic publishes limits only as unlabelled multiples. This is the only remaining unknown on the recommended path, and it is an experiment rather than a reading — which is why it is a task, [#222](https://github.com/NGL321/mosaic/issues/222), and not debt ([#148](https://github.com/NGL321/mosaic/issues/148), closed and kept).
+- **Whether the assumed workload resembles a real research run.** The §5.1 model was constructed to be priced, not measured against anything. One instrumented run closes this and the quota question together, which is why they are a single task — [#222](https://github.com/NGL321/mosaic/issues/222) ([#152](https://github.com/NGL321/mosaic/issues/152), closed and kept).
 
 ### Load-bearing ifs
 
@@ -441,18 +442,33 @@ item is marked **Unresolved** rather than filled from memory.
 
 ---
 
-## Verification Debt
+## Debt
 
-Five items, all filed. Note what is **not** here: the volatility warning above is a shelf
-life rather than a gap in anybody's understanding, and the un-investigated platforms are
-scope rather than debt. Both were itemised alongside the debt in the original and are moved
-into *What this does not establish*, where they belong.
+Three items, all filed, all **Source Debt** — each is discharged by an agent reaching a
+first-party page and producing a Source. This document generates **no Verification Debt at
+all**, which is unusual and is a fact about the subject: nothing here is mathematics Noah
+would need to defend unaided, only vendor facts nobody has read.
 
-1. **How many research tickets a Claude Pro or Max plan actually dispatches per week** — [#148](https://github.com/NGL321/mosaic/issues/148). Anthropic publishes limits only as unlabelled multiples with a discretionary clause (§2.2). *What would settle it:* dispatch a real ticket through the action on a subscription token and read `/usage`. **A one-run experiment, not a reading exercise**, and the highest-value item here because it is the only remaining unknown on the recommended path.
-2. **Whether Antigravity CLI can be authenticated in an ephemeral CI runner at all, and whether Google's terms permit it** — [#149](https://github.com/NGL321/mosaic/issues/149). The headless docs require a prior interactive session and document no service-account path (§1.4). *What would settle it:* an Antigravity terms-of-service page or an authentication doc describing a non-interactive credential — or a first-party statement that none exists.
-3. **The Gemini API free tier's numeric rate limits** — [#150](https://github.com/NGL321/mosaic/issues/150). Explicitly unreachable (§4). *What would settle it:* a signed-in read of the AI Studio limits page, recorded with a date.
-4. **Gemini context-caching prices** — [#151](https://github.com/NGL321/mosaic/issues/151). *What would settle it:* the caching section of `ai.google.dev/gemini-api/docs/pricing`, read directly, and §5 recomputed with it.
-5. **The token model in §5.1 is entirely assumed** — [#152](https://github.com/NGL321/mosaic/issues/152). Turn counts, context growth and the 90% cache-hit fraction are constructed, not measured. *What would settle it:* instrument one real research run and replace the table. **Same experiment as item 1 — it discharges both.**
+Note what is **not** here. The volatility warning above is a shelf life rather than a gap in
+anybody's understanding, and the un-investigated platforms are scope rather than debt; both
+were itemised alongside the debt in the original and are moved into *What this does not
+establish*, where they belong.
+
+1. **Whether Antigravity CLI can be authenticated in an ephemeral CI runner at all, and whether Google's terms permit it** — Source, [#149](https://github.com/NGL321/mosaic/issues/149). The headless docs require a prior interactive session and document no service-account path (§1.4). *What would settle it:* an Antigravity terms-of-service page or an authentication doc describing a non-interactive credential — or a first-party statement that none exists.
+2. **The Gemini API free tier's numeric rate limits** — Source, [#150](https://github.com/NGL321/mosaic/issues/150). Explicitly unreachable (§4). *What would settle it:* a signed-in read of the AI Studio limits page, recorded with a date.
+3. **Gemini context-caching prices** — Source, [#151](https://github.com/NGL321/mosaic/issues/151). *What would settle it:* the caching section of `ai.google.dev/gemini-api/docs/pricing`, read directly, and §5 recomputed with it.
+
+**Two more items left this section, and the reason is the same one that emptied the two
+above.** The dispatch quota ([#148](https://github.com/NGL321/mosaic/issues/148)) and the
+§5.1 token model ([#152](https://github.com/NGL321/mosaic/issues/152)) were filed here as
+debt, and both wrote *Curriculum: None* on their own faces — a debt item on a ledger whose
+purpose is scheduling Curriculum work, declaring it schedules none. Under
+[#189](https://github.com/NGL321/mosaic/issues/189)'s test — *is there a document that, once
+read, ends this?* — the answer for both is no: they are discharged by **running a
+measurement**, which is the population #189 expelled as tasks rather than debt. They are now
+one task, [#222](https://github.com/NGL321/mosaic/issues/222), because their own text already
+said one run settles both; the closed issues are kept so citations resolve, and both appear
+above under *open gaps*.
 
 ---
 

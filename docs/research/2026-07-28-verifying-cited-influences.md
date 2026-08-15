@@ -6,7 +6,8 @@ kind: verification
 tier: T3
 session: unrecorded
 sources: 21
-debt: [29, 30, 31, 32, 135, 136, 137, 138]
+debt_source: [29, 30, 31, 135]
+debt_verification: [32, 137, 138]
 supersedes: null
 ---
 
@@ -454,6 +455,7 @@ suggests.
 
 ### Open gaps
 
+- **Whether Still et al.'s nostalgia–dissipation result survives feedback.** They assume no feedback from system to drive; Mosaic's inference engines act by construction, so §2's verdict may survive as a statement about their setting and stop being usable here. Still (2014) §4.1 is the entry point. This was itemised as debt by the retrofit and is not debt — no reading discharges it and nobody owes it, which is [#189](https://github.com/NGL321/mosaic/issues/189)'s genus test failing. Now a **Prospect** ([#136](https://github.com/NGL321/mosaic/issues/136), closed and kept; [entry](https://github.com/NGL321/mosaic/issues/109#issuecomment-5286536015)), migrated by [#197](https://github.com/NGL321/mosaic/issues/197).
 - **Whether the `_After_` lines are *complete*, not merely correct.** This document checked the attributions the ticket named. It did not ask whether an entry credits everything it borrows — which is how [#97](https://github.com/NGL321/mosaic/issues/97) was later found: `Obstruction`'s gauge-theory and sheaf-cohomology citations were **never in this document's brief**, and the word *Obstruction* does not appear here at all. There may be others.
 - **A probable error in how the *Limnaea* work is remembered**, opened and deliberately not closed: Piaget's *doctoral thesis* (1918) was *Introduction à la malacologie valaisanne*, on Valais molluscs generally. The *Limnaea* work is a research programme running from the 1920s, not a thesis. Nothing in `CONTEXT.md` turned on it, so no edit was made — but the programme should not repeat the "1929 thesis" formulation.
 - **Whether Mosaic's "functional" condition on *Representation* can be given a thermodynamic warrant at all**, or only a stipulative one. §2.4 established that Still et al. do not supply it; it did not establish that nothing does.
@@ -467,20 +469,29 @@ suggests.
 
 ---
 
-## Verification Debt
+## Debt
 
-Eight items, all filed. Two kinds: sources that could not be reached, and derivations Noah
-would need to be able to defend unaided. The second kind is what schedules Curriculum work;
-the first is a library problem.
+Seven items, all filed, each declaring its kind under
+[#189](https://github.com/NGL321/mosaic/issues/189)'s split. **Source Debt** is discharged by
+an agent producing a Source; **Verification Debt** is discharged by Noah learning, and is what
+schedules Curriculum work. The first four here are a library problem, the last three a
+Curriculum one — which is the division this document's original section drew in prose, before
+the ledger had names for it.
 
-1. **Mountcastle (1957; 1978) unread in the original** — [#29](https://github.com/NGL321/mosaic/issues/29). *What would settle it:* a library copy of *The Mindful Brain*, or institutional access to J. Neurophysiol.
-2. **Piaget (1929), *Limnaea*, unreached** — [#30](https://github.com/NGL321/mosaic/issues/30). *What would settle it:* the 1929 paper, or *Biologie et connaissance* (1967), where Piaget draws the biology→cognition link in his own voice.
-3. **Piaget's own use of *schéma* unconfirmed from primary French** — [#31](https://github.com/NGL321/mosaic/issues/31). *What would settle it:* the French text of *La formation du symbole chez l'enfant* (1945) or *L'image mentale chez l'enfant* (1966).
-4. **Tishby, Pereira & Bialek read as the 2000 arXiv posting, not the 1999 proceedings** — [#135](https://github.com/NGL321/mosaic/issues/135). Bibliographic, not substantive; filed because the record should not carry a year nobody checked.
-5. **Still et al. (2012) Eq. (14) is not defensible unaided** — [#32](https://github.com/NGL321/mosaic/issues/32). Deriving `β⟨W_diss[x_t→x_{t+1}]⟩ = H[s_t|x_{t+1}] − H[s_t|x_t] = I_mem(t) − I_pred(t)` requires nonequilibrium free energy as a functional of an arbitrary distribution (their Eq. 8), the Crooks/Jarzynski setting, and the KL expression for the additional nonequilibrium free energy (Eq. 6). **Highest-priority item.**
-6. **The no-feedback condition** — [#136](https://github.com/NGL321/mosaic/issues/136). Still et al. assume no feedback from system to drive; Mosaic's inference engines act. Whether the nostalgia–dissipation result survives feedback may be a genuine open question rather than a reading exercise. Still (2014) §4.1 is the entry point.
-7. **Sheaf Laplacians and the O(n)-bundle specialisation** — [#137](https://github.com/NGL321/mosaic/issues/137). Enough Hodge theory on cell complexes to see why δ² = 0 makes the coboundary a discrete flat connection, and why the scalar-multiple refinement in Hansen & Ghrist §3.5 is forced rather than cosmetic.
-8. **Landauer's bound versus the second law** — [#138](https://github.com/NGL321/mosaic/issues/138). The gap between *this is a minimum* and *this minimum is achievable* is where the thermodynamics-of-computation literature since 1961 lives. The *bound* language this document put into the `_After_` line is a promise that the distinction is understood.
+1. **Mountcastle (1957; 1978) unread in the original** — Source, [#29](https://github.com/NGL321/mosaic/issues/29). *What would settle it:* a library copy of *The Mindful Brain*, or institutional access to J. Neurophysiol.
+2. **Piaget (1929), *Limnaea*, unreached** — Source, [#30](https://github.com/NGL321/mosaic/issues/30). *What would settle it:* the 1929 paper, or *Biologie et connaissance* (1967), where Piaget draws the biology→cognition link in his own voice.
+3. **Piaget's own use of *schéma* unconfirmed from primary French** — Source, [#31](https://github.com/NGL321/mosaic/issues/31). *What would settle it:* the French text of *La formation du symbole chez l'enfant* (1945) or *L'image mentale chez l'enfant* (1966).
+4. **Tishby, Pereira & Bialek read as the 2000 arXiv posting, not the 1999 proceedings** — Source, [#135](https://github.com/NGL321/mosaic/issues/135). Bibliographic, not substantive; filed because the record should not carry a year nobody checked.
+5. **Still et al. (2012) Eq. (14) is not defensible unaided** — Verification, [#32](https://github.com/NGL321/mosaic/issues/32). Deriving `β⟨W_diss[x_t→x_{t+1}]⟩ = H[s_t|x_{t+1}] − H[s_t|x_t] = I_mem(t) − I_pred(t)` requires nonequilibrium free energy as a functional of an arbitrary distribution (their Eq. 8), the Crooks/Jarzynski setting, and the KL expression for the additional nonequilibrium free energy (Eq. 6). **Highest-priority item.**
+6. **Sheaf Laplacians and the O(n)-bundle specialisation** — Verification, [#137](https://github.com/NGL321/mosaic/issues/137). Enough Hodge theory on cell complexes to see why δ² = 0 makes the coboundary a discrete flat connection, and why the scalar-multiple refinement in Hansen & Ghrist §3.5 is forced rather than cosmetic.
+7. **Landauer's bound versus the second law** — Verification, [#138](https://github.com/NGL321/mosaic/issues/138). The gap between *this is a minimum* and *this minimum is achievable* is where the thermodynamics-of-computation literature since 1961 lives. The *bound* language this document put into the `_After_` line is a promise that the distinction is understood.
+
+**One item left this section and did not leave the record.** The **no-feedback condition**
+([#136](https://github.com/NGL321/mosaic/issues/136)) was itemised here as debt with the
+retrofit's own hedge that it *"may be a genuine open question rather than a reading
+exercise"*. [#189](https://github.com/NGL321/mosaic/issues/189) ruled that question, and it is
+not debt: nobody owes it and no reading discharges it. It is now a Prospect, migrated by
+[#197](https://github.com/NGL321/mosaic/issues/197), and appears above under *open gaps*.
 
 ---
 
