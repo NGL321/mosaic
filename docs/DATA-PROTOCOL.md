@@ -100,9 +100,9 @@ store it.** Store the generator config in the repo. Regenerable bytes in canonic
 are pure cost: they ride the nightly mirror and the backup forever.
 
 For Mosaic this covers activation tensors, distance matrices, derived features, intermediate
-representations and re-renderable figures — which is to say most of what an experiment
-produces by volume. **This is a design constraint on every experiment**, not a cleanup
-policy: a pipeline that cannot regenerate its intermediates from a seed has failed §3.3 at
+representations and re-renderable figures — which is to say most of what a Run
+produces by volume. **This is a design constraint on every Experiment**, not a cleanup
+policy: a config that cannot regenerate its intermediates from a seed has failed §3.3 at
 design time, and is also failing the load-bearing standard in §1.
 
 **3.4 — Is it a durable artifact someone will rely on later** (model checkpoints, run
@@ -147,7 +147,7 @@ The Lab Notebook is **not** a note and does not route here; see §8.1.
 discriminator is *intent*, not publication status: Secure Research is work Noah does not
 intend to keep public from the outset, and Mosaic is public-by-design from day one. Its loss
 or theft would cost nothing, because being seen is the whole point. Institutional and cloud
-compute are therefore available, which means experiments need not be sized to one desktop.
+compute are therefore available, which means Runs need not be sized to one desktop.
 
 This corrects a first reading that took "unpublished" to mean "sensitive" and excluded cloud
 compute; the correction is [#3](https://github.com/NGL321/mosaic/issues/3)'s second
@@ -179,7 +179,7 @@ than batch publish.
 
 **Mosaic has no `publish.sh` yet.** Until it does, no run has a mechanised path to §3.4's
 deterministic location, and the first experiment will need one before its outputs can be
-cited.
+cited. Tracked as [#42](https://github.com/NGL321/mosaic/issues/42).
 
 ---
 
@@ -284,5 +284,5 @@ not as decided. Until it closes, a release freeze is proposed to Noah rather tha
 | | What is missing | Where it is tracked |
 |---|---|---|
 | §3.4 | The retention arithmetic — runs × checkpoints × size — before the first large sweep | map [#1](https://github.com/NGL321/mosaic/issues/1), *Not yet specified*; needs [#7](https://github.com/NGL321/mosaic/issues/7)'s first rung |
-| §5 | `publish.sh` — no mechanised path from a run's output to `Desk/mosaic/runs/<run-id>/` | unfiled; blocks the first experiment's outputs being citable |
+| §5 | `publish.sh` — no mechanised path from a run's output to `Desk/mosaic/runs/<run-id>/` | [#42](https://github.com/NGL321/mosaic/issues/42), on map [#1](https://github.com/NGL321/mosaic/issues/1); blocks the first experiment's outputs being citable |
 | §8.4 | Whether publication-time artifact release is exempt from §3.3, and under what retention | [#9](https://github.com/NGL321/mosaic/issues/9) |

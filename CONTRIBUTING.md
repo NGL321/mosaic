@@ -20,5 +20,5 @@ You licence each file you touch under whatever that file's path already carries 
 code, CC BY 4.0 for the prose record. The table is in [`README.md`](README.md#licensing).
 
 Contributions are credited in `git log` and by the licence's notice requirement. Where a
-recorded result comes to depend on your apparatus, the experiment record cites it and you
-by name.
+recorded result comes to depend on your apparatus, the record of the Run that produced it
+cites the apparatus and you by name.

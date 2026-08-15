@@ -1,0 +1,47 @@
+# PROTOTYPE — inquiries/172-formation-signature-grokking/runs/2026-08-14-s3f9c1.declared.yaml
+#
+# THE RUN-SET DECLARATION. Committed BEFORE any run in the set produces a number, and
+# never edited afterwards. Its appearance is the second freeze event, symmetric with #60's
+# first one: the appearance of `config.yaml` freezes the instrument, the appearance of
+# this file freezes the measurement.
+#
+# It exists because ancestry is a property of ONE result and the leak lives in the
+# siblings that were never committed. Twenty seeds run, one manifest published: every
+# ancestry check passes perfectly, and the data chose the result. Declaring the set is
+# what makes the nineteen absences visible.
+#
+# What is NOT here is as deliberate as what is:
+#
+#   - no `register:`         — #56 derives it, #60 refuses it on the charter, and a
+#                              declared register is a register an argument can move
+#   - no metric, no threshold, no decision rule
+#                            — those are the charter's, frozen at open, and repeating
+#                              them here would create a second copy that could disagree
+#   - no results             — this file is a commitment, not a report
+
+set_id: s3f9c1
+inquiry: 172
+config_sha: sha256:8f7e6d5c4b3a29180f7e6d5c4b3a29180f7e6d5c4b3a29180f7e6d5c4b3a2918
+
+# HOW THE SEEDS ARE DRAWN, never which seeds were chosen. `inquiries/README.md` already
+# keeps the seed out of config.yaml — "the config declares how seeds are drawn; each run's
+# manifest records the value it drew" — so the freeze pins the instrument and says nothing
+# about which seeds get run. This is where that gap closes. Seed i is a function of
+# committed text, so the sequence is recomputable in a clone by anyone and choosable by
+# nobody.
+draw:
+  rule: sha256-stream
+  master_seed: "172:s3f9c1"
+  count: 6
+
+# THE ATTRITION POLICY, declared in advance. A set with no declared response to a failed
+# run improvises one after the failure, which is a judgement made with the data in view.
+# `next-from-rule` means a replacement is the next index in the same stream — arithmetic,
+# not a decision. The bound is what stops replacement becoming a search over seeds.
+attrition:
+  policy: next-from-rule
+  max_replacements: 2
+
+# No `dataset:` block. This is a kind-(2) Inquiry — the data does not exist until the runs
+# produce it, so the ordering the register needs is available directly. The kind-(1) form,
+# where the dataset is years older than the Inquiry, is the sibling file.

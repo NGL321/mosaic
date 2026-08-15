@@ -43,9 +43,23 @@ for _stream in (sys.stdout, sys.stderr):
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "curriculum" / "open.md"
 
-OPEN_LABEL = "debt:open"
+SOURCE_LABEL = "debt:source"
+VERIFICATION_LABEL = "debt:verification"
+KIND_LABELS = (VERIFICATION_LABEL, SOURCE_LABEL)
 DONE_LABEL = "debt:discharged"
-QUERY = "https://github.com/NGL321/mosaic/issues?q=is%3Aissue+label%3Adebt%3Aopen"
+
+# Retired by #189. Fetched anyway so that anything still carrying it is *reported*
+# rather than silently dropped from the snapshot; the flip is tracked separately.
+LEGACY_LABEL = "debt:open"
+
+KIND_TITLE = {
+    VERIFICATION_LABEL: "Verification Debt — owed by Noah, discharged by learning",
+    SOURCE_LABEL: "Source Debt — owed by an agent, discharged by search",
+}
+QUERY = (
+    "https://github.com/NGL321/mosaic/issues"
+    "?q=is%3Aissue+label%3Adebt%3Averification%2Cdebt%3Asource"
+)
 
 EXIT_OK, EXIT_STALE, EXIT_TOOL, EXIT_MALFORMED = 0, 1, 2, 3
 
@@ -54,10 +68,11 @@ HEADER = """\
      The ledger is the issue tracker; this file is a committed snapshot of it.
      Regenerate with: python tools/snapshot_debt.py -->
 
-# Verification Debt — open
+# Debt — open
 
-Snapshot of [`label:debt:open`]({query}) taken {when}. Rows are grouped by **label**,
-which is authoritative; see [`README.md`](README.md).
+Snapshot of [`debt:verification` and `debt:source`]({query}) taken {when}. Rows are
+grouped by **kind label**, which is authoritative; `debt:discharged` beside a kind is
+the state. See [`README.md`](README.md), and #189 for why there are two kinds.
 
 The tracker is the source of truth. This file exists so that a clone of the
 repository contains the programme's debt, and so `git log` can answer what the
@@ -165,56 +180,75 @@ def link_text(title: str) -> str:
 # ---------------------------------------------------------------------------
 
 
-def partition(issues: list[dict]) -> tuple[list[dict], list[dict]]:
+def partition(issues: list[dict]) -> tuple[dict[str, list[dict]], list[dict]]:
     """
-    Split on the **label**, which is authoritative, and cross-check state.
+    Split on the **kind label**, which is authoritative, and cross-check state.
 
-    A closed issue still labelled `debt:open`, or an open one labelled
-    `debt:discharged`, is a bookkeeping error. It is reported, not quietly filed
-    under whichever heading the state happens to imply.
+    #189 made the kind and the state two axes: a bare `debt:source` or
+    `debt:verification` is open, and the same label beside `debt:discharged` is
+    discharged. An issue whose state disagrees with its labels — closed and not
+    discharged, or discharged and still open — is a bookkeeping error. It is
+    reported, not quietly filed under whichever heading the state happens to imply.
     """
-    live, done = [], []
+    live: dict[str, list[dict]] = {k: [] for k in KIND_LABELS}
+    done: list[dict] = []
     for i in issues:
         names = {lbl["name"] for lbl in i.get("labels", [])}
         is_open_state = i["state"].upper() == "OPEN"
         ref = f"#{i['number']}"
 
-        if OPEN_LABEL in names and DONE_LABEL in names:
-            warn(f"{ref}: carries both {OPEN_LABEL} and {DONE_LABEL}; filing as open")
-            names.discard(DONE_LABEL)
+        if LEGACY_LABEL in names:
+            warn(f"{ref}: still carries the retired {LEGACY_LABEL}; needs the #189 migration")
 
-        if OPEN_LABEL in names:
-            if not is_open_state:
-                warn(f"{ref}: labelled {OPEN_LABEL} but the issue is closed")
-            live.append(i)
-        elif DONE_LABEL in names:
+        kinds = [k for k in KIND_LABELS if k in names]
+        if not kinds:
+            warn(f"{ref}: carries no debt kind label; skipped")
+            continue
+
+        if DONE_LABEL in names:
             if is_open_state:
                 warn(f"{ref}: labelled {DONE_LABEL} but the issue is still open")
             done.append(i)
-        else:
-            warn(f"{ref}: carries neither debt label; skipped")
+            continue
+
+        if not is_open_state:
+            warn(f"{ref}: closed but not labelled {DONE_LABEL}")
+        # Both kinds is legitimate — an assertion may be unsourced *and* undefended —
+        # so the issue appears under each, rather than one winning arbitrarily.
+        for k in kinds:
+            live[k].append(i)
     return live, done
 
 
 def render(issues: list[dict]) -> str:
     live, done = partition(issues)
+    n_live = len({i["number"] for group in live.values() for i in group})
     parts = [HEADER.format(query=QUERY, when=date.today().isoformat())]
-    parts.append(f"**{len(live)} open · {len(done)} discharged**\n")
-    parts.append("| # | holds down | curriculum |")
-    parts.append("|---|---|---|")
-    for i in live:
-        ref = f"#{i['number']}"
-        holds = cell(field(i["body"], "**Holds down.**", where=ref))
-        curr = cell(section(i["body"], "Curriculum", where=ref))
-        parts.append(f"| [{ref}]({i['url']}) | {holds} | {curr} |")
+    parts.append(f"**{n_live} open · {len(done)} discharged**\n")
+
+    for kind in KIND_LABELS:
+        group = live[kind]
+        parts.append(f"## {KIND_TITLE[kind]}\n")
+        if not group:
+            parts.append("None open.\n")
+            continue
+        parts.append("| # | holds down | curriculum |")
+        parts.append("|---|---|---|")
+        for i in group:
+            ref = f"#{i['number']}"
+            holds = cell(field(i["body"], "**Holds down.**", where=ref))
+            curr = cell(section(i["body"], "Curriculum", where=ref))
+            parts.append(f"| [{ref}]({i['url']}) | {holds} | {curr} |")
+        parts.append("")
 
     parts.append("\n---\n")
-    for i in live:
-        ref = f"#{i['number']}"
-        parts.append(f"### [{ref} — {link_text(i['title'])}]({i['url']})\n")
-        parts.append(f"**Holds down.** {field(i['body'], '**Holds down.**', where=ref)}\n")
-        parts.append(f"**Discharged by.** {section(i['body'], 'Discharged by', where=ref)}\n")
-        parts.append(f"**Curriculum.** {section(i['body'], 'Curriculum', where=ref)}\n")
+    for kind in KIND_LABELS:
+        for i in live[kind]:
+            ref = f"#{i['number']}"
+            parts.append(f"### [{ref} — {link_text(i['title'])}]({i['url']})\n")
+            parts.append(f"**Holds down.** {field(i['body'], '**Holds down.**', where=ref)}\n")
+            parts.append(f"**Discharged by.** {section(i['body'], 'Discharged by', where=ref)}\n")
+            parts.append(f"**Curriculum.** {section(i['body'], 'Curriculum', where=ref)}\n")
 
     if done:
         parts.append("## Discharged\n")
@@ -230,7 +264,7 @@ def _comparable(text: str) -> str:
 
 
 def main() -> None:
-    text = render(gh_issues(OPEN_LABEL, DONE_LABEL))
+    text = render(gh_issues(*KIND_LABELS, DONE_LABEL, LEGACY_LABEL))
 
     if _problems:
         print(

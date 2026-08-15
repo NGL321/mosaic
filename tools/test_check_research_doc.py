@@ -29,7 +29,8 @@ kind: survey
 tier: T3
 session: unrecorded
 sources: 1
-debt: [45]
+debt_source: [45]
+debt_verification: []
 supersedes: null
 ---
 """
@@ -183,26 +184,26 @@ def test_debt_requires_an_issue_number_not_a_word() -> None:
 
 
 def test_debt_front_matter_must_mirror_the_section() -> None:
-    body = "# T\n\n## Verification Debt\n\n1. [#46](u) — read the proof.\n"
+    body = "# T\n\n## Verification Debt\n\n1. [#46](u) — **Source.** read the proof.\n"
     ok, why = crd._debt_filed(doc(body))  # front matter says [45]
     assert not ok and "mirror" in why
 
 
 def test_debt_passes_when_the_two_agree() -> None:
-    body = "# T\n\n## Verification Debt\n\n1. [#45](u) — read the proof.\n"
+    body = "# T\n\n## Verification Debt\n\n1. [#45](u) — **Source.** read the proof.\n"
     assert crd._debt_filed(doc(body))[0]
 
 
 def test_a_documents_own_ticket_does_not_count_as_filed_debt() -> None:
     """`unfiled` closed one hatch; `#4` in a document resolving #4 was the same hatch open."""
     body = "# T\n\n## Verification Debt\n\n1. Someone should re-read the #4 survey.\n"
-    front = GOOD_FRONT.replace("debt: [45]", "debt: [4]")  # ticket: 4
+    front = GOOD_FRONT.replace("debt_source: [45]", "debt_source: [4]")  # ticket: 4
     ok, why = crd._debt_filed(doc(body, front))
     assert not ok and "own ticket" in why
 
 
 def test_a_sub_bullet_is_not_a_second_debt_item() -> None:
-    body = ("# T\n\n## Verification Debt\n\n1. [#45](u) — read the proof.\n"
+    body = ("# T\n\n## Verification Debt\n\n1. [#45](u) — **Source.** read the proof.\n"
             "   - it is paywalled\n   - the preprint differs\n")
     ok, why = crd._debt_filed(doc(body))
     assert ok, why
@@ -216,12 +217,37 @@ def test_the_debt_message_names_the_cause_it_found() -> None:
     assert not ok and "name no issue" in why and "own ticket" not in why
 
     own_only = "# T\n\n## Verification Debt\n\n1. Someone should re-read the #4 survey.\n"
-    ok, why = crd._debt_filed(doc(own_only, GOOD_FRONT.replace("debt: [45]", "debt: [4]")))
+    ok, why = crd._debt_filed(doc(own_only, GOOD_FRONT.replace("debt_source: [45]", "debt_source: [4]")))
     assert not ok and "own ticket (#4)" in why
 
 
+def test_a_debt_item_must_declare_its_kind() -> None:
+    """#189 split the ledger; an item that does not say which kind it is leaks the split back."""
+    body = "# T\n\n## Debt\n\n1. [#45](u) \u2014 read the proof.\n"
+    ok, why = crd._debt_filed(doc(body))
+    assert not ok and "declare no kind" in why
+
+
+def test_the_two_debt_keys_mirror_separately() -> None:
+    """A Source Debt declared under `debt_verification` is the mistake worth catching."""
+    body = "# T\n\n## Debt\n\n1. [#45](u) \u2014 **Source.** read the proof.\n"
+    front = GOOD_FRONT.replace("debt_source: [45]\ndebt_verification: []",
+                               "debt_source: []\ndebt_verification: [45]")
+    ok, why = crd._debt_filed(doc(body, front))
+    assert not ok and "debt_source" in why
+
+
+def test_both_kinds_may_be_declared_at_once() -> None:
+    body = ("# T\n\n## Debt\n\n1. [#45](u) \u2014 **Source.** read the proof.\n"
+            "2. [#46](u) \u2014 **Verification.** derive it unaided.\n")
+    front = GOOD_FRONT.replace("debt_source: [45]\ndebt_verification: []",
+                               "debt_source: [45]\ndebt_verification: [46]")
+    ok, why = crd._debt_filed(doc(body, front))
+    assert ok, why
+
+
 def test_a_document_may_declare_no_debt() -> None:
-    front = GOOD_FRONT.replace("debt: [45]", "debt: []")
+    front = GOOD_FRONT.replace("debt_source: [45]", "debt_source: []")
     ok, _ = crd._debt_filed(doc("# T\n\n## Verification Debt\n\nNone.\n", front))
     assert ok
 

@@ -35,14 +35,27 @@ kind: survey                 # survey | verification | question | revision
 tier: T3                     # the document's floor — see §4
 session: unrecorded          # Transcript Archive session id — see below — or `unrecorded`
 sources: 44                  # primary sources in the appendix; must match the count
-debt: [45, 46]               # `debt:open` issues this document filed; [] if none
+debt_source: [45, 46]        # `debt:source` issues this document filed; [] if none
+debt_verification: []        # `debt:verification` issues it *proposes*; [] if none
 supersedes: null             # path of the document this replaces, if any
 ---
 ```
 
-**`debt:` mirrors the tracker and never adds to it.** Every number is an open `debt:open`
-issue that already exists, and the same numbers appear in the *Verification Debt* section;
-the checker requires the two to agree. [#5](https://github.com/NGL321/mosaic/issues/5) settled
+**The two debt keys mirror the tracker and never add to it.** Every number is an open issue
+that already exists, carrying the matching kind label, and the same numbers appear in the
+*Debt* section; the checker requires the two to agree.
+
+**The keys are split because the custody rules differ, not because the schema is tidier.**
+[#189](https://github.com/NGL321/mosaic/issues/189) separated the ledger into **Source Debt**
+(debtor: an agent; discharged by producing a Source) and **Verification Debt** (debtor: Noah;
+discharged by learning). An agent may **file** a Source Debt outright — that the record has
+not sourced an assertion is a fact about the record. It may only **propose** a Verification
+Debt, because asserting what Noah cannot defend unaided is a claim about the researcher, and
+[`PROTOCOL.md` §5](../../PROTOCOL.md) reserves root assertions about Noah to Noah. A proposed
+Verification Debt therefore goes in *Proposals* alongside the tier badge it would hold down,
+on the same rail the badge already travels, and is decidable only against the **competence
+floor** ([#40](https://github.com/NGL321/mosaic/issues/40)) — undeclared as of this writing,
+which §5 rules makes the obligation *undecidable rather than satisfied*. [#5](https://github.com/NGL321/mosaic/issues/5) settled
 that the ledger *is* the issue tracker, and this key does not reopen that — it is there so the
 debt a document created is greppable from a clone without an API call, the same read-through
 cache argument that justifies [`curriculum/open.md`](../../curriculum/open.md). If the two ever
@@ -71,7 +84,7 @@ and it is the sentence a reviewer actually reads.
 | 2 | `## 0. Verdict` | a verdict table — one row per sub-question, each carrying a verdict and naming the section that argues it — and a one-line verdict as a blockquote |
 | 3 | `## 1..N` evidence | the argument |
 | 4 | `## What this does not establish` | three `###` subsections: **sources not reached**, **open gaps**, **load-bearing ifs**, a sentence under each |
-| 5 | `## Verification Debt` | itemised; each item names its `debt:open` issue |
+| 5 | `## Debt` | itemised; each item names its issue **and its kind** — Source or Verification |
 | 6 | `## Proposals` | exact replacement text for authored files, or the single word `None.` |
 | 7 | `## Appendix: primary sources` | every source, every one linked, retrieval dates where facts rot |
 
@@ -143,7 +156,7 @@ anyway so that a green run is not mistaken for a merge decision.
 | R3 | First section is the verdict, with a table or a stated one-liner | blocking | CI |
 | R4 | Every verdict-table row carries a verdict from the closed set | blocking | CI |
 | R5 | `What this does not establish`, three `###` subsections, each with a body | blocking | CI |
-| R6 | Every debt item names an issue other than this document's own ticket, mirrored in front matter | blocking | CI |
+| R6 | Every debt item names an issue other than this document's own ticket **and declares its kind**, mirrored in the matching front-matter key | blocking | CI |
 | R7 | No debt/tier/provenance content inside HTML comments | blocking | CI |
 | R8 | `Proposals` section present, `None.` if empty | blocking | CI |
 | R9 | Appendix present, count matches front matter, every entry linked | blocking | CI |
@@ -158,9 +171,14 @@ spends their attention there instead of on shape. A document that concludes *"mo
 needed"* passes every mechanical check on this list.
 
 **Two of these are narrower than they read, and the gap is the reviewer's.** R6 checks that a
-debt item names *some* issue that is not this document's own ticket and that the front matter
-mirrors the same numbers; that the number is an issue at all, that it is open, and that it
-carries `debt:open` are not checkable offline and are not checked. R10 decides which sources
+debt item names *some* issue that is not this document's own ticket, that it declares a kind
+from the closed set, and that the front matter mirrors the same numbers under the matching
+key; that the number is an issue at all, that it is open, and that its **label agrees with the
+declared kind** are not checkable offline and are not checked. The kind is therefore
+self-declared and a mislabelled item passes — which is the exact leak #189 named: *if the
+filing rule cannot tell the kinds apart at filing time, the split leaks back the moment it is
+made*. What stops it is not this check but the custody asymmetry above — an agent cannot file
+a Verification Debt at all, so the kind that matters is the one CI never has to adjudicate. R10 decides which sources
 move by reading the link — pricing, quotas, rate limits, `latest` docs — so it is a reminder
 with false negatives, not a guarantee; it is advisory for that reason. Both were written into
 this table as though CI settled them, which is the specific way a gate comes to certify less
