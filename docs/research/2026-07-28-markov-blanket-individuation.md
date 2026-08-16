@@ -1,3 +1,17 @@
+---
+ticket: 14
+map: 1
+date: 2026-07-28
+revised: 2026-07-29
+kind: question
+tier: T3
+session: unrecorded
+sources: 28
+debt_source: [146, 209]
+debt_verification: [139, 140, 141, 142, 143]
+supersedes: null
+---
+
 # Can a Markov blanket carry individuation, or should causal states?
 
 **Ticket:** [#14 — Can a Markov blanket carry individuation, or should causal states?](https://github.com/NGL321/mosaic/issues/14)
@@ -8,6 +22,23 @@
 ---
 
 ## 0. What this document concluded
+
+> **No. The Markov blanket cannot carry the individuation load, and neither can causal
+> states on their own.** Individuation and qualification collapse into **one criterion
+> applied at two levels** — the partition search of Krakauer et al. — which is a
+> simplification of the `Inference Engine` definition rather than an addition to it.
+
+| § | Sub-question | Verdict | One-line reason |
+|---|---|---|---|
+| §2 | Does instantaneous conditional independence give trajectory independence? | **Refuted** | Biehl, Pollock & Kanai (2021), Observation 1: an explicit Ornstein–Uhlenbeck counterexample proves the two are logically independent *in either direction*. |
+| §3 | Does the free-energy side's own defence preserve the blanket as an individuating construct? | **Refuted** | Ramstead's reply states the formal ontology is *"not an a priori attempt to find or draw boundaries in nature"* but instrumentalist model-building. That is the rebuttal, not a critic's characterisation. |
+| §4 | Do causal states individuate? | **Refuted** | Computational mechanics is *handed* a process: Shalizi & Crutchfield Def. 1 starts from a fixed alphabet, and Crutchfield & Feldman frame the apparatus as a measurement channel with the observable partition already chosen. |
+| §5.1 | Do Markov blankets survive nesting? | **Loose** | Nesting is constructed, not proved. |
+| §5.2 | Do causal states survive nesting? | **Supported** | Shalizi (2003), Lemma 2 (Patch Composition) *proves* that local causal states compose losslessly. |
+| §6 | Is there a candidate neither thread named? | **Supported** | Krakauer, Bertschinger, Olbrich, Flack & Ay: an individual is *"a system partition that is a sufficient predictor of its own future"*, found by searching over candidate partitions. |
+| §6.1 | Are `Closure` and the proposed individuation criterion one apparatus at two levels? | **Open** | The same formalism by three of the same authors already sits under `Closure`, adopted independently. Whether that is identity or resemblance is unsettled, and over-claiming it would do the most damage of anything here. |
+| §7 | Can the entry keep the blanket as stated? | **Refuted** | Options 1, 2 and 4 each fail for a stated reason; option 3 — demote the blanket to intuition-and-citation — is what survives. |
+| §7.7 | Has anyone related blankets and causal states formally? | **Open** | Searched for and not found. A well-posed, apparently unasked question squarely inside Mosaic's territory, and a candidate belt rung in its own right. |
 
 **Inference Engine** currently reads: *a system delineated by a Markov blanket whose internal state carries predictive information about states beyond that blanket*. The blanket individuates; predictive information qualifies. This document asks whether the blanket can carry the individuation load.
 
@@ -467,9 +498,12 @@ A **second** well-posed gap was opened by the revision, stated in §6.1: whether
 > _After_: Shalizi & Crutchfield (2001) for causal states as the minimal sufficient statistic for prediction, and for statistical complexity; Bialek, Nemenman & Tishby (2001) for predictive information; Krakauer, Bertschinger, Olbrich, Flack & Ay (2020) for individuation by choosing the partition that maximises propagated information. Pearl (1988) and Friston (2013) for the Markov blanket, which supplies the **intuition** — a thing is what it is by how it is coupled, with a sensory and an active face — and is cited for that and not relied on formally.
 > _Departs_: The blanket **no longer individuates**. It was doing so in an earlier version of this entry; it cannot. The instantaneous and path formulations are provably inequivalent (Biehl, Pollock & Kanai 2021), blanket existence is a fine-tuning condition in cyclic systems (Aguilera, Millidge, Tschantz & Buckley 2022), and the framework's own defenders describe it instrumentally rather than as drawing boundaries in nature (Ramstead 2022). Individuation and qualification are therefore **one criterion at two levels** rather than two criteria glued together. Departs from computational mechanics in turn: causal states characterise a process whose observable is already given and do not individuate on their own, so the partition search is Mosaic's addition, after Krakauer et al. The observable is **declared, not discovered** — the boundary is a fact relative to a stated measurement, not independent of it.
 
-<!-- Provenance Tier: machine-produced, unverified. Sourced against primary documents in
-     docs/research/2026-07-28-markov-blanket-individuation.md. The Shalizi–Crutchfield
-     theorems, the Biehl counterexample and the Krakauer construction are Verification Debt. -->
+> **Provenance of the proposed entry.** **T3** — machine-produced and unverified. Every
+> source behind it was read directly and is in the appendix, which is *evidence, not
+> warrant*: the Shalizi–Crutchfield theorems, the Biehl–Pollock–Kanai counterexample and the
+> Krakauer construction are all Verification Debt, itemised below and filed. Promoted from an
+> HTML comment under [#50](https://github.com/NGL321/mosaic/issues/50) — debt logged inside a
+> comment is logged nowhere ([#5](https://github.com/NGL321/mosaic/issues/5)).
 
 Consequential edits implied elsewhere, flagged but not drafted:
 
@@ -481,22 +515,95 @@ Consequential edits implied elsewhere, flagged but not drafted:
 
 ---
 
-## 9. New Verification Debt created by this recommendation
+## What this does not establish
 
-Mathematics Noah would need to defend the amended entry unaided. Ordered by dependency, which is the order the Curriculum should schedule them in.
+Retrofitted under [#50](https://github.com/NGL321/mosaic/issues/50) against the [output
+contract](README.md), which postdates this document. **Open gaps** is recoverable in full —
+§7.7 was already written as one, and is the strongest thing here. **Sources not reached** is
+the subsection [#50](https://github.com/NGL321/mosaic/issues/50) says an agent cannot honestly
+retrofit, and it is thin below for exactly that reason: it is reconstructed from the
+document's own text, not from the session that produced it.
 
-1. **Information theory to the level of the data-processing inequality and sufficient statistics.** Required to read *any* of Theorems 1–5. The proofs use only the chain rule, H[f(X)] ≤ H[X], and conditioning-reduces-entropy — genuinely elementary, but they must be owned rather than recognised. Covered by [Cover & Thomas, *Elements of Information Theory*, 2nd ed.](https://onlinelibrary.wiley.com/doi/book/10.1002/047174882X), ch. 2.
-2. **Shalizi & Crutchfield Theorems 1, 2, 3 and 5, reproved from the paper.** These are the load-bearing claims. Theorem 2 depends on the Refinement Lemma (Lemma 7), which is the only non-trivial step; there is an alternative proof in their Appendix E and both should be worked.
-3. **The Biehl–Pollock–Kanai Ornstein–Uhlenbeck counterexample (Appendix A).** Requires: linear SDEs, the stationary Fokker–Planck equation, the Helmholtz decomposition f = (Γ + R)∇ ln p*, and the continuous Lyapunov equation JΣ* + Σ*Jᵀ + 2Γ = 0. This is the single item Noah must be able to reconstruct on a whiteboard, because it is the technical claim on which the demotion of the blanket rests.
-4. **Excess entropy and entropy convergence.** [Crutchfield & Feldman (2003)](https://arxiv.org/abs/cond-mat/0102181) §III–V: block entropy H(L), its discrete derivatives, and E as the L→∞ intercept. Needed to say what E *is* without hand-waving, and to know that its estimation from finite data is biased.
-5. **Subextensivity of predictive information.** [Bialek et al. (2001)](https://arxiv.org/abs/physics/0007070) §II: why I_pred(T) = S₁(T) and why it cannot grow linearly. Modest, and it makes the qualification criterion defensible against "isn't that just mutual information?"
-6. **The Krakauer identity A* − A = NTIC and the closure⇒sufficiency implication.** Elementary once (1) is done; the derivation is half a page in the paper. Must be reproduced because it is the individuation criterion.
-6a. **The informational-closure family, and whether Closure and non-closure are one quantity at two levels.** [Bertschinger, Olbrich, Ay & Jost (2008)](https://www.sciencedirect.com/science/article/abs/pii/S0303264707001037) for the autonomy measure and informational closure, then the derivation of nC and NTIC in Krakauer et al. Required to settle the open question in §6.1 — the one place where this recommendation touches vocabulary that landed independently, and therefore the place where an unearned identification would do the most damage. Cheap relative to its value, since item 6 already covers most of the machinery.
+### Sources not reached
 
-7. **Shalizi (2003), Lemma 2 (Patch Composition), and the lightcone construction.** Needed for the nesting claim in Schema. Requires being comfortable with light-cone-indexed random fields, which is more notation than mathematics.
-8. **Estimation, not just theory — flagged as the largest hidden debt.** Every quantity above is defined on an infinite stationary process and must be estimated from finite samples. Causal-state reconstruction (CSSR and its descendants), entropy-rate estimator bias, and the sample complexity of C_μ are all live problems, and none of the theorems in §4.2 say anything about them. Any empirical Mosaic claim will be attacked here first. This should be scheduled as its own Curriculum block rather than folded into the others.
+**Thin, and the thinness is the finding.** Every source this document *cites* is in the
+appendix and was read; what cannot be recovered from the document alone is what was *wanted
+and not got*. The original session is not reachable, so the honest answer is that this
+subsection is incomplete rather than empty, and a reader should not read its shortness as a
+clean bill.
 
-Debt **discharged** by the recommendation, worth recording as a credit: the non-equilibrium steady-state machinery, the Helmholtz/solenoidal decomposition, and the information geometry of Bayesian mechanics are no longer load-bearing for the Inference Engine definition. Item 3 requires the SDE apparatus once, to verify a counterexample — not to build on.
+Two are recoverable from the text:
+
+- **Nothing formally relating Markov blankets and causal states.** Searched for and not found (§7.7). This is a genuine absence in the literature rather than an access failure — which is why it is recorded as an open gap below and not only here.
+- **The Bertschinger, Olbrich, Ay & Jost (2008) paper is behind a publisher paywall.** It is load-bearing for §6.1 and appears in the appendix as a publisher landing page. [#33](https://github.com/NGL321/mosaic/issues/33) independently records that the same paper is cited from **recall, not warrant**, on `Closure` — so the one source both halves of §6.1's identification rest on is the one nobody has opened.
+
+### Open gaps
+
+- **Nobody has related Markov blankets and causal states formally** (§7.7). No theorem states when a Friston blanket's internal states are, refine, or are refined by the causal states of the blanket-conditioned process; nothing connects a particle's C_μ to the conditions under which its blanket exists. Given that Lemma 2 delivers exactly the screening property the blanket is imported to provide, *"when is the causal-state partition a Markov blanket, and vice versa?"* is well-posed, apparently unasked, and a candidate Protective Belt rung.
+- **Whether an engine's Extraction and its schemas' Closures are one partition-search objective at two levels of nesting** (§6.1). If they are, [#15](https://github.com/NGL321/mosaic/issues/15)'s not-a-scalar clause stops being a stipulation and becomes a result. Filed as debt by the retrofit and ruled not debt: a **Prospect** ([#145](https://github.com/NGL321/mosaic/issues/145), closed and kept; [entry](https://github.com/NGL321/mosaic/issues/109#issuecomment-5286536160)), migrated by [#197](https://github.com/NGL321/mosaic/issues/197).
+- **Whether any of these quantities can be estimated from finite samples at the volumes Mosaic can collect.** Every quantity the argument uses is defined on an infinite stationary process. Causal-state reconstruction (CSSR and its descendants), entropy-rate estimator bias, and the sample complexity of C_μ are live problems, and none of the theorems in §4.2 says anything about them — so every theorem above can be true and unusable, and any empirical Mosaic claim will be attacked here first. **The programme reached this same wall by a second, independent route**, [#87](https://github.com/NGL321/mosaic/issues/87)'s Edge of Chaos axes, which is evidence about where the real risk sits that neither document could see alone. A **Prospect** ([#147](https://github.com/NGL321/mosaic/issues/147), closed and kept; [entry](https://github.com/NGL321/mosaic/issues/109#issuecomment-5286536362)) — no reading discharges it, which is exactly why it is not on anybody's Curriculum.
+- **The recommendation still requires the modeller to declare an observable.** It does not escape the map/territory problem; it makes the choice explicit and falsifiable instead of hiding it inside a word that sounds ontological. Whether an observable can be *chosen well* — by what criterion, against what — is not addressed anywhere.
+
+### Load-bearing ifs
+
+- **If the Biehl–Pollock–Kanai Ornstein–Uhlenbeck counterexample does not hold, the whole recommendation loses its sharpest argument.** §2's **Refuted** is the finding everything downstream leans on, and it is taken on the paper's authority — nobody here reconstructed it. [#141](https://github.com/NGL321/mosaic/issues/141), and the one item the document itself says must be reconstructible on a whiteboard.
+- **If Shalizi (2003) Lemma 2 does not compose in the form §5.2 reads it as composing**, the nesting advantage of causal states over blankets disappears and Thread D's asymmetry goes with it — [#146](https://github.com/NGL321/mosaic/issues/146).
+- **If §6.1's identification is over-claimed**, the "one apparatus at two levels" answer to the degenerating-problemshift objection becomes a resemblance argument rather than a fact, and the recommendation has to be defended on its merits alone. The document flags and refuses the over-claim; it does not settle it — [#145](https://github.com/NGL321/mosaic/issues/145).
+- **If the quantities cannot be estimated from finite samples at the volumes Mosaic can collect**, every theorem above is true and unusable. This is the largest hidden risk in the document and it is not a reading gap — [#147](https://github.com/NGL321/mosaic/issues/147).
+
+---
+
+## Debt
+
+Seven items, all filed, each declaring its kind under
+[#189](https://github.com/NGL321/mosaic/issues/189)'s split. Five are **Verification Debt** —
+mathematics Noah would need to defend the amended entry unaided, **ordered by dependency**,
+which is the order the Curriculum should schedule them in — and two are **Source Debt**,
+readings an agent discharges by producing a Source. The Source items are kept in their
+dependency position rather than grouped, because the ordering is what the Curriculum reads.
+
+1. **Information theory to the data-processing inequality and sufficient statistics** — Verification, [#139](https://github.com/NGL321/mosaic/issues/139). Required to read *any* of Theorems 1–5. The proofs use only the chain rule, H[f(X)] ≤ H[X], and conditioning-reduces-entropy — genuinely elementary, and they must be owned rather than recognised. [Cover & Thomas, 2nd ed.](https://onlinelibrary.wiley.com/doi/book/10.1002/047174882X), ch. 2.
+2. **Shalizi & Crutchfield Theorems 1, 2, 3 and 5, reproved from the paper** — Verification, [#140](https://github.com/NGL321/mosaic/issues/140). Theorem 2 depends on the Refinement Lemma (Lemma 7), the only non-trivial step; there is an alternative proof in Appendix E and both should be worked.
+3. **The Biehl–Pollock–Kanai Ornstein–Uhlenbeck counterexample (Appendix A)** — Verification, [#141](https://github.com/NGL321/mosaic/issues/141). Requires linear SDEs, the stationary Fokker–Planck equation, the Helmholtz decomposition f = (Γ + R)∇ ln p*, and the continuous Lyapunov equation JΣ* + Σ*Jᵀ + 2Γ = 0. **The single item that must be reconstructible on a whiteboard**, because it is the technical claim the demotion of the blanket rests on.
+4. **Excess entropy and entropy convergence** — Verification, [#142](https://github.com/NGL321/mosaic/issues/142). [Crutchfield & Feldman (2003)](https://arxiv.org/abs/cond-mat/0102181) §III–V: block entropy H(L), its discrete derivatives, and E as the L→∞ intercept. Needed to say what E *is* without hand-waving, and to know its finite-data estimate is biased.
+5. **Subextensivity of predictive information** — Verification, [#143](https://github.com/NGL321/mosaic/issues/143). [Bialek et al. (2001)](https://arxiv.org/abs/physics/0007070) §II: why I_pred(T) = S₁(T) and why it cannot grow linearly. Modest, and it is what makes the qualification criterion defensible against *"isn't that just mutual information?"*
+6. **The reading of Krakauer et al. (2020) is agent-produced** — Source, [#209](https://github.com/NGL321/mosaic/issues/209). The Source is admitted at [`literature/krakauer-2020-individuality/`](../../literature/krakauer-2020-individuality/README.md) and is **T3 while this is open**; closing it is the promotion.
+7. **Shalizi (2003), Lemma 2 (Patch Composition), and the lightcone construction** — Source, [#146](https://github.com/NGL321/mosaic/issues/146). Needed for `Schema`'s nesting claim. More notation than mathematics — a judgement that is itself untested until someone reads it.
+
+**Item 6 replaces one this document got wrong on three counts, and the corrections came from
+opening the paper.** It was written as *"the Krakauer identity `A* − A = NTIC` and the closure
+⇒ sufficiency implication — half a page, and elementary."* Admitting the Source under
+[#199](https://github.com/NGL321/mosaic/issues/199) found that `A* − A = NTIC` **is not stated
+in that paper at all** — it is one line from three of its definitions, not half a page — that
+the phrase *non-trivial informational closure* does not appear there either, and that the
+closure ⇒ sufficiency implication is an **independent appendix result** rather than something
+following from the identity. The half-page genuinely worth reproducing is the appendix.
+
+**Two items left this section and did not leave the record**, both migrated to the Prospect
+backlog by [#197](https://github.com/NGL321/mosaic/issues/197) under
+[#189](https://github.com/NGL321/mosaic/issues/189)'s ruling that an open problem is not debt.
+Whether `Closure` and non-closure are one quantity at two levels
+([#145](https://github.com/NGL321/mosaic/issues/145)) and whether the quantities can be
+estimated from finite samples at all ([#147](https://github.com/NGL321/mosaic/issues/147))
+have no debtor and no reading that discharges them. Both now appear above under *open gaps*.
+**#147 is the one to watch** — this document called it *the largest hidden debt*, and it is
+one of the two independent routes by which the programme reached the same finite-sample wall,
+the other being [#87](https://github.com/NGL321/mosaic/issues/87)'s Edge of Chaos axes. Being
+expelled from the ledger makes it nobody's queue item, not a smaller problem.
+
+**Debt discharged by the recommendation, recorded as a credit:** the non-equilibrium
+steady-state machinery, the Helmholtz/solenoidal decomposition, and the information geometry
+of Bayesian mechanics are no longer load-bearing for the `Inference Engine` definition. Item 3
+needs the SDE apparatus **once**, to verify a counterexample — not to build on.
+
+**A note on scope, added by the retrofit.** These were written as *"new Verification Debt
+created by this recommendation"*, and §8's proposed entry has not been applied to `CONTEXT.md`.
+They are filed anyway, and unconditionally: [#14](https://github.com/NGL321/mosaic/issues/14)
+is closed as decided, so the argument is in the record and the record is what the debt holds
+down. The estimation gap in particular does not wait on any amendment — it is a fact about the
+quantities, not about the entry, which is part of why it turned out not to be debt at all.
+Where an item's phrasing names the amended entry, read it as naming the claim the entry would
+carry.
 
 ---
 

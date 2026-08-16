@@ -1,3 +1,16 @@
+---
+ticket: 27
+map: 1
+date: 2026-07-29
+kind: question
+tier: T3
+session: unrecorded
+sources: 23
+debt_source: [149, 150, 151]
+debt_verification: []
+supersedes: null
+---
+
 # The real cost and quota basis for automating async agent work
 
 **Ticket:** [#27 — Establish the real cost and quota basis for automating async agent work](https://github.com/NGL321/mosaic/issues/27)
@@ -21,7 +34,7 @@
 | **2.2** How much subscription quota, numerically? | **Unresolved** | Anthropic publishes limits only as multiples ("5x or 20x more usage than the Pro plan") and never in tokens, messages, or hours. Not computable from public documentation. |
 | **3.1** Are GitHub Actions free for Mosaic's public repository? | **Supported** | "GitHub Actions usage is free for self-hosted runners and for public repositories that use standard GitHub-hosted runners." |
 | **3.2** Does Mosaic's plausible workload exceed the hosted-runner limits? | **Refuted** (it does not) | 6-hour per-job cap, 20 concurrent jobs on Free, 35-day workflow cap. A research run is tens of minutes, serial. Enormous headroom. |
-| **4** Per-run cost for one research ticket | See §5 | Sonnet 5 **$0.51 / $2.55 / $10.74** (low/typical/high). Opus 5 **$1.27 / $6.37 / $26.85**. Gemini 3.1 Pro **$1.50 / $8.40 / $39.60**. Runner minutes **$0.00** on a public repo. |
+| **4** Per-run cost for one research ticket | **Loose** (see §5) | Sonnet 5 **$0.51 / $2.55 / $10.74** (low/typical/high). Opus 5 **$1.27 / $6.37 / $26.85**. Gemini 3.1 Pro **$1.50 / $8.40 / $39.60**. Runner minutes **$0.00** on a public repo. **Loose**, not Supported: the prices are first-party and dated, but the token model they are multiplied by is assumed rather than measured (§5.1), and the Gemini rows carry no caching discount because that price was never retrieved. |
 
 ### The one-line verdict
 
@@ -302,6 +315,8 @@ Note the first row: **the strongest Gemini model has no free tier at all.** The 
 
 ## 5. Per-run cost for one research ticket — the arithmetic
 
+Every unit price below is §4's, as retrieved on 2026-07-29 from [Anthropic's pricing page](https://platform.claude.com/pricing) and [Google's](https://ai.google.dev/gemini-api/docs/pricing). What is *derived* here is the workload they are multiplied by, and it is assumed.
+
 ### 5.1 The model of a run (all of this is assumption)
 
 > **These are assumptions, not measurements.** Nothing in the Mosaic record measures the token cost of a research ticket. The bands below are constructed from a plausible shape of agentic run and should be treated as an order-of-magnitude estimate whose *ratios* between options are more trustworthy than its absolute values. Discharging this by instrumenting one real run is §7, item 4.
@@ -383,7 +398,7 @@ Per one research ticket, USD, retrieved 2026-07-29.
 
 ## 6. What this means for #24
 
-Stated narrowly, as findings and not as a recommendation — the platform decision is #24's.
+Stated narrowly, as findings and not as a recommendation — the platform decision is [#24](https://github.com/NGL321/mosaic/issues/24)'s.
 
 1. **The premise #24 flagged is confirmed, and then some.** "I already pay Google" does not convert into CI quota (§1.1), and since 2026-06-18 it does not even convert into Gemini CLI access (§1.3). The apparent cost advantage does disappear.
 2. **The symmetric premise #24 did not check goes the other way.** A Claude subscription *does* authenticate the GitHub Action (§2.1), at zero marginal cost per run. #24 recommended Actions + the Claude Code action for reasons independent of cost; the cost analysis now supports rather than merely tolerates that recommendation.
@@ -393,17 +408,75 @@ Stated narrowly, as findings and not as a recommendation — the platform decisi
 
 ---
 
-## 7. Surviving Verification Debt
+## What this does not establish
 
-Items this document could not settle, and what would settle them.
+Retrofitted under [#50](https://github.com/NGL321/mosaic/issues/50) against the [output
+contract](README.md), which postdates this document. Unusually for the three, most of this
+**is** recoverable: a document whose sources are first-party pages records what it could not
+reach as a matter of course, because an unreachable page is itself the finding.
 
-1. **How many research tickets a Claude Pro or Max plan actually dispatches per week.** Anthropic publishes limits only as unlabelled multiples with a discretionary clause (§2.2). *What would settle it:* an empirical measurement — dispatch a real ticket through the action on a subscription token and read `/usage`. This is a one-run experiment, not a reading exercise, and it is the highest-value item here because it is the only remaining unknown in the recommended path.
-2. **Whether Antigravity CLI can be authenticated in an ephemeral CI runner at all, and whether Google's terms permit it.** The headless docs require a prior interactive session and document no service-account path (§1.4). *What would settle it:* an Antigravity terms-of-service page or an authentication doc describing a non-interactive credential. I did not find one; the pricing page is silent and the CLI docs are silent.
-3. **The Gemini API free tier's numeric rate limits.** The rate-limits page has stopped publishing the RPM/TPM/RPD table and defers to AI Studio, which is behind auth (§4). Explicitly unreachable, not merely unfound. *What would settle it:* a signed-in read of the AI Studio limits page, recorded with a date.
-4. **Gemini context-caching prices.** Not retrieved, which is why §5's Gemini rows carry no caching discount and the Gemini-vs-Sonnet ranking is not established. *What would settle it:* the caching section of `ai.google.dev/gemini-api/docs/pricing`, read directly.
-5. **The token model in §5.1 is entirely assumed.** Turn counts, context growth, and the 90% cache-hit fraction are constructed, not measured. Every absolute figure in §5 inherits that uncertainty; the *ratios* are more robust than the levels, because the same assumed workload is priced under every option. *What would settle it:* instrument one real research run and replace the table. Same experiment as item 1 — it discharges both.
-6. **Volatility.** Two load-bearing facts changed in June 2026 (§1.3, §2.1), one Anthropic price changes on 2026-09-01 (§4), and Anthropic reserves the right to change consumer limits "at our discretion" (§2.2). Anything in this document older than a quarter should be re-fetched before it decides anything. Recorded here so a future reader does not mistake a dated retrieval for a standing fact.
-7. **Not investigated:** Vertex AI / Gemini Enterprise Agent Platform pricing for Claude models, GitHub Models, and self-hosted runners on owned hardware. Each is a live option for #24 and none was in this ticket's scope.
+### Sources not reached
+
+Three, each unreachable for a different reason, and all three now filed debt.
+
+- **The Gemini API free tier's numeric rate limits.** The public rate-limits page has stopped publishing the RPM/TPM/RPD table and defers to AI Studio, which is behind authentication. **Explicitly unreachable, not merely unfound** — [#150](https://github.com/NGL321/mosaic/issues/150).
+- **Gemini context-caching prices.** Not retrieved. Consequence: §5's Gemini rows carry no caching discount while the Anthropic rows do, so the Gemini-vs-Sonnet ranking is **not like-for-like** — [#151](https://github.com/NGL321/mosaic/issues/151).
+- **Any Antigravity CLI terms-of-service or non-interactive authentication page.** Searched for and not found; the pricing page is silent and the CLI docs are silent. *Unfound* and *non-existent* are different facts and only a first-party statement separates them — [#149](https://github.com/NGL321/mosaic/issues/149).
+
+Everything else in the appendix was retrieved directly from a first-party page on
+**2026-07-29** and is quoted rather than recalled. Where a page did not state a figure, the
+item is marked **Unresolved** rather than filled from memory.
+
+### Open gaps
+
+- **Not investigated, and each is a live option for [#24](https://github.com/NGL321/mosaic/issues/24):** Vertex AI / Gemini Enterprise Agent Platform pricing for Claude models, GitHub Models, and self-hosted runners on owned hardware. None was in this ticket's scope. Recorded so a later reader does not mistake absence for a negative finding.
+- **How much subscription quota a Claude Pro or Max plan carries, numerically.** Not computable from public documentation at all — Anthropic publishes limits only as unlabelled multiples. This is the only remaining unknown on the recommended path, and it is an experiment rather than a reading — which is why it is a task, [#222](https://github.com/NGL321/mosaic/issues/222), and not debt ([#148](https://github.com/NGL321/mosaic/issues/148), closed and kept).
+- **Whether the assumed workload resembles a real research run.** The §5.1 model was constructed to be priced, not measured against anything. One instrumented run closes this and the quota question together, which is why they are a single task — [#222](https://github.com/NGL321/mosaic/issues/222) ([#152](https://github.com/NGL321/mosaic/issues/152), closed and kept).
+
+### Load-bearing ifs
+
+- **If the token model in §5.1 is wrong, every absolute figure in §5 is wrong with it.** Turn counts, context growth and the 90% cache-hit fraction are assumed. The **ratios** are more robust than the levels, because the same assumed workload is priced under every option — but the document will be cited for its levels — [#152](https://github.com/NGL321/mosaic/issues/152).
+- **If Anthropic resumes the paused change**, §2.1's **Supported** — the finding the whole recommendation turns on — falls, and the subscription path becomes an API-key path overnight. Anthropic paused it once and reserves the right to change consumer limits *"at our discretion"*.
+- **If the Gemini caching discount is large**, the Gemini-vs-Sonnet ranking in §5.7 could invert. It is not established, and the table looks complete enough to hide that — [#151](https://github.com/NGL321/mosaic/issues/151).
+- **Everything here is dated, and two load-bearing facts are six weeks old.** §1.3 and §2.1 are both *changes made in June 2026*, one Anthropic price changes on 2026-09-01, and this is the class of fact [#27](https://github.com/NGL321/mosaic/issues/27) itself called *"the kind of thing that changes annually"* — which changed twice this year. **Anything in this document older than a quarter should be re-fetched before it decides anything.** This is not filed as debt because there is nothing to learn: it is a shelf life, and it applies to the document as a whole.
+
+---
+
+## Debt
+
+Three items, all filed, all **Source Debt** — each is discharged by an agent reaching a
+first-party page and producing a Source. This document generates **no Verification Debt at
+all**, which is unusual and is a fact about the subject: nothing here is mathematics Noah
+would need to defend unaided, only vendor facts nobody has read.
+
+Note what is **not** here. The volatility warning above is a shelf life rather than a gap in
+anybody's understanding, and the un-investigated platforms are scope rather than debt; both
+were itemised alongside the debt in the original and are moved into *What this does not
+establish*, where they belong.
+
+1. **Whether Antigravity CLI can be authenticated in an ephemeral CI runner at all, and whether Google's terms permit it** — Source, [#149](https://github.com/NGL321/mosaic/issues/149). The headless docs require a prior interactive session and document no service-account path (§1.4). *What would settle it:* an Antigravity terms-of-service page or an authentication doc describing a non-interactive credential — or a first-party statement that none exists.
+2. **The Gemini API free tier's numeric rate limits** — Source, [#150](https://github.com/NGL321/mosaic/issues/150). Explicitly unreachable (§4). *What would settle it:* a signed-in read of the AI Studio limits page, recorded with a date.
+3. **Gemini context-caching prices** — Source, [#151](https://github.com/NGL321/mosaic/issues/151). *What would settle it:* the caching section of `ai.google.dev/gemini-api/docs/pricing`, read directly, and §5 recomputed with it.
+
+**Two more items left this section, and the reason is the same one that emptied the two
+above.** The dispatch quota ([#148](https://github.com/NGL321/mosaic/issues/148)) and the
+§5.1 token model ([#152](https://github.com/NGL321/mosaic/issues/152)) were filed here as
+debt, and both wrote *Curriculum: None* on their own faces — a debt item on a ledger whose
+purpose is scheduling Curriculum work, declaring it schedules none. Under
+[#189](https://github.com/NGL321/mosaic/issues/189)'s test — *is there a document that, once
+read, ends this?* — the answer for both is no: they are discharged by **running a
+measurement**, which is the population #189 expelled as tasks rather than debt. They are now
+one task, [#222](https://github.com/NGL321/mosaic/issues/222), because their own text already
+said one run settles both; the closed issues are kept so citations resolve, and both appear
+above under *open gaps*.
+
+---
+
+## Proposals
+
+**None.** This document proposes no replacement text for any authored file. Its findings are
+addressed to [#24](https://github.com/NGL321/mosaic/issues/24), which owns the platform
+decision, and §6 states them as findings rather than as a recommendation for that reason.
 
 ---
 

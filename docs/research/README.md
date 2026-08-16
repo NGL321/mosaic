@@ -191,10 +191,42 @@ survives as §4 above. The ids are kept stable so the reasoning on
 
 ## The three documents here predate this
 
-All three fail the contract, mostly on §4 and on debt filed only in prose. Retrofitting them
-is [#50](https://github.com/NGL321/mosaic/issues/50), which blocks the charter and nothing
-else — `0.x` is where process mistakes are allowed to accumulate and be swept once, rather
-than fixed one at a time as they appear ([`PROTOCOL.md` §2](../../PROTOCOL.md)). The checker is
-deliberately **not** wired into CI until that sweep lands; wiring it now would put the
-repository in permanent red, which teaches everyone to ignore it. CI wiring goes with the
-other gates in [#24](https://github.com/NGL321/mosaic/issues/24).
+All three used to fail the contract, mostly on §4 and on debt filed only in prose. They were
+retrofitted under [#50](https://github.com/NGL321/mosaic/issues/50) and all three now pass;
+`0.x` is where process mistakes are allowed to accumulate and be swept once, rather than fixed
+one at a time as they appear ([`PROTOCOL.md` §2](../../PROTOCOL.md)).
+
+**What the sweep cost, recorded because it is the argument for doing it:** eighteen debt items
+that three documents had itemised in prose and never filed
+([#135](https://github.com/NGL321/mosaic/issues/135)–[#152](https://github.com/NGL321/mosaic/issues/152)),
+against five already on the tracker. The ledger was carrying a fifth of what these three
+documents had already found and written down.
+
+**And then the sweep was itself swept, which is the more useful half of the story.** The
+retrofit landed before [#189](https://github.com/NGL321/mosaic/issues/189) split the ledger,
+so it filed all eighteen under one undifferentiated kind — and applying #189's genus test
+afterwards, **five of the twenty items these documents cite turn out not to be debt at all**.
+Three are open problems now on the Prospect backlog
+([#136](https://github.com/NGL321/mosaic/issues/136), [#145](https://github.com/NGL321/mosaic/issues/145),
+[#147](https://github.com/NGL321/mosaic/issues/147)), and two are measurements, now the single
+task [#222](https://github.com/NGL321/mosaic/issues/222) — a population the
+#189/[#198](https://github.com/NGL321/mosaic/issues/198) migration passed straight over,
+because they were the only ledger issues left carrying no kind label and nobody had the job of
+reading the census. A sixth, [#144](https://github.com/NGL321/mosaic/issues/144), split into a
+Source and a Prospect under [#199](https://github.com/NGL321/mosaic/issues/199).
+
+The lesson is not that the retrofit was wrong. It is that **a document's debt list is a claim
+about the ledger, and it goes stale exactly when the ledger is reorganised** — which is why
+the front-matter keys mirror and never add, and why the ledger stays the single place debt is
+checked.
+
+`What this does not establish` is retrofitted honestly rather than completely. #50 is explicit
+that only whoever did the reading knows which sources they failed to reach, and none of the
+three sessions is reachable — so each document's *sources not reached* subsection says what is
+recoverable from its own text and says that it is incomplete. The
+[individuation document](2026-07-28-markov-blanket-individuation.md) is the thin one, and says
+so in the subsection itself.
+
+The checker was **not** wired into CI by that sweep, and the reason has changed: the repository
+is no longer in permanent red, but CI wiring belongs with the other gates in
+[#24](https://github.com/NGL321/mosaic/issues/24) rather than arriving on its own.
