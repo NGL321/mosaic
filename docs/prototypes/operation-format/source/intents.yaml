@@ -1,0 +1,18 @@
+# PROTOTYPE — the intent axis (premise 2), only as far as three Operations need it.
+# Enumerating it is #226's job; this file exists so the KEY can be exercised, and
+# deliberately stops at what the three cells below use.
+
+add:
+  gloss: Bring a new instance of the class into being.
+edit:
+  gloss: Change the meaning of an existing instance.
+propose:
+  gloss: >
+    Produce exact replacement text for an instance the actor may not write, and
+    hand it to one who may. Its own intent, not a mode of `add` — premise 3.
+regenerate:
+  gloss: >
+    Recompute a generated instance from its source of truth. Distinct from `edit`
+    by construction: there is nothing to decide, so nobody may decide it.
+file:
+  gloss: Open a tracker instance recording an obligation.

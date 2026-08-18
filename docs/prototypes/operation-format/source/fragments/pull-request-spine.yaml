@@ -1,0 +1,33 @@
+# PROTOTYPE — PROTOCOL §6's merge spine.
+
+id: pull-request-spine
+authority: PROTOCOL.md §6
+params: [type, track, level, ticket, gist]
+steps:
+  - id: open-pr
+    do: "Open a pull request. Every branch merges through one, on both tracks."
+    executor: agent
+  - id: review
+    do: >
+      A reviewer other than the author is required when the author is an agent.
+      An agent is never the reviewer of record for its own output.
+    executor: noah
+  - id: merge-commit
+    do: |
+      Merge with --no-ff. Never squash-merge. The merge commit takes the highest
+      commit type on the branch:
+
+          {type}: {gist} (#PR)
+
+          Resolves #{ticket}.
+
+          Bump: {track} {level}
+    executor: noah
+    note: >
+      FINDING: `Bump:` is a hand-typed statement of a fact the log already computes
+      (#176). It is written here as a step with executor `noah` because that is what
+      is TRUE today, not because it is right. The honest entry makes the defect
+      visible at the exact step that carries it.
+  - id: merge
+    do: "Merge the pull request."
+    executor: noah

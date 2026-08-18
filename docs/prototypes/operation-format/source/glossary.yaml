@@ -1,0 +1,29 @@
+# PROTOTYPE — glossed inline, ADDED AFTER THE ACCEPTANCE TEST.
+#
+# The cold agent on `add@CONTEXT-entry` refused correctly and then named this: the entry
+# uses "competence floor" and "Provenance Tier" and defines neither, and it felt the pull
+# to go open PROTOCOL.md. That pull IS the premise-16 failure — an entry that sends you
+# elsewhere to understand it has not been flattened, only shortened.
+#
+# So terms are a fourth factored layer. Written once, spliced into every entry that uses
+# one. This is premise 10 applied to vocabulary rather than to steps.
+
+competence floor:
+  gloss: >
+    Noah's declared statement of what he can defend unaided. Defence terminates AT the
+    floor, not at first principles. Declared in curriculum/FLOOR.md.
+  authority: PROTOCOL.md §5 "The competence floor"
+Provenance Tier:
+  gloss: A graded annotation of how well warranted a claim is. External contributions land at the bottom tier.
+  authority: PROTOCOL.md §8
+Verification Debt:
+  gloss: A derivation step the programme has not checked. Owed by Noah, discharged by learning. Label debt:verification.
+  authority: "PROTOCOL.md §5, #189"
+Source Debt:
+  gloss: An assertion the record has never sourced. Owed by an agent, discharged by search. Label debt:source.
+  authority: "#189"
+defence:
+  gloss: >
+    What changed and why, in Noah's own words, on the pull request thread. Judged for
+    COMPREHENSION, never prose — a checker rejecting on polish has broken the instrument.
+  authority: PROTOCOL.md §5 "The defence — which changes owe one"

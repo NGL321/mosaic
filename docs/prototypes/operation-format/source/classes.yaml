@@ -1,0 +1,43 @@
+# PROTOTYPE — the artifact-class table (premise 4).
+#
+# Class is finer than location, and is DERIVED FROM location, never the reverse
+# (premise 2). Every class carries the three flags premise 4 names.
+#
+# FINDING, written while filling this in: premise 4's third flag and the custody
+# flag both want the word "authored", and they are not the same axis.
+#   custody: who may hold the pen      (human-only | agent-writable)
+#   origin:  what put the bytes there  (authored | generated)
+# `curriculum/open.md` is agent-writable AND generated. `PROTOCOL.md` is
+# agent-writable AND authored. `CONTEXT.md` is human-only AND authored. All three
+# combinations are live in this repository; a single flag cannot carry them.
+# Named apart here so the collision is on the page rather than in a reader's head.
+
+CONTEXT-entry:
+  gloss: A vocabulary entry in CONTEXT.md § Research substance
+  surface: repository
+  locate: CONTEXT.md, section "Research substance"
+  track: research          # PROTOCOL §1 — a silent change can falsify a recorded result
+  custody: human-only      # PROTOCOL §5 — authored file
+  origin: authored
+  defence: owed            # PROTOCOL §5 "The defence — which changes owe one"
+  authority: PROTOCOL.md §5
+
+curriculum-open:
+  gloss: The committed snapshot of the debt ledger
+  surface: repository
+  locate: curriculum/open.md
+  track: tooling           # a read-through cache; the tracker is authoritative
+  custody: agent-writable
+  origin: generated        # by tools/snapshot_debt.py
+  defence: not-owed
+  authority: curriculum/README.md, tools/snapshot_debt.py
+
+debt-issue:
+  gloss: A debt row — a GitHub issue labelled debt:verification or debt:source
+  surface: tracker         # the artifact is not a file
+  locate: "github:NGL321/mosaic issue, label debt:verification|debt:source"
+  track: research          # the ledger holds down claims in CONTEXT.md
+  custody: agent-writable
+  origin: authored
+  defence: not-owed
+  authority: curriculum/README.md, PROTOCOL.md §5 "The competence floor"

@@ -1,0 +1,88 @@
+# PROTOTYPE — the generated cell. No human `add` exists at all; see the null beside it.
+
+key:
+  intent: regenerate
+  class: curriculum-open
+
+ruling: in
+
+operation:
+  inputs:
+    - ticket: the issue this work is claimed against
+  terms: [Verification Debt, Source Debt]
+  postconditions:
+    - id: current
+      text: >
+        curriculum/open.md agrees with the tracker as of the moment it was written,
+        and says on its face when that was.
+    - id: derived-only
+      text: >
+        Every row in the file is a function of tracker state. Nothing in it was typed
+        by a hand, and nothing in it can be edited into agreement.
+    - id: disagreement-loud
+      text: >
+        Where the kind label and the issue state disagree, the run FAILS rather than
+        filing a plausible-looking row.
+  decided_by: none                 # there is nothing to decide — that is the point
+  actors:
+    noah: may
+    agent: may
+    external:
+      ruling: may-not
+      reason: PROTOCOL.md §8 — external work arrives as a fork pull request and lands through review.
+      redirect: propose@curriculum-open
+
+procedure:
+  uses:
+    - fragment: branch-spine
+      with: {prefix: tooling, ticket: "<ticket>", slug: debt-snapshot, track: tooling}
+    - fragment: pull-request-spine
+      with: {type: "chore", track: tooling, level: none, ticket: "<ticket>", gist: "refresh the debt snapshot"}
+  steps:
+    - id: run
+      after: single-owner
+      do: "python tools/snapshot_debt.py"
+      executor: "tool:tools/snapshot_debt.py"
+      exit_codes:
+        0: fine
+        2: "the tool could not run — gh missing, unauthenticated, bad JSON"
+        3: "the tracker data is malformed — an issue is missing required fields"
+      on_failure:
+        2: "Fix your environment and re-run. Nothing has been written."
+        3: "STOP. Do not commit. The malformed issue is the defect; repair it on the tracker and re-run."
+      # ADDED AFTER THE ACCEPTANCE TEST. The cold agent reached exit 3 and stopped,
+      # correctly, saying: the document tells me what it MEANS and not what to DO.
+      # A step needs a failure route or its executor field is decoration.
+    - id: commit
+      after: run
+      do: |
+        Commit the regenerated file. Do not edit it.
+
+            chore: refresh the debt snapshot
+
+      executor: agent
+      # ADDED AFTER THE ACCEPTANCE TEST. The cold agent invented a commit message
+      # because the entry gave the shape of the MERGE commit and not of this one.
+    - id: staleness-gate
+      after: commit
+      do: "python tools/snapshot_debt.py --check — exit 1 means the snapshot is stale."
+      executor: none
+      gap: >
+        the tool has a --check mode written FOR CI and no CI calls it. The snapshot goes
+        stale silently every time a debt issue is filed or discharged, which is exactly
+        the coupling below, unenforced.
+  trigger:
+    do: "Regenerate whenever a debt issue is filed, discharged, or relabelled."
+    executor: none
+    gap: >
+      nobody and nothing holds this. It is the map's standing case (#198: eighteen closed
+      issues still carried debt:open) arriving on a second surface.
+
+couplings:
+  - id: file-couples-in
+    text: "A debt-issue `file` requires a curriculum-open `regenerate`."
+    from: file@debt-issue
+    note: >
+      The inverse of the CONTEXT-entry coupling, and the reason couplings need a place
+      distinct from nulls: filed as a null, "you cannot file debt without regenerating"
+      would delete a legal action instead of qualifying it.

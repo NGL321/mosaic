@@ -1,0 +1,89 @@
+# PROTOTYPE — the tracker cell. The artifact is not a file, and the Procedure's spine is
+# not §4's. FINDING: the whole branch/pull-request spine drops out, and NOTHING replaces
+# it — there is no review, no custody check, and no reviewer of record for a tracker
+# write. Every mechanical obligation on this surface has executor `none`.
+
+key:
+  intent: file
+  class: debt-issue
+
+ruling: in
+
+operation:
+  inputs:
+    - holds_down: the term or document whose derivation needs this
+    - kind: debt:verification or debt:source
+  terms: [Verification Debt, Source Debt, competence floor]
+  postconditions:
+    - id: row-exists
+      text: >
+        A tracker issue exists carrying exactly one kind label — debt:verification
+        (owed by Noah, discharged by learning) or debt:source (owed by an agent,
+        discharged by search).
+      authority: "#189, which separated the two kinds"
+    - id: holds-down
+      text: The issue names what it holds down — the term or document whose derivation needs it.
+    - id: curriculum
+      text: The issue names what reading would discharge it.
+    - id: measured-against-floor
+      text: >
+        A verification debt is measured against the declared competence floor. Until the
+        floor is declared, the obligation is undecidable rather than satisfied.
+      authority: PROTOCOL.md §5 "The competence floor"
+    - id: snapshot-agrees
+      text: The committed snapshot reflects the new row.
+  decided_by: noah              # for debt:verification — it is a claim about what Noah can defend
+  actors:
+    noah: may
+    agent:
+      ruling: may
+      qualified_by: >
+        An agent may file debt:source on its own authority — the debtor is an agent and the
+        discharge is search. debt:verification asserts what Noah cannot yet defend unaided,
+        which is a claim about him: an agent may file it, and premise 3's `propose` shape is
+        the honest form. FINDING: this is a may/may-not distinction that splits ACROSS one
+        cell by label value, which the key `intent x class` cannot express. Either
+        debt:verification and debt:source are two artifact CLASSES, or the actor column needs
+        a condition. Carried to #228.
+    external:
+      ruling: may
+      reason: An issue is not a fork pull request. PROTOCOL §8's gate does not reach the tracker.
+
+procedure:
+  steps:
+    - id: choose-kind
+      do: "Decide debt:verification or debt:source by asking who owes it and what discharges it."
+      executor: noah
+    - id: write
+      do: "Open the issue with the kind label, what it holds down, and the curriculum."
+      executor: agent
+    - id: link-back
+      do: "Add the debt to the term's entry or the document's debt section, so it is reachable from the claim."
+      executor: none
+      gap: >
+        no mechanism, no convention, and no check. The ledger points at CONTEXT.md; CONTEXT.md
+        does not point back.
+    - id: field-check
+      do: "Refuse an issue missing a required field."
+      executor: none
+      gap: >
+        snapshot_debt.py exits 3 on a malformed issue — at REGENERATION time, long after the
+        issue was filed and by a different actor. There is no gate at the write.
+    - id: regenerate
+      after: write
+      do: "Regenerate the committed snapshot."
+      executor: none
+      gap: "the coupling below is stated nowhere and held by nobody."
+    - id: state-label-agreement
+      do: "Flip the kind/state labels when the debt is discharged."
+      executor: none
+      gap: "#198 — eighteen closed issues still carried debt:open, because the flip was a job nobody had been given."
+
+couplings:
+  - id: requires-regenerate
+    text: "A tracker `file` on this class requires a repository `regenerate` of curriculum-open."
+    to: regenerate@curriculum-open
+    surfaces: [tracker, repository]
+    note: >
+      The shape premise 18 predicted, found in this repository rather than in Drive: a legal
+      action on one surface carrying an obligation on another.

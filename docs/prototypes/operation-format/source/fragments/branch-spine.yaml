@@ -1,0 +1,34 @@
+# PROTOTYPE — PROTOCOL §4's branch spine, written ONCE.
+#
+# This is the thing premise 10 is about. Every repository-surface Procedure needs
+# it; no repository-surface Procedure should restate it; and no actor should ever
+# be handed "see §4" at the moment of acting (premise 16).
+#
+# It is a PROCEDURE fragment, never an Operation fragment: it names git, and an
+# Operation does not know git exists (premise 1).
+
+id: branch-spine
+authority: PROTOCOL.md §4
+params: [prefix, ticket, slug, track]
+steps:
+  - id: branch
+    do: "git checkout -b {prefix}/{ticket}-{slug} origin/main"
+    executor: agent
+    note: >
+      Branch prefixes are wayfinder ticket types. FINDING: `record/` is in use on six
+      branches and §4 has no row for it — the map's own fog patch, reached here by
+      trying to fill in {prefix} from the table and finding no cell.
+  - id: single-owner
+    do: |
+      Confirm you are the ticket's assignee. Nobody else commits to a claimed branch.
+
+          gh issue view {ticket} --json assignees
+
+    executor: agent
+    # ADDED AFTER THE ACCEPTANCE TEST. The cold agent stalled here: it was told to
+    # confirm and not how, and named this as the first thing it would have left the
+    # entry to find out. A step's `do` must be executable, not merely true.
+  - id: no-rewrite
+    do: "Never rebase, amend, or force-push once pushed. Corrections are added commits."
+    executor: agent
+    authority: PROTOCOL.md §6, §7

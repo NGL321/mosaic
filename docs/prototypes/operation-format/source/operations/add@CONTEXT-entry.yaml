@@ -1,0 +1,114 @@
+# PROTOTYPE — the hard cell: authored, custody-split, research track, owes a defence.
+
+key:
+  intent: add
+  class: CONTEXT-entry
+
+ruling: in            # in | null — premise 18. `null` cells carry a reason and a redirect.
+
+operation:
+  # ADDED AFTER THE ACCEPTANCE TEST. The cold agent said the entry "assumes I already
+  # have" a ticket number and does not hand it over. An Operation must declare what it
+  # must be GIVEN, or a delegated agent invents it.
+  inputs:
+    - ticket: the wayfinder ticket or issue this work is claimed against
+    - term: the term being defined
+  terms: [competence floor, Provenance Tier, defence]
+
+  # POSTCONDITIONS, not steps. Nothing below names git, GitHub, or a branch.
+  postconditions:
+    - id: entry-present
+      text: >
+        CONTEXT.md § Research substance contains an entry for the term, carrying its
+        _After_ / _Departs_ lines and a Provenance Tier.
+    - id: hand
+      text: The entry's text entered the record under Noah's hand.
+      authority: PROTOCOL.md §5 "Custody — whose hand"
+    - id: defended
+      text: >
+        A defence exists — what changed and why, in Noah's own words — or a citation
+        to reasoning already recorded, enumerating the terms it covers.
+      authority: PROTOCOL.md §5 "The defence — which changes owe one"
+    - id: session-cited
+      text: >
+        Where an agent held the pen, the record carries a session citation resolving
+        in the Transcript Archive.
+    - id: debt-filed
+      text: >
+        Anything the entry's derivation needs from below the competence floor is filed
+        as debt, against the term.
+      authority: PROTOCOL.md §5 "The competence floor"
+  decided_by: noah
+  actors:
+    noah: may
+    agent:
+      ruling: may-not
+      reason: PROTOCOL.md §5 — CONTEXT.md is human-only. An agent DECIDING vocabulary is the breach.
+      redirect: propose@CONTEXT-entry
+    external:
+      ruling: may-not
+      reason: >
+        PROTOCOL.md §8 — "human only" means Noah, not any human. A fork pull request
+        touching an authored file is refused on custody grounds however good it is.
+      redirect: propose@CONTEXT-entry
+
+procedure:
+  uses:
+    - fragment: branch-spine
+      with: {prefix: record, ticket: "<ticket>", slug: "<term>", track: research}
+    - fragment: pull-request-spine
+      with: {type: "record", track: research, level: PATCH, ticket: "<ticket>", gist: "<one-line gist>"}
+  steps:
+    - id: decide
+      after: single-owner
+      do: "Decide the term, the carving, and what it departs from."
+      executor: noah
+    - id: draft
+      after: decide
+      do: "Draft the entry's prose, rendering the decision Noah made."
+      executor: agent
+      note: "Agent-drafted, human-signed is the sanctioned pipeline, not a concession."
+    - id: apply
+      after: draft
+      do: "Apply the text and commit it under a human identity, with Claude-Session: on the commit."
+      executor: noah
+    - id: defence
+      after: apply
+      do: >
+        Put the defence artifact on the pull request thread, or cite the grilling tickets
+        it discharges through, ENUMERATING the terms covered.
+      executor: noah
+    - id: grill-defence
+      after: defence
+      do: "Grill the defence for comprehension, not prose. Must not be the agent that drafted the text."
+      executor: agent
+    - id: identity-check
+      after: apply
+      do: "Check the authored file was committed under a human identity."
+      executor: "ci:.github/workflows/custody.yml"
+    - id: citation-check
+      after: apply
+      do: "Check a Session: trailer is PRESENT."
+      executor: "ci:.github/workflows/custody.yml"
+    - id: citation-resolves
+      after: citation-check
+      do: "Check the cited session RESOLVES in the Transcript Archive."
+      executor: none
+      gap: "unmechanised — a public runner cannot reach a private archive (PROTOCOL §5)"
+    - id: floor-check
+      after: decide
+      do: "Decide whether the derivation reaches below the competence floor."
+      executor: noah
+    - id: file-debt
+      after: floor-check
+      do: "File what it needs from below the floor."
+      executor: agent
+      coupling: file@debt-issue
+
+couplings:
+  - id: debt-couples-out
+    text: >
+      An entry whose derivation reaches below the floor requires a debt-issue `file`.
+      This is a LEGAL action carrying a companion obligation, not a null (premise 18).
+    to: file@debt-issue
+    condition: floor-check finds a gap
