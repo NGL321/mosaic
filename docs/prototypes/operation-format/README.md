@@ -41,7 +41,7 @@ Five files, four layers, and one function.
 | `classes.yaml` | artifact classes and their flags | 4 |
 | `intents.yaml` | the intent axis | 2 |
 | `glossary.yaml` | terms an entry uses | 10, applied to vocabulary |
-| `fragments/` | Procedure spines, written once, parameterised | 10 |
+| `fragments/` | spines written once, parameterised — **Procedure** spines, plus `issue.yaml`, a **class** fragment (#227) | 10 |
 | `operations/<intent>@<class>.yaml` | the cell: Operation, actors, Procedure, couplings | 1, 2, 3, 9, 18 |
 
 A cell separates cleanly into `operation:` (postconditions, actors, whose decision) and
@@ -139,9 +139,14 @@ reading the format did not. Premise 16 should be run on every entry, not on a sa
 
 ## What this does not settle
 
-The axes. `intents.yaml` stops at five intents and `classes.yaml` at three classes, on
-purpose — [#226](https://github.com/NGL321/mosaic/issues/226) and
-[#227](https://github.com/NGL321/mosaic/issues/227) own those, and enumerating them here
-would have been the thing #224 was written to avoid. Nothing above depends on the axes being
+The intent axis. `intents.yaml` stops at five intents on purpose —
+[#226](https://github.com/NGL321/mosaic/issues/226) owns it, and enumerating it here would
+have been the thing #224 was written to avoid.
+
+**`classes.yaml` is no longer a prototype.** [#227](https://github.com/NGL321/mosaic/issues/227)
+enumerated the artifact axis in full: 42 classes over five flags — `track`, `custody`
+(three values, not two), `origin` (three, not two), `facing`, `mutability` — plus the typed
+address `locate{surface, path, licence}`. `defence` left for #226 as a property of the
+intent. The file's own header carries the argument. Nothing above depends on the axes being
 complete; finding 2 is the only place the *key* is at risk, and it is stated as a question
 for [#228](https://github.com/NGL321/mosaic/issues/228) rather than answered here.

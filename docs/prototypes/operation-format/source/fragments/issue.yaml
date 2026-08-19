@@ -1,0 +1,72 @@
+# The shared substance of every tracker-surface class. Minted under #227.
+#
+# THIS IS A NEW KIND OF FRAGMENT. branch-spine.yaml and pull-request-spine.yaml
+# are PROCEDURE fragments — they name git, and an Operation does not know git
+# exists (premise 1). This is a CLASS fragment: it factors flags and
+# postconditions, names no tooling, and therefore sits at the Operation layer.
+# The two are kept apart by name so a reader can tell which layer each factors.
+#
+# WHY IT EXISTS. `map` and `ticket` share almost all of their substance, and
+# Noah's objection to holding them as two unrelated classes was correct: a map
+# IS a ticket — same tracker object, same mechanics, and that must not diverge.
+# But true inheritance (map extends ticket) fails a concrete test: `claim` is
+# legal on a ticket and MEANINGLESS on a map. Nobody assigns a map to themselves.
+# So a map is not a ticket-plus-extras; it is a SIBLING that shares a base.
+#
+# Peer classes composed from a shared fragment is premise 10 exactly — factored
+# at the source, flat at the point of use. Factoring is a source concern,
+# individuation is a use concern, and the two need not agree. That is what lets
+# a map be an issue without inheriting `claim`.
+#
+# The fragment is deliberately broader than map/ticket: debt-verification,
+# debt-source, custody-waiver, health-review and prospect-backlog all compose it
+# too. It is the tracker surface's base, not a wayfinding one.
+#
+# NAMING. `issue` is the word this repository already uses for the object —
+# curriculum/README.md: "a debt item is a GitHub issue". #223's rule bites on
+# inherited SETS Mosaic cannot extend, not on nouns, so borrowing the word is
+# the same act as adopting "wayfinder"'s ticket types: the term is appropriated
+# and becomes Mosaic's, independent of the platform it is associated with.
+# GitHub did not invent the word, and the association is not a cost worth a
+# coinage to avoid.
+
+id: issue
+kind: class-fragment
+authority: docs/DATA-PROTOCOL.md, curriculum/README.md
+
+flags:
+  surface: tracker
+  custody: agent-writable
+  origin: authored
+  # track, facing and mutability are NOT here — they vary across the classes
+  # that compose this. debt-* is research, map/ticket/custody-waiver is tooling;
+  # prospect-backlog is append-only where the rest are amendable.
+
+postconditions:
+  - id: exists-as-issue
+    text: >
+      The artifact is a tracker issue with its own number, and that number is its
+      identity. Nothing on this surface is identified by position, title, or order.
+
+  - id: labelled
+    text: >
+      The issue carries exactly the labels its class declares, and no label from
+      another class's set. The label is what makes the class queryable, so a
+      mislabelled issue is not a cosmetic error — it is an artifact that has left
+      its class.
+
+  - id: closed-never-deleted
+    text: >
+      An issue is closed, never deleted. Closure is the record of the thing having
+      been resolved; deletion destroys the fact that it was ever asked.
+    authority: premise 8 — "supersede where record entries were taken under it"
+
+  - id: no-review-of-record
+    text: >
+      A write to this surface has no reviewer.
+    gap: >
+      STANDING GAP, found by #224 on file@debt-issue and true of every class that
+      composes this fragment: the branch and pull-request spines drop out on the
+      tracker and NOTHING replaces them. No review, no custody check, no reviewer
+      of record. Every mechanical obligation on this surface has executor `none`.
+      Stated here once rather than rediscovered per class.

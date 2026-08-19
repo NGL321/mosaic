@@ -1,43 +1,601 @@
-# PROTOTYPE — the artifact-class table (premise 4).
+# The artifact-class table (premise 4), enumerated under #227.
 #
 # Class is finer than location, and is DERIVED FROM location, never the reverse
-# (premise 2). Every class carries the three flags premise 4 names.
+# (premise 2). Forty-two classes across three surfaces. The ticket estimated
+# "roughly twenty"; the count was a floor, and it was low by half.
 #
-# FINDING, written while filling this in: premise 4's third flag and the custody
-# flag both want the word "authored", and they are not the same axis.
-#   custody: who may hold the pen      (human-only | agent-writable)
-#   origin:  what put the bytes there  (authored | generated)
-# `curriculum/open.md` is agent-writable AND generated. `PROTOCOL.md` is
-# agent-writable AND authored. `CONTEXT.md` is human-only AND authored. All three
-# combinations are live in this repository; a single flag cannot carry them.
-# Named apart here so the collision is on the page rather than in a reader's head.
+# ---------------------------------------------------------------------------
+# THE FLAGS — five, plus a typed address
+# ---------------------------------------------------------------------------
+#
+#   track      research | tooling                     PROTOCOL §1
+#   custody    human-authored | human-signed | agent-writable
+#   origin     authored | generated | vendored
+#   facing     human | agent
+#   mutability amendable | append-only | frozen
+#
+#   locate     {surface, path, licence}               a TYPED address, not a string
+#
+# `surface` and `licence` are components of the address rather than flags of
+# their own. #224 raised `surface` as a candidate fourth flag; it was ruled a
+# component instead, because `locate` already points at a location and a second
+# field naming the same thing is the redundancy, not the safeguard. Nothing is
+# parsed out of a string — the surface is DECLARED, so premise 2's derivation
+# direction holds. `licence` rides the address for the same reason and one more:
+# it exists only on `surface: repository`, so a class-level flag would read `n/a`
+# on two surfaces out of three.
+#
+# ONE CLASS, ONE ADDRESS. A class that lives in two places is two classes. The
+# record already did this twice before anyone wrote it down — the debt ledger is
+# `debt-verification`/`debt-source` on the tracker PLUS `curriculum-open` in the
+# repository, and a run is `run-manifest` in the repository PLUS `run-output` in
+# Drive. A backup is not the thing it backs up.
+#
+# ONE FILE, ONE CLASS. Sub-file classes were drafted and then ruled out: they are
+# hard to track and splitting the file is cheap. Three files in this repository
+# hold two flag-sets each and are therefore filed for splitting — see the FILED
+# block at the foot of this header. Extended to the tracker as ONE ISSUE, ONE
+# CLASS.
+#
+# INDIVIDUATION (#227): two artifacts are one class unless they differ in a flag
+# OR in the set of intents legal on them. Procedure is deliberately NOT an
+# individuator — individuating by procedure would key the Operation layer to how
+# an obligation is currently met, which is premise 1 inverted. This is what makes
+# `debt-verification` and `debt-source` two classes (different debtor, different
+# discharge) while `research`/`grilling`/`prototype`/`task` tickets are one
+# (same intents; only the resolving procedure differs).
+#
+# ---------------------------------------------------------------------------
+# WHAT THE ENUMERATION FOUND
+# ---------------------------------------------------------------------------
+#
+# 1. `origin` needed a THIRD value. #224 split `custody` from `origin` and left
+#    origin binary. The vendored skill trees and the two licence texts are bytes
+#    neither Noah nor an agent wrote — README.md classifies them "Third-party —
+#    neither". Calling them `authored` would make `agent-writable` mean an agent
+#    may edit a vendored file, which is exactly backwards. Live, not theoretical:
+#    `writing-great-skills` was deleted from both trees this week.
+#
+# 2. `custody` needed a THIRD value. PROTOCOL §5 has three postures, not two, and
+#    the two-value flag was collapsing the middle one:
+#      human-authored  §5's "three exceptions, and they are the whole list" —
+#                      the keystrokes ARE the claim, drafting assistance destroys
+#                      the thing claimed (competence floor, falsifiers, creative
+#                      and proof deliverables)
+#      human-signed    §5's "agent-drafted, human-signed" — an agent proposes
+#                      exact text, the human applies and commits
+#      agent-writable  an agent commits directly
+#    Premise 3 already named this: "where §5's third posture applies, `propose`
+#    is its own intent". #224's `custody: human-only` meant "committed under a
+#    human identity" (§5: "a path check sees who committed"), never "typed by a
+#    human", and nothing in the flag said so.
+#
+# 3. `facing` is a flag, and it is about REGISTER, not obligation. It was drafted
+#    as load obligation and ruled back to preference: who the file is written
+#    for. An agent-facing file prefers compact over pretty; a human-facing file
+#    is what someone new to the project reads. Neither excludes the other reader.
+#
+# 4. `mutability` is a flag, and it is where "log" lives. ADR looked like a class
+#    of its own — a record kept for posterity rather than active use — but what
+#    every such artifact shares is that it is NEVER EDITED, and the record says
+#    so repeatedly and in those words: axiom.md "append-only" (inquiries),
+#    "Never remove a row from a manifest" (DATA-PROTOCOL §2), "Frozen, in the
+#    strong sense" (literature), "superseded, never deleted" (docs/adr), the
+#    scrub allow-list "append-only" (notebook). No flag said any of it. The flag
+#    predicts intents — `amendable` admits amend, `append-only` admits append,
+#    `frozen` admits only supersede — which is the evidence it is an axis and
+#    not a family. The artifact-generation phase of the programme will emit
+#    `frozen` and `append-only` almost exclusively.
+#
+# 5. `defence` is NOT here. #224 carried `defence: owed | not-owed`; it survived
+#    the derivability test (research-track `debt-issue` is not-owed) but was
+#    ruled a property of the INTENT, not the class, and handed to #226. Noah's
+#    reasoning, which is stronger than the flag was: a landed change that owed a
+#    defence and does not have one is a BREACH, not a state — if the procedure
+#    was followed the defence was already granted, so an artifact carrying
+#    "defence: owed" as a standing condition describes a violation, not a class.
+#
+# ---------------------------------------------------------------------------
+# WHAT THE ENUMERATION LEFT OPEN
+# ---------------------------------------------------------------------------
+#
+#   `scrub-allowlist` HAS NO ADDRESS. notebook/README.md specifies it completely
+#   — per line, per transcript, hand-written, append-only, "itself part of the
+#   record" — and never says where it lives. The only class here with a full
+#   flag set and no `locate`.
+#
+#   `charter` and the three `conjecture-*` classes HAVE NO INSTANCES. Deliberate
+#   in both cases (§5 pins CHARTER.md's path "before it is written, because the
+#   custody check keys on paths"; #7 has not named the first Belt claim).
+#
+#   `conjecture-governor`'s custody is DEFERRED. conjectures/README.md says
+#   "amendable by Noah" (posture 2) and "Agents amend nothing, ever" (posture 1)
+#   in consecutive sentences. Cheap to defer: zero instances.
+#
+# FILED, NOT FIXED HERE (premise 13/15 — this map finds, other tickets repair).
+# All five are children of #1, the founding-charter map:
+#   - README.md's licence table is superseded by `locate.licence` and must cite
+#     it rather than hold it
+#   - CONTEXT.md splits (one file, one class + the Ralph-loop context floor)
+#   - conjectures/ splits three ways (statement / falsifier / governor)
+#   - the notebook entry becomes two sources plus a generated render
+#   - PROTOCOL §5's exception table says the competence floor lands in
+#     CONTEXT.md; it lives at curriculum/FLOOR.md, and §5 says "the custody
+#     check keys on paths"
 
-CONTEXT-entry:
-  gloss: A vocabulary entry in CONTEXT.md § Research substance
-  surface: repository
-  locate: CONTEXT.md, section "Research substance"
-  track: research          # PROTOCOL §1 — a silent change can falsify a recorded result
-  custody: human-only      # PROTOCOL §5 — authored file
+# ===========================================================================
+# REPOSITORY — 30
+# ===========================================================================
+
+vocabulary-entry:
+  gloss: A resolved term in CONTEXT.md
+  locate: {surface: repository, path: "CONTEXT.md", licence: cc-by-4.0}
+  track: research
+  custody: human-signed     # §5 posture 2 — "most of the vocabulary was in fact written" this way
   origin: authored
-  defence: owed            # PROTOCOL §5 "The defence — which changes owe one"
+  facing: agent
+  mutability: amendable
+  authority: PROTOCOL.md §5 "Custody — whose hand"
+  note: Address changes when CONTEXT.md splits; the class does not.
+
+rule-bearing-document:
+  gloss: A document that binds behaviour, amended under §2's pricing
+  locate: {surface: repository, path: "PROTOCOL.md | docs/DATA-PROTOCOL.md", licence: cc-by-4.0}
+  track: tooling
+  custody: agent-writable   # §5 — "This file is not an authored file, and that is a decision"
+  origin: authored
+  facing: agent
+  mutability: amendable
   authority: PROTOCOL.md §5
 
-curriculum-open:
-  gloss: The committed snapshot of the debt ledger
-  surface: repository
-  locate: curriculum/open.md
-  track: tooling           # a read-through cache; the tracker is authoritative
-  custody: agent-writable
-  origin: generated        # by tools/snapshot_debt.py
-  defence: not-owed
-  authority: curriculum/README.md, tools/snapshot_debt.py
-
-debt-issue:
-  gloss: A debt row — a GitHub issue labelled debt:verification or debt:source
-  surface: tracker         # the artifact is not a file
-  locate: "github:NGL321/mosaic issue, label debt:verification|debt:source"
-  track: research          # the ledger holds down claims in CONTEXT.md
+public-document:
+  gloss: What someone new to the project reads first
+  locate: {surface: repository, path: "README.md | CONTRIBUTING.md", licence: cc-by-4.0}
+  track: tooling
   custody: agent-writable
   origin: authored
-  defence: not-owed
-  authority: curriculum/README.md, PROTOCOL.md §5 "The competence floor"
+  facing: human
+  mutability: amendable
+
+directory-charter:
+  gloss: The README that governs one top-level directory
+  locate: {surface: repository, path: "<dir>/README.md — seven of them", licence: varies-by-dir}
+  track: tooling
+  custody: agent-writable
+  origin: authored
+  facing: agent
+  mutability: amendable
+  note: >
+    Lands with PROTOCOL.md rather than with README.md. Both are "READMEs"; only one
+    is loaded to find out how the thing works.
+
+adr:
+  gloss: An architecture decision record
+  locate: {surface: repository, path: "docs/adr/NNNN-slug.md", licence: cc-by-4.0}
+  track: tooling
+  custody: agent-writable
+  origin: authored
+  facing: agent
+  mutability: frozen        # superseded, never deleted, never edited
+  authority: docs/adr/README.md "Superseding"
+  note: >
+    Contends with premise 8's "delete otherwise" — filed as #241, not resolved here.
+
+research-document:
+  gloss: Agent-produced research output — record, not belief
+  locate: {surface: repository, path: "docs/research/*.md", licence: cc-by-4.0}
+  track: research
+  custody: agent-writable
+  origin: authored
+  facing: agent
+  mutability: frozen        # a new finding is a new document
+  authority: docs/research/README.md §5 "Acceptance"
+
+conjecture-statement:
+  gloss: The conjecture itself and its formal rendering
+  locate: {surface: repository, path: "conjectures/NNN-slug/statement.md", licence: mit}
+  track: research
+  custody: human-signed     # §5 — an agent "may word a rung Noah has decided on"
+  origin: authored
+  facing: agent
+  mutability: frozen        # "frozen for the life of the conjecture"
+  authority: conjectures/README.md "Amendment"
+  instances: none
+
+conjecture-falsifier:
+  gloss: The falsification criterion, in Noah's own words
+  locate: {surface: repository, path: "conjectures/NNN-slug/falsifier.md", licence: mit}
+  track: research
+  custody: human-authored   # §5 exception 2 — "an instrument the measured party did not build measures nothing"
+  origin: authored
+  facing: agent
+  mutability: frozen
+  authority: PROTOCOL.md §5 exception 2
+  instances: none
+
+conjecture-governor:
+  gloss: The budget, stall tolerance, and continue/return/retire rule
+  locate: {surface: repository, path: "conjectures/NNN-slug/governor.md", licence: mit}
+  track: research
+  custody: DEFERRED         # "amendable by Noah" vs "Agents amend nothing, ever"
+  origin: authored
+  facing: agent
+  mutability: amendable
+  authority: conjectures/README.md "Amendment"
+  instances: none
+
+inquiry-charter:
+  gloss: An Inquiry's Question and Adequacy Criterion, frozen at open
+  locate: {surface: repository, path: "inquiries/NNN-slug/README.md", licence: mit}
+  track: research
+  custody: agent-writable   # "Nothing in the charter is signed" — the freeze is git ancestry
+  origin: authored
+  facing: agent
+  mutability: frozen
+  authority: inquiries/README.md
+  instances: none
+
+axiom-ledger:
+  gloss: The axiom's life
+  locate: {surface: repository, path: "inquiries/NNN-slug/axiom.md", licence: mit}
+  track: research
+  custody: agent-writable
+  origin: authored
+  facing: agent
+  mutability: append-only
+  authority: inquiries/README.md "Layout"
+
+instrument-candidate:
+  gloss: A candidate instrument, tried during Searching
+  locate: {surface: repository, path: "inquiries/NNN-slug/configs/*", licence: mit}
+  track: research
+  custody: agent-writable
+  origin: authored
+  facing: agent
+  mutability: amendable
+
+frozen-instrument:
+  gloss: The frozen instrument — its appearance IS the freeze event
+  locate: {surface: repository, path: "inquiries/NNN-slug/config.yaml", licence: mit}
+  track: research
+  custody: agent-writable
+  origin: authored
+  facing: agent
+  mutability: frozen
+  authority: inquiries/README.md "The appearance of config.yaml is the freeze"
+  note: >
+    Same directory and same flags as instrument-candidate except mutability, which is
+    the whole difference: changing this is a new Inquiry, not an amendment.
+
+inquiry-code:
+  gloss: Dataset generators, analysis pipelines, seed handling
+  locate: {surface: repository, path: "inquiries/NNN-slug/src/", licence: mit}
+  track: research           # inquiries/README.md — versioned as research despite reading as tools
+  custody: agent-writable
+  origin: authored
+  facing: agent
+  mutability: amendable
+
+run-manifest:
+  gloss: The record of one Run — manifest only, never the bytes
+  locate: {surface: repository, path: "inquiries/NNN-slug/runs/<date>-<run-id>.md", licence: mit}
+  track: research
+  custody: agent-writable
+  origin: generated
+  facing: agent
+  mutability: frozen
+  authority: inquiries/README.md, DATA-PROTOCOL §3.4
+
+source-node:
+  gloss: A cited paper, its claims, and its reading
+  locate: {surface: repository, path: "literature/author-year-slug/README.md", licence: mit}
+  track: research
+  custody: agent-writable
+  origin: authored
+  facing: agent
+  mutability: frozen
+  authority: literature/README.md "Frozen, in the strong sense"
+
+notebook-annotation:
+  gloss: Noah's reading of the day
+  locate: {surface: repository, path: "notebook/sources/YYYY-MM-DD-slug.annotation.md", licence: cc-by-4.0}
+  track: tooling
+  custody: human-signed
+  origin: authored
+  facing: human
+  mutability: amendable
+  authority: notebook/README.md
+
+notebook-record:
+  gloss: The generated spine — sessions, ledger lines, anchors
+  locate: {surface: repository, path: "notebook/sources/YYYY-MM-DD-slug.record.md", licence: cc-by-4.0}
+  track: tooling
+  custody: agent-writable
+  origin: generated
+  facing: agent
+  mutability: amendable
+
+notebook-entry:
+  gloss: The published page — annotation on top, record folded beneath
+  locate: {surface: repository, path: "notebook/YYYY-MM-DD-slug.md", licence: cc-by-4.0}
+  track: tooling
+  custody: agent-writable
+  origin: generated
+  facing: human
+  mutability: amendable
+  note: >
+    Premise 10 arriving where it was not expected. Splitting the file would have destroyed
+    the reading experience notebook/README.md designs; rendering it from two sources does
+    not. Committed like curriculum-open so a clone stays self-contained.
+
+curriculum-open:
+  gloss: The committed snapshot of the debt ledger — a read-through cache
+  locate: {surface: repository, path: "curriculum/open.md", licence: cc-by-4.0}
+  track: tooling
+  custody: agent-writable
+  origin: generated         # tools/snapshot_debt.py
+  facing: human
+  mutability: amendable
+  authority: curriculum/README.md "Why open.md exists anyway"
+
+competence-floor:
+  gloss: The minimum Noah can defend unaided
+  locate: {surface: repository, path: "curriculum/FLOOR.md", licence: cc-by-4.0}
+  track: research
+  custody: human-authored   # §5 exception 1 — "the thing the claim exists to bound would be drafting the bound"
+  origin: authored
+  facing: agent             # FLOOR.md — "a reference for agents designing a curriculum"
+  mutability: append-only
+  authority: PROTOCOL.md §5 exception 1
+  note: >
+    §5's exception table says this lands in CONTEXT.md. It does not. Filed against #1.
+
+charter:
+  gloss: The Hard Core and the Protective Belt
+  locate: {surface: repository, path: "CHARTER.md", licence: cc-by-4.0}
+  track: research
+  custody: human-signed     # its falsifiers are human-authored; the rest is §5 posture 2
+  origin: authored
+  facing: human
+  mutability: amendable
+  authority: PROTOCOL.md §5
+  instances: none
+  note: >
+    The path is pinned before the file exists, because the custody check keys on paths —
+    "a charter under any other name would leave that check green and covering nothing".
+
+tooling-script:
+  gloss: Executing tooling
+  locate: {surface: repository, path: "tools/*.py", licence: mit}
+  track: tooling
+  custody: agent-writable
+  origin: authored
+  facing: agent
+  mutability: amendable
+
+ci-gate:
+  gloss: A check that runs on a pull request
+  locate: {surface: repository, path: ".github/workflows/*.yml, .github/scripts/*.py", licence: mit}
+  track: tooling
+  custody: agent-writable
+  origin: authored
+  facing: agent
+  mutability: amendable
+  note: Kept apart from tooling-script; #231 generates this class from Procedures.
+
+vendored-skill:
+  gloss: A skill synced from upstream
+  locate: {surface: repository, path: ".claude/skills/, .agents/skills/", licence: third-party}
+  track: tooling
+  custody: agent-writable   # by the sync tool, never by hand
+  origin: vendored
+  facing: agent
+  mutability: amendable
+  authority: README.md "Third-party — neither", skills-lock.json
+  note: >
+    Can vanish. `writing-great-skills` was deleted from both trees during this map's life.
+
+skills-lock:
+  gloss: What is vendored, and at which revision
+  locate: {surface: repository, path: "skills-lock.json", licence: mit}
+  track: tooling
+  custody: agent-writable
+  origin: generated
+  facing: agent
+  mutability: amendable
+
+citation-metadata:
+  gloss: Machine-readable metadata about the record
+  locate: {surface: repository, path: "CITATION.cff", licence: mit}
+  track: tooling
+  custody: agent-writable
+  origin: authored
+  facing: human
+  mutability: amendable
+  authority: README.md — "assigned rather than inherited"
+
+licence-text:
+  gloss: A licence, reproduced under its own terms
+  locate: {surface: repository, path: "LICENSE, LICENSE-DOCS", licence: own-terms}
+  track: tooling
+  custody: agent-writable
+  origin: vendored
+  facing: human
+  mutability: frozen
+
+prototype:
+  gloss: A cheap concrete artifact made to react to
+  locate: {surface: repository, path: "docs/prototypes/*", licence: cc-by-4.0}
+  track: tooling
+  custody: agent-writable
+  origin: authored
+  facing: agent
+  mutability: amendable
+
+scrub-allowlist:
+  gloss: Acknowledged secret-scan false positives, per line and per transcript
+  locate: NONE              # specified fully in notebook/README.md, located nowhere
+  track: tooling
+  custody: human-authored   # "written by hand, so nothing clears itself"
+  origin: authored
+  facing: agent
+  mutability: append-only
+  authority: notebook/README.md "The scrub fails closed"
+
+# ===========================================================================
+# TRACKER — 7, all over the `issue` class fragment
+# ===========================================================================
+
+map:
+  gloss: A wayfinding map — destination, decisions, fog, scope
+  fragment: issue
+  locate: {surface: tracker, path: "issue, label wayfinder:map"}
+  track: tooling
+  facing: agent
+  mutability: amendable
+  note: >
+    Not a special case of `ticket` and not its parent — a peer. `claim` is legal on a
+    ticket and meaningless on a map, so inheritance fails; the shared substance is
+    factored into the `issue` fragment instead. The only class here whose lifecycle
+    includes its own closure condition — a shape #229's kernel will meet again.
+
+ticket:
+  gloss: One decision, sized to a session
+  fragment: issue
+  locate: {surface: tracker, path: "issue, label wayfinder:research|grilling|prototype|task"}
+  track: tooling
+  facing: agent
+  mutability: amendable
+  ticket_types: [research, grilling, prototype, task]
+  note: >
+    One class, not four. The types differ in PROCEDURE — a research ticket resolves via
+    subagent, a grilling ticket via a live session — and procedure does not individuate.
+    Holding them as an attribute is what keeps #223's "extensible" promise cheap: a fifth
+    type is one enum value, not a fifth class times every intent.
+
+debt-verification:
+  gloss: A derivation step Noah cannot yet defend unaided
+  fragment: issue
+  locate: {surface: tracker, path: "issue, label debt:verification"}
+  track: research
+  facing: agent
+  mutability: amendable
+  debtor: noah
+  discharged_by: learning, on the Curriculum
+  authority: curriculum/README.md, "#189"
+
+debt-source:
+  gloss: An assertion the record has not sourced
+  fragment: issue
+  locate: {surface: tracker, path: "issue, label debt:source"}
+  track: research
+  facing: agent
+  mutability: amendable
+  debtor: agent
+  discharged_by: search, producing a Source
+  note: >
+    Two classes, not one labelled class. #224 found this pair splitting the ACTOR COLUMN
+    inside a single cell of file@debt-issue and carried it to #228 as "either two classes
+    or a conditional". Individuation by intent-set answers it here: different debtor,
+    different discharge, therefore different classes — and the cell stops straining.
+    Taken back off #228.
+
+custody-waiver:
+  gloss: A custody obligation the scaffolding era defers
+  fragment: issue
+  locate: {surface: tracker, path: "issue, label custody:deferred"}
+  track: tooling
+  facing: agent
+  mutability: amendable
+  authority: PROTOCOL.md §2, §5 — blocks 1.0.0 until discharged
+
+health-review:
+  gloss: A programme health review, with one Hard Core member as its defendant
+  fragment: issue
+  locate: {surface: tracker, path: "issue, label health:review"}
+  track: research
+  facing: agent
+  mutability: amendable
+  authority: "#88"
+
+prospect-backlog:
+  gloss: The ledger of notions in flight
+  fragment: issue
+  locate: {surface: tracker, path: "issue #109"}
+  track: research
+  facing: human
+  mutability: append-only
+  authority: "#109, #189"
+  note: >
+    ONE ISSUE, ONE CLASS holds here without an exemption. A Prospect is a ROW in this
+    ledger, not an artifact of its own — structurally identical to index-manifest on
+    Drive. The justification is not queue bandwidth but curriculum/README.md's own test:
+    "is there a debtor and a discharge procedure". #189 removed Prospects from the ledger
+    on exactly that test — "an open problem nobody can discharge is a Prospect, not a
+    debt" — so a Prospect is not a work-item being kept out of the queue, it is not a
+    work-item.
+    TRIPWIRE: if Prospects begin acquiring assignees or blocking edges inside the
+    backlog, the ledger has become a queue and must split into issues.
+
+# ===========================================================================
+# DRIVE — 5
+# ===========================================================================
+
+transcript:
+  gloss: A session transcript, private
+  locate: {surface: drive, path: "Archive — resolved hash -> path through index-manifest"}
+  track: tooling
+  custody: agent-writable
+  origin: generated
+  facing: agent
+  mutability: frozen
+  authority: notebook/README.md "Citing the Transcript Archive", "#3"
+  note: >
+    The two-hop address is a COUPLING in premise 18's sense, not an address feature:
+    a citation of this class carries an obligation on index-manifest. Carried to #228.
+
+weekly-reflection:
+  gloss: Noah's private reference notes
+  locate: {surface: drive, path: "Notes/"}
+  track: tooling
+  custody: human-authored
+  origin: authored
+  facing: human
+  mutability: amendable
+  authority: DATA-PROTOCOL §2
+
+run-output:
+  gloss: Durable artifacts of a Run — checkpoints, metrics, final figures
+  locate: {surface: drive, path: "Desk/mosaic/runs/<run-id>/"}
+  track: research
+  custody: agent-writable
+  origin: generated
+  facing: agent
+  mutability: frozen
+  authority: DATA-PROTOCOL §3.4
+  note: >
+    Most of what a Run produces by volume is NOT here — §3.3 forbids storing what a seed
+    and a config can regenerate. This class holds the residue that cannot be.
+
+shelf-paper:
+  gloss: A paper cited by the record, shareable read-only
+  locate: {surface: drive, path: "Shelf/"}
+  track: research
+  custody: agent-writable
+  origin: vendored          # someone else's bytes
+  facing: human
+  mutability: frozen
+  authority: DATA-PROTOCOL §2
+
+index-manifest:
+  gloss: The hash -> path ledger
+  locate: {surface: drive, path: "Index/ — a Drive-native Sheet"}
+  track: tooling
+  custody: agent-writable
+  origin: generated
+  facing: agent
+  mutability: append-only
+  authority: DATA-PROTOCOL §2 "Never remove a row from a manifest", §3.6, §8.2
+  note: >
+    "Do not hand-edit; append through a tool." #115 found the manifest every Session:
+    citation resolved through did not exist.
