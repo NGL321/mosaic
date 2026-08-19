@@ -1,0 +1,222 @@
+# THE KERNEL — mint. Written under #229.
+#
+# `mint` is not an intent. #226's grain test collapsed it onto the ordinary axis
+# acting on one class, and it survives as the GLOSSARY TERM for this cell.
+#
+# THE FILENAME HAS NO MODE, AND THAT IS CORRECT. The key renders as
+# `propose:add@operation-cell`, but the mode is DERIVED, not written: #226 rules
+# that propose-cells are "generated only where an actor column actually refuses",
+# and `custody: human-signed` is the refusal. Writing the mode into the filename
+# would state a fact the generator computes — the defect this map is named for.
+# It is also unspellable: `:` is illegal in a filename on Windows, where this
+# repository is authored, so a mode-bearing filename would have been unwritable
+# on the machine that had to write it.
+
+key:
+  intent: add
+  class: operation-cell
+  renders_as: propose:add@operation-cell     # mode derived from custody: human-signed
+
+ruling: in
+
+operation:
+  inputs:
+    - ticket: the wayfinder ticket or issue this mint is claimed against
+    - key: the coordinate being minted — an intent and a class, both extant
+    - decision: Noah's ruling on what this cell obliges, recorded before drafting
+  terms: [Operation, Procedure, cell, kernel, ruling, defence, competence floor]
+
+  postconditions:
+    - id: coordinate-defined
+      text: >
+        Both halves of the key exist before the cell does: the intent is a member of
+        the intent axis and the class is in the class table. A cell at a coordinate
+        one of whose axes does not exist is unaddressable.
+      authority: premise 2 — "the key is intent x artifact class, and the key is the identity"
+
+    - id: cell-present
+      text: >
+        A cell exists at `<intent>@<class>` carrying `ruling: in`, its postconditions,
+        its actor column, its `enforcement:`, and its Procedure.
+
+    - id: operation-names-no-tooling
+      text: >
+        Nothing under `operation:` names git, GitHub, a branch, a pull request or any
+        tool. Postconditions state what must be TRUE when the act is done.
+      authority: premise 1
+      note: >
+        #224 found this "was not hard to maintain, it was hard to violate" across three
+        maximally different cells. It is asserted here because the kernel is the one
+        place where the Operation layer describes its own machinery, and the pull to
+        name the generator is strongest.
+
+    - id: executors-named
+      text: >
+        Every step names an executor. `none` is permitted and is a FILED GAP by
+        construction — it is never a blank.
+      authority: premise 9
+
+    - id: enforcement-declared
+      text: >
+        The cell declares `enforcement:` — ci, command, human-step or none. `none` is
+        permitted and makes the cell an unenforceable one: a mechanism-shaped hole with
+        an address, which is a driver rather than a defect.
+      authority: "#228"
+
+    - id: delegable
+      text: >
+        The rendered entry hands a cold agent everything it needs: declared `inputs:`,
+        every term it uses glossed, a failure route on each step, and no instruction
+        that sends the reader elsewhere to understand it.
+      authority: premise 16; "#236"
+      note: >
+        #224's acceptance test found five format defects in ninety seconds that reading
+        the format did not. #236 made this a GATE rather than an aspiration, and ruled
+        the standing gate is a deterministic lint suite rather than an agent.
+
+    - id: decided-before-assembled
+      text: >
+        Noah's ruling on this coordinate was recorded BEFORE the change was assembled —
+        not acknowledged after it was drafted.
+      authority: premise 7 as revised by "#226"; "#229"
+      note: >
+        THE WHOLE SAFETY ARGUMENT IS THIS ORDERING, not the signature. A gate that fires
+        at commit time fires after the change is assembled, which is the moment the
+        reasoning is hardest to reopen — and §5 already puts Noah in the loop for every
+        merge to main, so a commit-time gate adds nothing premise 7 does not already
+        have. Noah, ruling it: "It only makes sense to loop me in after text is drafted
+        in circumstances where my involvement in the design is not necessary, just my
+        acknowledgment that the design is sufficient. This is a particular case where I
+        need to be involved in the design."
+
+    - id: defended
+      text: >
+        A defence exists — what changed and why, in Noah's own words — or a citation to
+        reasoning already recorded, enumerating what it covers.
+      authority: PROTOCOL.md §5 "The defence — which changes owe one"
+      derived_from: "derivations.yaml defence rule (add x origin: authored)"
+      note: >
+        Minting a new way to interface with this project is the most defence-worthy act
+        in the set, and the defence is precisely the artifact recording that premise 19's
+        "Noah seeing it first" happened.
+
+    - id: rendered
+      text: The committed rendering carries the new cell.
+
+  decided_by: noah
+
+  actors:
+    noah: may
+    agent:
+      ruling: may-not
+      reason: >
+        PROTOCOL.md §5 posture 2 — an agent may draft the exact text and may render it,
+        and may not DECIDE the coordinate or its ruling. Custody is over the decision,
+        never the keystrokes.
+      redirect: propose:add@operation-cell
+      derived_from: "derivations.yaml actor_column (custody: human-signed)"
+    automated_path:
+      ruling: may-not
+      reason: >
+        THE REACH RULE. No generator run, no CI action and no catch-all invocation may
+        land a cell as a step or a side effect. This is distinct from the agent ruling
+        above and both are needed: a CI job is not an agent with custody. Noah: "It is
+        about what an automated path can execute, not create."
+      redirect: none
+      derived_from: "classes.yaml modes: [propose]"
+      authority: premise 7
+
+enforcement: ci
+
+procedure:
+  uses:
+    - fragment: branch-spine
+      with: {prefix: grilling, ticket: "<ticket>", slug: "<key>", track: tooling}
+    - fragment: pull-request-spine
+      with: {type: "feat", track: tooling, level: MAJOR-or-MINOR, ticket: "<ticket>", gist: "<one-line gist>"}
+  steps:
+    - id: decide
+      after: single-owner
+      do: >
+        Rule the coordinate and what it obliges. This step is Noah's and it comes FIRST.
+      executor: noah
+      on_failure: "No ruling, no cell. Stop; there is nothing to draft."
+
+    - id: record-decision
+      after: decide
+      do: >
+        Record the ruling on the ticket, in-band. This is the artifact the ordering
+        check reads; an unrecorded decision is unverifiable.
+      executor: noah
+      on_failure: "Stop. The ordering check below cannot pass and the mint is unauditable."
+
+    - id: draft
+      after: record-decision
+      do: "Draft the cell, rendering the ruling Noah made."
+      executor: agent
+
+    - id: render
+      after: draft
+      do: "Regenerate the rendering from source."
+      executor: agent
+      coupling: regenerate@operation-rendering
+
+    - id: lint
+      after: render
+      do: "Run the delegability lint suite against the rendered entry."
+      executor: "ci — #236's deterministic suite"
+      on_failure: "An ordinary gate under #187's waiver. Repair the entry and re-render."
+
+    - id: apply
+      after: lint
+      do: "Apply and commit under a human identity."
+      executor: noah
+
+    - id: ordering-check
+      after: apply
+      do: >
+        Check that the recorded decision's timestamp PRECEDES the branch's first commit.
+        Both facts are in git and the tracker; nothing is typed or remembered.
+      executor: "ci:.github/workflows/kernel-reach.yml"
+      on_failure: "Refuse the merge. The change was assembled before it was decided."
+      note: >
+        #229 Q13. This is the reach rule made computable rather than asserted — the map's
+        own thesis applied to itself, and the move #203 concluded was the only one of four
+        steps that stops a fourth recurrence. What it cannot reach falls back to a named
+        gap in gaps.yaml rather than to a human remembering.
+
+    - id: custody-check
+      after: apply
+      do: "Check the cell was committed under a human identity."
+      executor: "ci:.github/workflows/custody.yml"
+
+    - id: defence
+      after: apply
+      do: "Put the defence on the pull request, or cite the reasoning it discharges through."
+      executor: noah
+
+    - id: grill-defence
+      after: defence
+      do: "Grill the defence for comprehension, not prose. Must not be the agent that drafted the cell."
+      executor: agent
+
+couples:
+  - id: a-cell-needs-its-coordinate
+    companion: add@class-table
+    when: before
+    obligation: >
+      Where the class is new, its entry lands first. A cell whose class is absent has no
+      flags, so none of its derived rulings can be computed.
+
+  - id: a-mint-must-render
+    companion: regenerate@operation-rendering
+    when: with
+    obligation: >
+      The rendering carries the new cell. A cell the rendering does not show is a cell
+      nobody can be handed, which is #198 on the Operation surface.
+
+  - id: a-mint-owes-a-defence
+    companion: add@defence
+    when: with
+    obligation: What changed and why, in Noah's own words.
+    derived: true

@@ -1,0 +1,209 @@
+# THE KERNEL — amend. Written under #229.
+#
+# `amend` is the glossary term for this cell. It is also where a NOVEL NULL lands,
+# and #229 corrected premise 19's spelling of that path — see `novel-null` below.
+
+key:
+  intent: edit
+  class: operation-cell
+  renders_as: propose:edit@operation-cell
+
+ruling: in
+
+operation:
+  inputs:
+    - ticket: the wayfinder ticket or issue this amendment is claimed against
+    - cell: the coordinate being amended
+    - decision: Noah's ruling on what changes, recorded before drafting
+    - level: the amendment's price — MAJOR, MINOR or PATCH (see `priced` below)
+  terms: [Operation, Procedure, cell, kernel, ruling, defence, amendment capacity]
+
+  postconditions:
+    - id: cell-changed
+      text: The cell at `<intent>@<class>` states something it did not state before.
+
+    - id: priced
+      text: >
+        The amendment carries a level, and the level is computed from WHAT MOVED rather
+        than from how much moved.
+      authority: PROTOCOL.md §2's MAJOR shape applied to apparatus; "#229"
+      levels:
+        MAJOR: >
+          The key or an axis changed — an intent added or removed, a flag added or
+          removed, the mode set changed, or `<intent>@<class>` ceasing to be the
+          identity. Every cell is re-keyed and must be re-ruled. A CHANGE TO
+          derivations.yaml IS MAJOR: a predicate re-rules every cell it reaches while
+          touching none of them, which is the largest blast radius in the source and
+          the least visible. Noah, ruling it: a change to derivations.yaml should be
+          major.
+        MINOR: >
+          A new class or a new cell. New coordinates; nothing existing is disturbed.
+        PATCH: >
+          A cell's contents amended — postconditions sharpened, a step's executor
+          filled, a gap declared.
+      note: >
+        EXCEEDING AMENDMENT CAPACITY IS THE MAJOR ROW, and this is what the map's
+        reframe meant by "rebuilding the machinery": not a bigger diff, but a change
+        that invalidates every existing ruling and forces the whole set to be re-ruled.
+        §2's own framing carries over exactly — "version bump and diff size are
+        uncorrelated by design".
+        SHARED TERMINOLOGY, TWO SPINES. See the FINDING at the foot of this file.
+
+    - id: recomputed
+      text: >
+        Every cell the amendment reaches has been re-rendered, and the rendering shows
+        the result. An amendment whose consequences were not recomputed has left the
+        set stating two things at once.
+      note: >
+        This is the postcondition that makes a MAJOR expensive by construction, which is
+        the point rather than a cost to be engineered away.
+
+    - id: novel-null
+      text: >
+        Where the amendment records a null that was not there before, it lands in the
+        right place: as an EDIT to a derivation where a flag predicate can carry it, and
+        as a NEW CELL where no flag can.
+      authority: "#228; #229"
+      note: >
+        PREMISE 19 SPELLS THIS WRONG AND #229 CORRECTS IT. Premise 19 and #230 both say
+        a novel refusal "lands as an `amend` on the class's entry" — propose:edit. But
+        #228 ruled that a stated null IS A FILE carrying `ruling: null`, and turning an
+        absence into a stated null therefore CREATES one, which is `add`, not `edit`.
+        The premise was written before #228 made nulls physical.
+        So the catch-all has TWO mint-shaped outcomes rather than one, split by #228's
+        own question — is this null predictable from a flag? A derivation edit closes
+        many cells at once; a new cell closes exactly one. #230 is blocked by #229 and
+        absorbs the correction.
+
+    - id: decided-before-assembled
+      text: >
+        Noah's ruling was recorded BEFORE the change was assembled.
+      authority: premise 7; "#229"
+
+    - id: defended
+      text: What changed and why, in Noah's own words, or a citation to reasoning already recorded.
+      derived_from: "derivations.yaml defence rule (edit x origin: authored)"
+
+    - id: rendered
+      text: The committed rendering carries the amendment.
+
+  decided_by: noah
+
+  actors:
+    noah: may
+    agent:
+      ruling: may-not
+      reason: PROTOCOL.md §5 posture 2 — an agent drafts and renders; it does not decide.
+      redirect: propose:edit@operation-cell
+      derived_from: "derivations.yaml actor_column (custody: human-signed)"
+    automated_path:
+      ruling: may-not
+      reason: The reach rule. No automated path lands an amendment as a step or a side effect.
+      redirect: none
+      derived_from: "classes.yaml modes: [propose]"
+      authority: premise 7
+
+enforcement: ci
+
+procedure:
+  uses:
+    - fragment: branch-spine
+      with: {prefix: grilling, ticket: "<ticket>", slug: "<key>", track: tooling}
+    - fragment: pull-request-spine
+      with: {type: "feat", track: tooling, level: "<level>", ticket: "<ticket>", gist: "<one-line gist>"}
+  steps:
+    - id: decide
+      after: single-owner
+      do: "Rule what changes and price it. Noah's, and first."
+      executor: noah
+      on_failure: "No ruling, no amendment."
+
+    - id: record-decision
+      after: decide
+      do: "Record the ruling and its level on the ticket, in-band."
+      executor: noah
+
+    - id: draft
+      after: record-decision
+      do: "Draft the amendment, rendering the ruling Noah made."
+      executor: agent
+
+    - id: recompute
+      after: draft
+      do: >
+        Re-render every cell the amendment reaches. Where the amendment was MAJOR, that
+        is the whole set.
+      executor: agent
+      coupling: regenerate@operation-rendering
+      on_failure: "Stop. A partially recomputed set states two things at once."
+
+    - id: lint
+      after: recompute
+      do: "Run the delegability lint suite over every re-rendered entry."
+      executor: "ci — #236's deterministic suite"
+      on_failure: "An ordinary gate under #187's waiver."
+
+    - id: apply
+      after: lint
+      do: "Apply and commit under a human identity."
+      executor: noah
+
+    - id: ordering-check
+      after: apply
+      do: "Check the recorded decision predates the branch's first commit."
+      executor: "ci:.github/workflows/kernel-reach.yml"
+      on_failure: "Refuse the merge."
+
+    - id: custody-check
+      after: apply
+      do: "Check the amendment was committed under a human identity."
+      executor: "ci:.github/workflows/custody.yml"
+
+    - id: defence
+      after: apply
+      do: "Put the defence on the pull request, or cite what it discharges through."
+      executor: noah
+
+    - id: grill-defence
+      after: defence
+      do: "Grill for comprehension, not prose. Not the drafting agent."
+      executor: agent
+
+couples:
+  - id: an-amendment-must-render
+    companion: regenerate@operation-rendering
+    when: with
+    obligation: The rendering carries the amendment and every cell it reached.
+
+  - id: an-amendment-owes-a-defence
+    companion: add@defence
+    when: with
+    obligation: What changed and why, in Noah's own words.
+    derived: true
+
+# ---------------------------------------------------------------------------
+# FINDING — the version spine. FILED, NOT FIXED (premise 13).
+# ---------------------------------------------------------------------------
+#
+# TWO SPINES, EXPLICITLY. Shared terminology, separate subjects. Noah, ruling it:
+# "It's shared terminology, but it's two spines."
+#
+# PROTOCOL.md §2 prices amendment in MAJOR/MINOR/PATCH for BELIEF — a MAJOR means
+# the Hard Core moved. This map adopted the same shape for APPARATUS — a MAJOR
+# means the machinery was rebuilt. Collapsing them would mean that rebuilding the
+# generator moves the number meant to answer §2's one question: "did the
+# programme's commitments move, or did its evidence?" §1's two tracks already
+# partition the record this way, so the spine follows the track it was always
+# going to follow.
+#
+# THE CONCRETE HALF IS #239, AND IT IS NOW SHARPER. §3's tooling table reads
+# `feat:` -> minor, `fix:` -> patch, `chore:` -> none, and has NO MAJOR ROW. So an
+# apparatus MAJOR has no commit type to land under. This is not theoretical: #228
+# landed as `chore:` (bump: none) and #229 lands as `feat:` (bump: minor), and
+# BOTH changed derivations.yaml, which this file has just priced MAJOR. #239 is
+# no longer "§3 has no apparatus MAJOR" but "§3's tooling track needs a MAJOR row,
+# and this map has produced commits that need it."
+#
+# NOT REPAIRED HERE. §2's grace is a 1.0.0 ratification criterion and amending it
+# is a charter-level decision that must not be taken as a side effect of an
+# apparatus ticket. Premise 13 stands.

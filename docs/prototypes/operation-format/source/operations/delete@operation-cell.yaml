@@ -1,0 +1,168 @@
+# THE KERNEL — premise 8's "delete otherwise" branch, given a coordinate for the
+# first time. Written under #229.
+#
+# IS THIS A FOURTH KERNEL OPERATION? #229 was told to rule this first, because
+# adding a fourth directly attacks premise 7's only safety argument. THE RULING:
+# it is not a fourth. It is the branch of `retire` that #228's arithmetic
+# swallowed, now addressable.
+#
+# Premise 8 has always read "supersede where record entries were taken under it,
+# DELETE OTHERWISE". #228 compiled that into a flag predicate — origin: authored
+# nulls delete — and a flag predicate can see `origin` but cannot see whether
+# anything was acted under, so the "otherwise" branch was dropped for all ~30
+# authored classes. #228's own note conceded the result was "stricter than #226
+# estimated"; that strictness WAS the missing branch. So the count of kernel
+# Operations did not grow: a branch that premise 8 always had stopped being
+# unaddressable. Three is still the number of GLOSSARY TERMS — mint, amend,
+# retire — and retire has two outcomes, which it always did.
+#
+# The repair landed GLOBALLY, in derivations.yaml, not as a kernel carve-out
+# (#229 Q5). A flag predicate that cannot observe history should emit the check,
+# not guess the answer.
+
+key:
+  intent: delete
+  class: operation-cell
+  renders_as: propose:delete@operation-cell
+
+ruling: in
+
+operation:
+  precondition:
+    id: never-acted-under
+    text: No landed action cites this cell.
+    computed_from: git ancestry and the tracker
+    redirect_when_unmet: supersede@operation-cell
+    derived_from: derivations.yaml delete-is-preconditioned-where-the-record-can-reference-it
+
+  inputs:
+    - ticket: the wayfinder ticket or issue this deletion is claimed against
+    - cell: the coordinate being deleted
+    - decision: Noah's ruling, recorded before drafting
+  terms: [Operation, cell, kernel, ruling, defence]
+
+  postconditions:
+    - id: nothing-remains
+      text: The cell is gone. No tombstone, no forward pointer, no entry in the rendering.
+      note: >
+        This is what distinguishes it from `supersede`, and it is only safe because the
+        precondition holds: there is no action whose governing cell this was, so nothing
+        becomes unauditable by its absence.
+
+    - id: no-dangling-companions
+      text: No surviving cell couples to the deleted cell.
+
+    - id: decided-before-assembled
+      text: Noah's ruling was recorded BEFORE the change was assembled.
+      authority: premise 7; "#229"
+
+    - id: defended
+      text: What was deleted and why, in Noah's own words.
+      derived_from: derivations.yaml defence rule (delete is not in the predicate)
+      note: >
+        NOT DERIVED — STATED. The defence predicate covers add, edit and supersede. A
+        deletion under this precondition claims nothing and destroys nothing the record
+        references, so the arithmetic does not require one. It is required HERE anyway,
+        as a per-cell addition with a stated reason: this is the one Operation in the
+        set whose product is an ABSENCE, and an absence means "nobody looked" (premise
+        18). Without a defence, a deleted cell and an unexamined coordinate are
+        indistinguishable forever after. The defence is the only surviving trace that
+        somebody ruled here.
+
+    - id: rendered
+      text: The rendering no longer carries the cell.
+
+  decided_by: noah
+
+  actors:
+    noah: may
+    agent:
+      ruling: may-not
+      reason: PROTOCOL.md §5 posture 2 — an agent drafts and renders; it does not decide.
+      redirect: propose:delete@operation-cell
+      derived_from: "derivations.yaml actor_column (custody: human-signed)"
+    automated_path:
+      ruling: may-not
+      reason: >
+        The reach rule, and it bites hardest here. This is the one kernel Operation whose
+        product is an absence, which is also the one outcome no later reader can detect.
+      redirect: none
+      derived_from: "classes.yaml modes: [propose]"
+      authority: premise 7
+
+enforcement: ci
+
+procedure:
+  uses:
+    - fragment: branch-spine
+      with: {prefix: grilling, ticket: "<ticket>", slug: "<key>", track: tooling}
+    - fragment: pull-request-spine
+      with: {type: "feat", track: tooling, level: MINOR, ticket: "<ticket>", gist: "<one-line gist>"}
+  steps:
+    - id: check-ancestry
+      after: single-owner
+      do: >
+        Establish that NOTHING was landed under this cell. This is the precondition and
+        it is the whole gate.
+      executor: "command — the Operation set's own surface"
+      on_failure: >
+        Cannot establish, or something was found: stop and use supersede@operation-cell.
+        Fail safe toward addressability — a wrongly kept cell is clutter, a wrongly
+        deleted one makes landed actions unauditable.
+
+    - id: decide
+      after: check-ancestry
+      do: "Rule the deletion. Noah's, and first."
+      executor: noah
+
+    - id: record-decision
+      after: decide
+      do: "Record the ruling on the ticket, in-band."
+      executor: noah
+
+    - id: draft
+      after: record-decision
+      do: "Remove the cell; repoint or remove every coupling that names it."
+      executor: agent
+
+    - id: render
+      after: draft
+      do: "Regenerate the rendering."
+      executor: agent
+      coupling: regenerate@operation-rendering
+
+    - id: precondition-check
+      after: draft
+      do: >
+        Re-check the precondition mechanically against the branch's merge-base, so that
+        the ancestry read at step one cannot have gone stale.
+      executor: "ci:.github/workflows/kernel-reach.yml"
+      on_failure: "Refuse the merge; convert to a supersede."
+
+    - id: apply
+      after: precondition-check
+      do: "Apply and commit under a human identity."
+      executor: noah
+
+    - id: ordering-check
+      after: apply
+      do: "Check the recorded decision predates the branch's first commit."
+      executor: "ci:.github/workflows/kernel-reach.yml"
+      on_failure: "Refuse the merge."
+
+    - id: defence
+      after: apply
+      do: "Put the defence on the pull request. Required here despite the derivation — see `defended`."
+      executor: noah
+
+couples:
+  - id: a-deletion-must-render
+    companion: regenerate@operation-rendering
+    when: with
+    obligation: The rendering no longer carries the cell.
+
+  - id: a-deletion-owes-a-defence
+    companion: add@defence
+    when: with
+    obligation: What was deleted and why — the only surviving trace that somebody ruled here.
+    stated: true

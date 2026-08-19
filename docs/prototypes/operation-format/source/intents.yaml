@@ -99,12 +99,42 @@ mode:
 
 cell_fields:
   ruling:
-    values: [in, null]
+    values: [in, null, retired]
     note: >
       An ABSENCE is neither. Absent means nobody looked; null means it was ruled
       out, with a reason and a redirect (premise 18). The catch-all depends on
       telling them apart. A null may be DERIVED or STATED and renders identically
       either way — see derivations.yaml.
+      `retired` ADDED BY #229, and it is a third state rather than a spelling of
+      `null`. A retired cell WAS legal, is no longer, and its past actions must
+      stay auditable. Reusing `null` would render an action taken in 2026 under a
+      cell retired in 2027 as having been taken under a cell the set says was
+      CONTEXTUALLY IMPOSSIBLE — a lie about history, and one that could only be
+      unpicked by reading the reason string and judging it, which is the thing
+      this map exists to remove. It also keeps `null` clean for premise 18 and the
+      catch-all, which turn entirely on telling absent from ruled-out.
+      A retired cell carries a FORWARD POINTER to whatever superseded it, and it
+      RENDERS — in the document and in the command, marked retired (#229 Q14).
+      Dropping it from the rendering would be #115 again: an address resolving
+      through something that turns out not to be there. Noah, ruling it: it should
+      be there, just retired — visibility, no breakage, and append-only is mostly
+      what I want for this project.
+      PRODUCED BY `supersede`, never written directly. `retire` is the glossary
+      term for propose:supersede@operation-cell, and `retired` is the state it
+      leaves behind.
+
+  precondition:
+    values: {id: <name>, text: <what must hold>, computed_from: <where the fact lives>}
+    note: >
+      MINTED BY #229 on delete@<authored class>, where premise 8's discriminator —
+      has anything ever been acted under this instance — is a fact about HISTORY
+      that no flag can see. A precondition keeps the ruling STATIC while making the
+      check mechanical: the cell is ruled in, and the actor is handed a computable
+      test rather than a judgement. It must name where the fact lives, so that
+      `computed_from` is never prose.
+      DISTINCT FROM A COUPLING. A coupling names a companion CELL that must also be
+      acted on; a precondition names a FACT that must already hold. #228's
+      close-needs-its-proof is the former and this is the latter.
 
   trigger:
     required_on: [regenerate]

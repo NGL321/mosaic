@@ -1,0 +1,84 @@
+# THE KERNEL — the third of the three intents #228 ruled STATED, never derived.
+# Written under #229.
+#
+# "no combination of track, custody, origin, facing and mutability tells you
+# whether an artifact carries an obligation somebody can discharge" — so
+# dispatch, review and close are ruled per cell. #229 rules all three on the
+# kernel: `review` in, `close` and `dispatch` null.
+
+key:
+  intent: review
+  class: operation-cell
+  renders_as: propose:review@operation-cell
+
+ruling: in
+
+operation:
+  inputs:
+    - subject: the cell being judged
+    - verdict: the judgement, and the evidence for it
+  terms: [Operation, cell, kernel, review-record]
+
+  postconditions:
+    - id: judgement-recorded
+      text: >
+        A judgement against the named subject cell exists as a `review-record`, by a
+        named party, with its evidence.
+      authority: "#226 — review carries a `subject:` field"
+
+    - id: verdict-is-visible
+      text: >
+        The verdict is committed and generated beside the rendering, so that NEVER
+        SWEPT cannot look like PASSED.
+      authority: "#236"
+
+  decided_by: "the reviewing party — this is the one kernel cell whose product is not Noah's"
+
+  actors:
+    noah: may
+    agent:
+      ruling: may
+      reason: >
+        §5 — "a checker agent's critique... land in the record even though their SUBJECT
+        is belief. Custody follows the file, never the topic." A review-record is
+        agent-writable however gated its subject is, and #236 prescribes exactly this:
+        a deterministic lint suite as the standing gate and a live agent as a discovery
+        instrument.
+      note: >
+        THE CUSTODY SPLIT IS THE POINT. The kernel refuses an agent on add, edit,
+        supersede and delete, and admits one here — because reviewing a cell decides
+        nothing about the set. #236 already ruled the sweep's OUTPUT is
+        propose:edit@operation-cell, which is the gated path, so the agent's judgement
+        reaches the set only through a proposal Noah rules on.
+
+enforcement: ci
+
+procedure:
+  steps:
+    - id: lint
+      after: render-diff
+      do: "Run the deterministic delegability suite against the rendered entry."
+      executor: "ci — #236's suite"
+      on_failure: "An ordinary gate under #187's waiver."
+    - id: sweep
+      after: render-diff
+      do: >
+        Run the live-agent acceptance test in a sandbox built from the cell's declared
+        inputs, against the model pinned in source.
+      executor: "agent — #236's discovery instrument"
+      note: >
+        A sweep verdict BLOCKS NOTHING, files issues, and is a ratification criterion —
+        unwaivable because it is not a gate (#236).
+    - id: record
+      after: [lint, sweep]
+      do: "Commit the verdict beside the rendering."
+      executor: agent
+
+couples:
+  - id: a-failed-sweep-proposes-an-amendment
+    companion: edit@operation-cell
+    when: after
+    obligation: >
+      A failed acceptance test produces a proposal to amend the cell, never a direct
+      repair. #236: the sweep is a catch-all invocation triggered by a failed
+      acceptance test, and its output is propose:edit@operation-cell.

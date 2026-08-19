@@ -27,3 +27,54 @@ defence:
     What changed and why, in Noah's own words, on the pull request thread. Judged for
     COMPREHENSION, never prose — a checker rejecting on polish has broken the instrument.
   authority: PROTOCOL.md §5 "The defence — which changes owe one"
+
+# --- THE KERNEL'S THREE TERMS. Added under #229. -------------------------------
+# #226 collapsed mint, amend and retire off the intent axis and onto ordinary
+# intents acting on one class. They survive HERE, which is what "survives as a
+# glossary term" means in practice: the word stays, the machinery does not.
+
+mint:
+  gloss: >
+    Bring a new Operation into being — `propose:add@operation-cell`. Not an intent.
+    Its postconditions are what the catch-all's mint path hands off to.
+  authority: premise 7; "#226"; "#229"
+
+amend:
+  gloss: >
+    Change an existing Operation — `propose:edit@operation-cell`. Reachable from the
+    catch-all, and the landing site for a NOVEL NULL that a flag predicate can carry.
+    Where no flag can carry it, a novel null is a `mint` instead, not an amend.
+  authority: premise 7; "#226"; "#229"
+
+retire:
+  gloss: >
+    Take an Operation out of use — `propose:supersede@operation-cell`, leaving a
+    tombstone with a forward pointer. Where nothing was ever acted under the cell,
+    the branch is `propose:delete@operation-cell` instead and nothing remains. NOT
+    reachable from the catch-all.
+  authority: premise 8; "#226"; "#229"
+
+tombstone:
+  gloss: >
+    A cell carrying `ruling: retired` and a forward pointer to its successor. It
+    renders, so that an action taken under it stays resolvable to the cell that
+    governed it.
+  authority: "#229"
+
+amendment capacity:
+  gloss: >
+    What an amendment to the Operation set can absorb without re-keying it. Exceeded
+    when the key or an axis changes — an intent added or removed, a flag added or
+    removed, the mode set changed — at which point every cell must be re-ruled. This
+    is the apparatus MAJOR, and it is PROTOCOL.md §2's MAJOR shape applied to
+    machinery rather than to belief.
+  authority: PROTOCOL.md §2; "#229"
+
+kernel:
+  gloss: >
+    The classes whose instances determine the ruling of a cell. Each carries
+    `modes: [propose]`, and the set is DISCOVERED by scanning classes for that field
+    rather than held as a list. A reach rule, not a custody rule: agents draft and
+    generate the text freely, and what no automated path may do is LAND a change to
+    it as a step or a side effect.
+  authority: premise 7 as revised by "#226", scoped by "#229"

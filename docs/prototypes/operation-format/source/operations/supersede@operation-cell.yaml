@@ -1,0 +1,173 @@
+# THE KERNEL — retire. Written under #229.
+#
+# `retire` is the glossary term for this cell. Premise 8: "supersede where record
+# entries were taken under it, delete otherwise." THIS IS THE SUPERSEDE BRANCH;
+# the delete branch is delete@operation-cell, and #229 gave it a coordinate for
+# the first time.
+#
+# NOT REACHABLE FROM THE CATCH-ALL. #230's three outcomes are refuse, amend and
+# mint. Retiring an Operation is never something you arrive at by falling through
+# the set looking for a way to act.
+
+key:
+  intent: supersede
+  class: operation-cell
+  renders_as: propose:supersede@operation-cell
+
+ruling: in
+
+operation:
+  inputs:
+    - ticket: the wayfinder ticket or issue this retirement is claimed against
+    - cell: the coordinate being retired
+    - successor: the cell that supersedes it, or an explicit statement that the act is no longer legal
+    - decision: Noah's ruling, recorded before drafting
+  terms: [Operation, cell, kernel, ruling, tombstone, defence]
+
+  postconditions:
+    - id: acted-under
+      text: >
+        Something was landed under this cell. Where nothing was, this is the wrong
+        Operation — a cell that governed nothing is a mistake with no history and takes
+        `delete@operation-cell` instead.
+      authority: premise 8; "#226"; "#229"
+      computed_from: git ancestry and the tracker
+      note: >
+        THE DISCRIMINATOR IS NOT TRACK. That was tried while charting and is wrong. It
+        is "has anything ever been acted under this Operation", which is answerable from
+        ancestry rather than by judgement — and #229 turned it from a derived null on
+        the delete side into a computable PRECONDITION on both, so the two branches are
+        one test read in opposite directions.
+
+    - id: tombstoned
+      text: >
+        The cell now carries `ruling: retired` and a forward pointer to its successor.
+        It remains addressable, and it RENDERS.
+      authority: "#229"
+      note: >
+        `retired` IS A THIRD STATE, not a spelling of `null`. A null says the act was
+        ruled contextually impossible; rendering a retired cell as null would say that
+        every action taken under it was taken under an impossibility. The forward
+        pointer is what makes the tombstone a route rather than a dead end.
+        IT RENDERS, in the document and the command, marked retired. Dropping it would
+        be #115 again — an address resolving through something not there. Noah: "It
+        should be there, just retired... really stands by the principle of append-only,
+        which is mostly what I want for this project."
+
+    - id: past-actions-remain-auditable
+      text: >
+        Every landed action taken under the retired cell can still be resolved to the
+        cell that governed it, from the rendering alone.
+      note: >
+        THIS IS THE WHOLE REASON THE SUPERSEDE BRANCH EXISTS. Premise 12 already rules
+        that actions do not cite the Operation version that governed them, because the
+        commit date and the set's history are both in git and the governing version is
+        derivable. That derivation only terminates if the retired cell is still there.
+
+    - id: no-dangling-companions
+      text: >
+        No surviving cell couples to the retired cell. Where one does, its coupling is
+        repointed at the successor or the coupling is retired with it.
+      note: >
+        Found by writing this cell. A coupling names a companion CELL (#228), so
+        retiring a cell can silently break an obligation recorded on a cell nobody
+        touched — the same reach a derivation has, arriving from a third direction.
+
+    - id: decided-before-assembled
+      text: Noah's ruling was recorded BEFORE the change was assembled.
+      authority: premise 7; "#229"
+
+    - id: defended
+      text: What was retired and why, in Noah's own words.
+      derived_from: "derivations.yaml defence rule (supersede x origin: authored)"
+
+    - id: rendered
+      text: The committed rendering shows the cell as retired, with its forward pointer.
+
+  decided_by: noah
+
+  actors:
+    noah: may
+    agent:
+      ruling: may-not
+      reason: PROTOCOL.md §5 posture 2 — an agent drafts and renders; it does not decide.
+      redirect: propose:supersede@operation-cell
+      derived_from: "derivations.yaml actor_column (custody: human-signed)"
+    automated_path:
+      ruling: may-not
+      reason: The reach rule.
+      redirect: none
+      derived_from: "classes.yaml modes: [propose]"
+      authority: premise 7
+
+enforcement: ci
+
+procedure:
+  uses:
+    - fragment: branch-spine
+      with: {prefix: grilling, ticket: "<ticket>", slug: "<key>", track: tooling}
+    - fragment: pull-request-spine
+      with: {type: "feat", track: tooling, level: MINOR, ticket: "<ticket>", gist: "<one-line gist>"}
+  steps:
+    - id: check-ancestry
+      after: single-owner
+      do: >
+        Establish whether anything was landed under this cell. If nothing was, stop and
+        use delete@operation-cell.
+      executor: "command — the Operation set's own surface"
+      on_failure: "Cannot establish either way: treat as acted-under and supersede. Fail safe toward addressability."
+
+    - id: decide
+      after: check-ancestry
+      do: "Rule the retirement and name the successor. Noah's, and first."
+      executor: noah
+
+    - id: record-decision
+      after: decide
+      do: "Record the ruling on the ticket, in-band."
+      executor: noah
+
+    - id: draft
+      after: record-decision
+      do: "Set `ruling: retired` and the forward pointer; repoint or retire every coupling that names this cell."
+      executor: agent
+
+    - id: render
+      after: draft
+      do: "Regenerate the rendering."
+      executor: agent
+      coupling: regenerate@operation-rendering
+
+    - id: dangling-check
+      after: draft
+      do: "Check no surviving cell couples to the retired cell."
+      executor: "ci — a lint under #236's suite"
+      on_failure: "Repair the coupling before landing."
+
+    - id: apply
+      after: dangling-check
+      do: "Apply and commit under a human identity."
+      executor: noah
+
+    - id: ordering-check
+      after: apply
+      do: "Check the recorded decision predates the branch's first commit."
+      executor: "ci:.github/workflows/kernel-reach.yml"
+      on_failure: "Refuse the merge."
+
+    - id: defence
+      after: apply
+      do: "Put the defence on the pull request."
+      executor: noah
+
+couples:
+  - id: a-retirement-must-render
+    companion: regenerate@operation-rendering
+    when: with
+    obligation: The rendering shows the tombstone and its forward pointer.
+
+  - id: a-retirement-owes-a-defence
+    companion: add@defence
+    when: with
+    obligation: What was retired and why, in Noah's own words.
+    derived: true

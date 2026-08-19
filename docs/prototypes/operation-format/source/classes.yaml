@@ -4,6 +4,12 @@
 # (premise 2). Forty-two classes across three surfaces. The ticket estimated
 # "roughly twenty"; the count was a floor, and it was low by half.
 #
+# AMENDED BY #229 — 52. The kernel is not one class but SIX (plus one non-kernel
+# rendering): #226 named `operation-cell`, and writing the three kernel cells
+# found that three other source files re-rule cells without touching one. See
+# THE KERNEL at the foot of this file; premise 7 is restated there as a
+# predicate over classes rather than as a register.
+#
 # AMENDED BY #228 — 45. Working the hard cells found three classes this
 # enumeration never reached, because it swept the record by LOCATION and these
 # three are named only inside obligations: `pull-request` and `review-record`
@@ -696,3 +702,179 @@ defence:
     for that ticket, not a ruling here: a committed file beats a PR comment, because
     #203 is exactly the lesson about assertions no clone can verify.
     What DERIVES is the necessity of a defence (derivations.yaml), never the defence.
+
+# ===========================================================================
+# THE KERNEL — 6, plus one non-kernel rendering. MINTED UNDER #229.
+# ===========================================================================
+#
+# WHAT THE KERNEL IS A CLASS OF. #226 collapsed mint/amend/retire onto a single
+# class, `operation-cell`, and #228 keyed premise 7's reach rule to a single
+# class-level field, `modes: [propose]`. Writing the three cells found that one
+# class is TOO NARROW. `operation-cell` names only the cell files; the source has
+# six kinds of file, and three of them RE-RULE CELLS WITHOUT TOUCHING ONE — a new
+# predicate in derivations.yaml nulls cells arithmetically, a new member in
+# intents.yaml re-keys everything, a flag change in classes.yaml fires the
+# predicates. Left on ordinary custody, an automated path could null out cells
+# while never touching a cell: an agent amending the rule that says agents may
+# not amend rules, arriving through the side door premise 7 exists to close.
+#
+# PREMISE 7 IS A PREDICATE, NOT A REGISTER. Restated under #229:
+#
+#     A class whose instances determine the ruling of a cell carries
+#     `modes: [propose]`.
+#
+# That is premise 20 applied to the kernel itself. The kernel is DISCOVERED by
+# scanning classes for the field; it is never held as a list. The fixed point
+# stays small and visible — one field — while reaching everything it must reach,
+# and `operation-cell` turns out to be one member of a kernel SET rather than
+# the kernel.
+#
+# CUSTODY IS human-signed, AND THAT RESOLVES A COLLISION (#229 Q8). The two
+# derivations meet for the first time on this class and disagree: modes:
+# [propose] nulls execute:*, while the actor column's agent-writable rule reads
+# "no refusal, so no proposal". Under human-signed they agree, and the two
+# mechanisms stay distinct with both doing work — CUSTODY answers whose hand,
+# MODES answers what an automated path may execute. A CI job is not an agent
+# with custody, and premise 7 is aimed at it. Noah, on the revision: "It is
+# about what an automated path can execute, not create." The alternative was a
+# precedence rule between derivations, refused because precedence is where
+# arithmetic starts becoming judgement.
+#
+# ADDRESS (#229 Q9). docs/operations/source/, not a new top-level directory.
+# The seven top-level directories are the programme's SUBSTANCE; the Operation
+# set is apparatus describing how that substance is written, which is what
+# docs/ already holds. An eighth top-level directory would put the machinery at
+# the same altitude as the research. Licence follows the directory: docs/ is
+# CC BY 4.0. These classes are addressed at their LANDING site, not at the
+# prototype tree they are currently written in; #233 moves them.
+#
+# RESIDUE, FILED NOT MINTED. couplings.yaml and gaps.yaml are the two source
+# files #229 did NOT give a class, and the omission is deliberate rather than an
+# oversight. Neither determines a cell's ruling, so neither is kernel by the
+# predicate above — a gap is a declared property and a coupling is a companion
+# obligation, and both leave a cell's ruled-in/null status untouched.
+# couplings.yaml is additionally scheduled to VANISH: its own header calls it a
+# staging ground that shrinks to nothing as each coupling migrates onto its cell,
+# at which point its contents are operation-cell. Minting a class for a file
+# with a death date would be the worse error. This is stated so the hole is
+# COUNTABLE (premise 9) rather than invisible, and it is #229's one open residue.
+
+operation-cell:
+  gloss: One coordinate of the Operation set — a ruling at `<intent>@<class>`
+  locate: {surface: repository, path: "docs/operations/source/operations/<intent>@<class>.yaml", licence: cc-by-4.0}
+  track: tooling
+  custody: human-signed
+  origin: authored
+  facing: agent
+  mutability: amendable
+  modes: [propose]          # the reach rule — premise 7 as revised by #226, scoped by #229
+  authority: premise 7; "#226"; "#229"
+  note: >
+    The class #226 named when it collapsed the kernel. mint, amend and retire are
+    `propose:add`, `propose:edit` and `propose:supersede` on it, and survive as
+    glossary terms rather than as intents.
+
+class-table:
+  gloss: The artifact-class axis and its flags
+  locate: {surface: repository, path: "docs/operations/source/classes.yaml", licence: cc-by-4.0}
+  track: tooling
+  custody: human-signed
+  origin: authored
+  facing: agent
+  mutability: amendable
+  modes: [propose]
+  note: >
+    KERNEL BECAUSE A FLAG FIRES A PREDICATE. Changing `origin` on one class re-rules
+    every derived cell in its row without touching a cell file. This is the file you
+    are reading.
+
+intent-axis:
+  gloss: The intent axis and the mode
+  locate: {surface: repository, path: "docs/operations/source/intents.yaml", licence: cc-by-4.0}
+  track: tooling
+  custody: human-signed
+  origin: authored
+  facing: agent
+  mutability: amendable
+  modes: [propose]
+  note: >
+    KERNEL BECAUSE A MEMBER RE-KEYS EVERYTHING. Its own header already prices this:
+    "Adding an INTENT re-keys every existing cell and forces a ruled-in/null judgement
+    on every class — the apparatus-MAJOR shape this map adopted in its reframe."
+
+derivation-rule:
+  gloss: The arithmetic — what the generator computes rather than reads
+  locate: {surface: repository, path: "docs/operations/source/derivations.yaml", licence: cc-by-4.0}
+  track: tooling
+  custody: human-signed
+  origin: authored
+  facing: agent
+  mutability: amendable
+  modes: [propose]
+  authority: "#228; #229"
+  note: >
+    THE MOST EXPENSIVE FILE IN THE SOURCE TO CHANGE, which is not obvious and is the
+    consequence #229 Q4 was tested against. A predicate here re-rules every cell it
+    reaches WHILE TOUCHING NONE OF THEM, so a change is apparatus-MAJOR by the Q4 test
+    — the same property that makes it kernel. Noah, ruling it: a change to
+    derivations.yaml should be major.
+
+operation-fragment:
+  gloss: A spine or class fragment, written once and spliced
+  locate: {surface: repository, path: "docs/operations/source/fragments/*.yaml", licence: cc-by-4.0}
+  track: tooling
+  custody: human-signed
+  origin: authored
+  facing: agent
+  mutability: amendable
+  modes: [propose]
+  note: >
+    KERNEL BECAUSE A FRAGMENT CARRIES POSTCONDITIONS. #228 ruled that "a fragment
+    factors only what is true of everything that composes it" — so editing one changes
+    the substance of every cell over every class that composes it, sight unseen. That
+    is the same reach a derivation has, by a different route.
+
+glossary-term:
+  gloss: A term an entry uses, written once and spliced
+  locate: {surface: repository, path: "docs/operations/source/glossary.yaml", licence: cc-by-4.0}
+  track: tooling
+  custody: human-signed
+  origin: authored
+  facing: agent
+  mutability: amendable
+  modes: [propose]
+  note: >
+    KERNEL, AND THE LEAST OBVIOUS MEMBER. A term does not rule a cell in or out — but
+    #224's acceptance test found that undefined vocabulary is a PREMISE 16 FAILURE:
+    "an entry that sends you elsewhere to understand it has not been flattened, only
+    shortened." Redefining a term silently changes what every entry using it INSTRUCTS,
+    which is reach over meaning rather than over ruling. Included deliberately; the
+    predicate above is stated in terms of ruling, and this class is the one place it
+    had to be read as reach over substance.
+
+# --- NOT KERNEL ------------------------------------------------------------
+
+operation-rendering:
+  gloss: The committed rendering of the Operation set — premise 11's document half
+  locate: {surface: repository, path: "OPERATIONS.md", licence: cc-by-4.0}
+  track: tooling
+  custody: agent-writable
+  origin: generated
+  facing: human
+  mutability: amendable
+  trigger: {do: "the source changes", executor: "ci — see #236's render-diff trigger"}
+  authority: premise 11; "#236"
+  note: >
+    NOT KERNEL, and the boundary is worth stating: its bytes are DETERMINED BY the
+    source, so nothing is decided in it. `add` and `edit` are derived-null (origin:
+    generated), `regenerate` is the legal act, and it carries a `trigger:` or it is
+    #198 on a third surface. Premise 11's other half — the command — reads current
+    state and is not an artifact.
+    LICENCE ASSIGNED HERE, DELIBERATELY. README's "one rule here with teeth": a new
+    TOP-LEVEL file is assigned a licence in the pull request that creates it, because
+    a root-level file has no directory to inherit from and the MIT default is wrong
+    for prose. #233 creates it and must carry the README table row.
+    RETIRED CELLS RENDER (#229 Q10/Q14), marked retired and carrying their forward
+    pointer, so this file grows monotonically. Noah, ruling it: it should be there,
+    just retired — visibility, no breakage, and append-only is mostly what I want for
+    this project.
