@@ -1,0 +1,29 @@
+# THE KERNEL — a STATED null. Written under #229.
+
+key:
+  intent: dispatch
+  class: operation-cell
+  renders_as: propose:dispatch@operation-cell
+
+ruling: null
+
+reason: >
+  A mandate transfers authority to WRITE. Authority over a cell cannot be transferred
+  at all — that is premise 7, and a dispatch over the kernel would be precisely the
+  automated path the reach rule refuses. What is really being dispatched when someone
+  says "have an agent write this cell" is the TICKET that rules it: the agent is given
+  a mandate to draft and to propose, and the ruling stays with Noah.
+
+redirect: dispatch@ticket
+
+authority: premise 7; premise 17
+
+note: >
+  THIS NULL IS THE REACH RULE ARRIVING FROM A THIRD DIRECTION, and it is worth having
+  as a stated null rather than leaving to the mode restriction. `modes: [propose]`
+  already nulls `execute:dispatch`; what this rules out is the PROPOSE half too, which
+  the mode cannot reach. An agent may propose a cell (add) and may propose an
+  amendment (edit); it may not propose a transfer of authority over the kernel,
+  because a proposal to hand out the pen is not a smaller act than handing it out.
+  #228 recorded `dispatch` over a wayfinder ticket twice. Both sightings are the
+  redirect above, and neither is a dispatch over a cell.

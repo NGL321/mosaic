@@ -83,22 +83,45 @@ nulls:
       hypothetical: `writing-great-skills` was deleted from both skill trees
       during this map's life.
 
-  - id: delete-is-null-where-the-record-can-reference-it
+  - id: delete-is-preconditioned-where-the-record-can-reference-it
     when: {origin: authored}
-    nulls: [delete]
-    redirect: supersede@<class>
+    rules: in                        # NOT a null — see below
+    precondition:
+      id: never-acted-under
+      text: No landed action cites this instance.
+      computed_from: git ancestry and the tracker
+    redirect_when_unmet: supersede@<class>
     reason: >
-      Actions were taken under it, so it must stay addressable or those actions
-      become unauditable.
+      An instance that governed a landed action must stay addressable or that
+      action becomes unauditable. An instance that governed nothing is a mistake
+      with no history, and it may simply leave.
     authority: premise 8
     note: >
-      STRICTER THAN #226 ESTIMATED. #226 put delete at "roughly fifteen nulls"
-      against a smaller class axis; as a flag predicate it is null EVERYWHERE
-      EXCEPT origin: generated (regenerable from source, so nothing is lost) and
-      origin: vendored (droppable — see above). Noah's anti-cancer argument is
-      what keeps delete on the axis at all: an escape hatch that is null almost
-      everywhere is still an escape hatch, and the alternative is a set that only
-      ever grows.
+      REPAIRED BY #229. #228 wrote this as a flag predicate emitting a NULL on
+      every authored class, and in doing so it silently dropped half of premise 8.
+      Premise 8 reads "supersede where record entries were taken under it, DELETE
+      OTHERWISE" — and a flag predicate can see `origin: authored` but cannot see
+      whether anything was acted under, so compiling the rule into a flag deleted
+      the "otherwise" branch for all ~30 authored classes. #228's own note
+      conceded the result was "stricter than #226 estimated"; that strictness was
+      the missing branch, not a finding.
+      A FLAG PREDICATE THAT CANNOT OBSERVE HISTORY SHOULD EMIT THE CHECK, NOT
+      GUESS THE ANSWER. This is the general form of the repair and the reason it
+      lands globally rather than on the kernel alone (#229 Q5): the alternative
+      was to invent an override-a-derived-null mechanism the format does not have,
+      in order to paper over a predicate already agreed to be wrong.
+      WHY A PRECONDITION AND NOT A TIME-VARYING NULL. The discriminator is git
+      ancestry, so a ruling keyed to it would CHANGE OVER TIME — and a time-varying
+      ruling is one the committed rendering cannot state truthfully, only the
+      command can. As a precondition on a ruled-in cell, the ruling stays static,
+      the document stays true, and no reader evaluates a condition. Noah, ruling
+      it: it makes much more sense as a precondition than otherwise.
+      LIVE CONTRADICTION, FILED NOT FIXED. docs/adr/README.md's "superseded, never
+      deleted" is #241. This repair resolves the MECHANISM in premise 8's favour;
+      the repair to ADR's text is #241's and premise 13 keeps it there.
+      Noah's anti-cancer argument is what keeps delete on the axis at all: "leaving
+      myself without an escape hatch via delete means that the program will likely
+      grow uncontrollably, cancerously."
 
   - id: kernel-is-unreachable-by-an-automated-path
     when: {modes: [propose]}
@@ -133,6 +156,20 @@ nulls:
 
 actor_column:
   derived_from: custody
+  # PRECEDENCE IS NOT NEEDED, AND THAT IS A RULING (#229 Q8). This block and the
+  # `kernel-is-unreachable-by-an-automated-path` null above are the only two rules
+  # that generate propose-cells, and #229 was the first ticket where they met on
+  # one class. They disagree under `custody: agent-writable`: the kernel rule nulls
+  # execute:* while the rule below reads "no refusal, so no proposal". The kernel
+  # classes were given `custody: human-signed` precisely so the two AGREE, rather
+  # than introducing a precedence rule between derivations — which would have been
+  # the format's first, and precedence is where arithmetic starts becoming
+  # judgement. The two mechanisms remain distinct and both do work: CUSTODY answers
+  # whose hand, MODES answers what an automated path may execute. A CI job is not
+  # an agent with custody, and premise 7 is aimed at it.
+  # STANDING RULE FOR FUTURE CLASSES: `modes: [propose]` with `custody:
+  # agent-writable` is a contradiction, not a configuration. A lint should refuse
+  # it (#236) rather than a precedence rule resolving it.
   rules:
     - when: {custody: agent-writable}
       agent: may
@@ -187,7 +224,7 @@ defence:
   derives: coupling
   rule:
     when:
-      intent: [edit, supersede]
+      intent: [add, edit, supersede]     # `add` ADDED BY #229 — see below
       origin: authored
     emits:
       coupling: add@defence
@@ -202,6 +239,25 @@ defence:
         the reason the field needs a route rather than a boolean.
       discharges_by: citing an existing `defence` instance
   note: >
+    `add` ADDED BY #229, REPAIRING A CONTRADICTION #224 AND #228 ALREADY CARRIED.
+    The predicate read [edit, supersede], excluding `add` on every class — while
+    the worked cell add@CONTEXT-entry carries a postcondition `defended` citing
+    §5. The prototype said add owes a defence and the arithmetic said it never
+    does, and the two had coexisted since #228 without either being wrong on its
+    own terms. Found by drafting `mint`; wrong on ~30 authored classes, not just
+    the kernel.
+    §5's framing is about AUTHORED-FILE CHANGES, and creating a file is one. The
+    alternative — delete the cell's postcondition — would have made `mint` the
+    one kernel Operation that records no reasoning, inverting premise 7. Noah, on
+    the scope: minting inside the kernel certainly needs a defence; minting
+    outside it is a larger scope, and it is not unreasonable to insist on one
+    there either. The waffle is recorded because it is the honest part of the
+    ruling, and the relief routes below are what keep the cost proportionate — a
+    de-minimis add still claims nothing.
+    MINTING A NEW WAY TO INTERFACE WITH THIS PROJECT is the most defence-worthy
+    act in the set. Premise 19: "No new way to interface with this project comes
+    into being without Noah seeing it first" — and the defence is precisely the
+    artifact that records his having seen it.
     NOAH'S DISTINCTION, which this block is built on: what derives is the
     NECESSITY of a defence, never the defence. The artifact itself is
     human-authored (§5: "in Noah's own words") and can only ever be written.

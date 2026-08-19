@@ -161,6 +161,13 @@ itself the finding: the source format survived two enumerations landing on top o
 
 - [#227](https://github.com/NGL321/mosaic/issues/227) filled `classes.yaml` — 42 classes,
   five flags, a typed address — and minted the first **class** fragment, `issue.yaml`.
+- [#229](https://github.com/NGL321/mosaic/issues/229) wrote **the kernel** — seven cells
+  on `operation-cell` (`add`, `edit`, `supersede`, `delete`, `review` ruled in; `close`
+  and `dispatch` ruled null) — and found the kernel is **six classes, not one**. It added
+  `retired` as a third `ruling:` value and `precondition:` as a cell field, and made
+  three repairs in `derivations.yaml`, each of which is apparatus-**MAJOR** by the pricing
+  the same ticket settled. The three cells whose glossary terms are `mint`, `amend` and
+  `retire` are the ones this map was chartered to protect.
 - [#228](https://github.com/NGL321/mosaic/issues/228) worked six hard cells against it.
   The key held. It added `derivations.yaml`, `couplings.yaml` and `gaps.yaml`; ratified
   `trigger:` and `couples:`, which #224 had invented ad hoc, as required fields with

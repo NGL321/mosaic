@@ -1,0 +1,29 @@
+# THE KERNEL — a STATED null. Written under #229.
+#
+# A null is a file (#224), and this is one. `close` and `dispatch` are the two
+# intents #228 ruled stated-never-derived that #229 rules OUT on the kernel; both
+# redirect to the tracker, and the redirect is the whole content of the ruling.
+
+key:
+  intent: close
+  class: operation-cell
+  renders_as: propose:close@operation-cell
+
+ruling: null
+
+reason: >
+  A cell carries no obligation anybody discharges. `close` records an obligation as
+  met, citing the evidence that met it — and the obligations around the Operation set
+  live on the TICKETS that rule it, never on the cells themselves. A cell is a
+  standing statement of what must be true when an act is done; it is never a thing
+  that becomes done.
+
+redirect: close@ticket
+
+authority: "#226 — close is distinct from edit by its proof obligation"
+
+note: >
+  PREMISE 5'S SEAM HOLDING ON A NEW PAIR. The decision lives in the ticket and the
+  obligation closes there; the cell is what the decision produced. Ruling `close` in
+  here would give the set two places to record the same discharge, which is the drift
+  premise 20 exists against.
