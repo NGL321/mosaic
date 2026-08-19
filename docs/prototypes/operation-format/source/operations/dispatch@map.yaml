@@ -1,0 +1,31 @@
+# AN EXPLICIT NULL, STATED (premise 18). Landed by #232.
+
+key:
+  intent: dispatch
+  class: map
+
+ruling: null
+
+null_ruling:
+  kind: stated
+  reason: >
+    A mandate creates an obligation to record its discharge (dispatch-owes-a-close), and a
+    map has no close: it is the only tracker class whose lifecycle ends in a closure
+    CONDITION rather than an act, and it does not resolve — its tickets do. A mandate over a
+    map would be an obligation with no discharge, which is the shape `close` exists to
+    forbid. Wayfinder's own rule points the same way: one ticket per session, never a map.
+  redirect: dispatch@ticket
+  ruled_by: "#232, on the coupling rather than on the flags"
+  note: >
+    STATED, not derived — and it could not have been derived. derivations.yaml already
+    records that which classes admit `dispatch`, `close` and `review` is stated per cell,
+    because no combination of track, custody, origin, facing and mutability tells you
+    whether an artifact carries an obligation somebody can discharge. `map` and `ticket`
+    share a fragment and differ on exactly this, which is a second sighting of the same
+    finding that made them peers rather than parent and child: `claim` is legal on a ticket
+    and meaningless on a map, and so is a mandate.
+
+# WHAT IS DELIBERATELY NOT RULED HERE. Every other class is ABSENT on `dispatch` — nobody
+# looked — and absence must keep meaning that (premise 18, #224 finding 6). In particular
+# the research-loop classes are NOT ruled null from here: premise 5 puts that seam on
+# #55's side, and a null is a ruling.

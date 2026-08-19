@@ -1,0 +1,109 @@
+# THE RETURN. Landed by #232. `close` is the return half of `dispatch` — #226 ruled the
+# mandate needs no ninth intent to come back through, because "the return is `close`."
+#
+# This cell carries the ASYMMETRY that bounds an unbounded dispatch chain.
+
+key:
+  intent: close
+  class: ticket
+
+ruling: in
+
+operation:
+  inputs:
+    - ticket: the mandate being discharged
+    - evidence: what met the obligation
+  terms: [mandate, delegate, authority root]
+  postconditions:
+    - id: obligation-met
+      text: The mandate is recorded as met, and the evidence that met it is cited.
+    - id: returned-as-a-report
+      text: >
+        The delegate's return is a structured comment on the dispatching ticket carrying
+        four fields: the keys it entered, the addresses it wrote, the evidence for the
+        proposed close, and THE STEP IT STOPPED AT.
+      authority: >
+        #24 — labels command, comments report; the channel separation is what lets an agent
+        say what it did without asking for anything.
+      note: >
+        The fourth field is load-bearing and was nearly omitted. #224's acceptance test had
+        a delegate stop correctly at the first step that was not its own, unprompted — that
+        stop is a RESULT. A return shape with no place to put it turns the model's best
+        behaviour into an error.
+  actors:
+    noah: may
+    agent:
+      ruling: may
+      overridden_by: the-dispatcher-never-the-delegate
+
+# ---------------------------------------------------------------------------------------
+# THE ACTOR OVERRIDE — stated, not derived. The mechanism #228 minted for
+# close@debt-verification, reused here on the same shape of reason: a rule that comes from
+# outside the five flags, resolved when the cell is WRITTEN and never when it is read.
+# ---------------------------------------------------------------------------------------
+
+actor_override:
+  id: the-dispatcher-never-the-delegate
+  rules: >
+    A mandate is closed by the actor who dispatched it. The delegate returns the companion
+    artifact and a PROPOSED close; it may not close its own mandate.
+  reason: >
+    `ticket` is `custody: agent-writable`, so the derived actor column lets a delegate close
+    the mandate it was working — the same actor asserting both the work and its adequacy.
+    That is #24's identity problem one level up. The cost of the override is one comment and
+    one click by an actor already in the loop, which is not a cost worth the self-certified
+    close.
+  authority: "#232; the mechanism from #228's close@debt-verification"
+
+# ---------------------------------------------------------------------------------------
+# THE ASYMMETRY. This is what makes an ungated `dispatch@ticket` safe, and it is the reason
+# no mode restriction was needed there.
+#
+#   A `close` POPS ONE FRAME — to whoever dispatched, agent or human.
+#   A `propose` JUMPS TO THE AUTHORITY ROOT — which is always a human.
+#
+# DEPTH IS FREE; THE PROPOSE CHANNEL DOES NOT GET DEEPER. A chain of agents may run
+# arbitrarily deep and every proposal raised anywhere in it lands on the same human.
+#
+# The alternative — a proposal walking up one hop at a time — was built and driven under
+# #232. Each agent passes the proposal to another agent, and premise 19 ("no new way to
+# interface with this project comes into being without Noah seeing it first") holds
+# FORMALLY, in that the proposal was escalated at every hop, while being false in fact. Both
+# readings satisfy the sentence, which is why it had to be built rather than argued.
+# ---------------------------------------------------------------------------------------
+
+routing:
+  close:
+    to: the dispatcher
+    hops: one
+  propose:
+    to: the authority root
+    hops: all
+    computed_by: >
+      Walk the parent edges and read each ticket's DISPATCHER; the root is the nearest
+      ticket whose dispatcher is human.
+    note: >
+      THE PARENT EDGE IS NOT THE AUTHORITY EDGE — #232 found this by building the rule as
+      first stated ("store the parent edge, compute the root"), which walked parents to the
+      root and read the root ticket's ASSIGNEE. That is the first DELEGATE; the human is the
+      first DISPATCHER. Two edges hang off one dispatch and they point at different trees:
+      the parent edge is the WORK tree, the dispatcher is the AUTHORITY chain, and a
+      proposal routes up authority. Same stored fact, different arithmetic over it. The
+      first implementation routed a proposal to an agent on its first run, plausibly and
+      without complaint.
+    guaranteed_by: dispatch@ticket's `no-human-in-the-authority-chain` refusal
+
+procedure:
+  steps:
+    - id: cite-the-evidence
+      do: "Cite what met the obligation, from the delegate's returned report."
+      executor: the dispatcher
+    - id: close
+      do: "Close the ticket."
+      executor: the dispatcher
+
+couplings:
+  - id: dispatch-owes-a-close
+    text: "A mandate creates an obligation to record its discharge."
+    from: dispatch@ticket
+    when: after

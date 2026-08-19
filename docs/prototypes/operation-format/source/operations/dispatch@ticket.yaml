@@ -1,0 +1,108 @@
+# THE MANDATE. Landed by #232, which collapsed the command surface and dispatch into one
+# object: the rendered cell, resolved from a key. A human types the key and gets the entry;
+# an agent is handed the same key as a mandate and its first act is the same call. What an
+# agent MAY WRITE and MUST RETURN is therefore this cell's `inputs`, `actors` and
+# postconditions — not a second protocol with its own delegability test.
+#
+# Only the checkable half of #232 lands here (premise 15 batches the rest into #233).
+
+key:
+  intent: dispatch
+  class: ticket
+
+ruling: in
+
+operation:
+  inputs:
+    - ticket: the unit of work the mandate is over
+    - delegate: who is being given authority to write
+  terms: [mandate, delegate, authority root]
+  postconditions:
+    - id: mandate-exists
+      text: >
+        The ticket carries `agent:dispatched`. The mandate IS the label — there is no
+        mandate artifact and no register of open mandates; they are a label query
+        (premise 20).
+      authority: "#24 — labels command, comments report; premise 20"
+    - id: parent-edge-recorded
+      text: >
+        The ticket records the ticket it was dispatched beneath, or that it is the first
+        of its chain. This is the only fact this Operation STORES.
+    - id: dispatcher-is-derivable
+      text: >
+        Who transferred the authority is answerable from the tracker's own record of who
+        applied `agent:dispatched`. It is never written down as a field.
+      authority: >
+        this map's standing rule — compute it, never store or type it. #232 found the
+        alternative by building it: a stored dispatcher is a hand-typed statement of a
+        fact the timeline already holds, which is #176 exactly.
+  actors:
+    noah: may
+    agent:
+      ruling: may
+      qualified_by: >
+        UNGATED, and deliberately so. An agent may dispatch any form of agent. Noah, ruling
+        it: the research programme's branching IS parallel sandboxes, and a no-dispatch rule
+        forces every branch of it into one agent session — one sandbox — which is not what
+        parallel experiments are. Gating here would gate the honest case (a controlling
+        agent running a Ralph loop, which premise 16 REQUIRES) while doing nothing about the
+        generative loop, which #24 established is a RATE ACROSS THE TRACKER rather than a
+        depth in one thread. What bounds the chain is the asymmetry in `close@ticket` and
+        the refusal below, not a mode on this cell.
+
+# ---------------------------------------------------------------------------------------
+# REFUSALS — A NEW CELL FIELD, minted by #232 and forced by the cell below it.
+#
+# A refusal is a condition that VOIDS the cell, evaluated by the command BEFORE it renders.
+# It is not a step. #232 found the distinction by getting it wrong: the base case first sat
+# in this cell's step list, where it fired AFTER the entry had already rendered — handing
+# the actor a complete procedure and then telling them it was void.
+#
+#   ANYTHING THAT CAN VOID A CELL IS A REFUSAL.
+#   ONLY WHAT CAN FAIL WITHIN A VALID CELL IS A STEP.
+#
+# A step can be skipped and a refusal cannot, which is the whole of it. Derived refusals
+# (the actor column, the flag predicates) already exist in derivations.yaml; this field is
+# for STATED ones, and it is the same split nulls already carry.
+# ---------------------------------------------------------------------------------------
+
+refusals:
+  - id: no-human-in-the-authority-chain
+    when: >
+      The actor is not human AND no ticket on the parent chain — this one included — was
+      dispatched by a human.
+    message: You were not dispatched by a human, so a proposal raised beneath this mandate could not reach one.
+    redirect: "a chain's first dispatch is a human's act"
+    reason: >
+      THE BASE CASE. `close` pops one frame and `propose` jumps to the authority root
+      (close@ticket), and that arithmetic has no answer when no human appears anywhere in
+      the chain — a cron-started agent dispatching another agent. Such a chain can still
+      raise a proposal, and premise 19 would have nowhere to send it. Checked at DISPATCH
+      rather than at proposal time: refusing here means the unroutable chain never comes
+      into being, while refusing there discovers it after the work is done.
+    authority: "premise 19; #232"
+
+procedure:
+  steps:
+    - id: apply-the-label
+      do: "Apply `agent:dispatched` to the ticket."
+      executor: the dispatcher
+      note: >
+        PERFORMED BY THE ACTOR, NEVER BY THE COMMAND. The command renders and refuses and
+        does not write (#232). This is not fastidiousness: applying the label already
+        requires a write bit, so the act carries its own authorisation, and the timeline
+        records WHO — which is what makes `dispatcher-is-derivable` true. A command that
+        applied the label would record the tool instead, and the derived fact would name
+        the tool on every mandate in the project.
+    - id: record-the-parent-edge
+      do: "Record which ticket this was dispatched beneath, or that it is the first of its chain."
+      executor: the dispatcher
+
+couplings:
+  - id: dispatch-owes-a-close
+    text: "A mandate creates an obligation to record its discharge."
+    to: close@ticket
+    when: after
+    note: >
+      Staged in couplings.yaml by #228 and migrated onto its cell here, per the chore that
+      ticket left behind: couplings move onto their cells as those cells are written.

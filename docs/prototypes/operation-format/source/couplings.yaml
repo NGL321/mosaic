@@ -68,6 +68,10 @@ couplings:
     authority: "#227; #115"
 
   - id: dispatch-owes-a-close
+    MIGRATED: >
+      #232 wrote both cells, so this entry has moved onto them and is retained here only as
+      the record of where it was staged. It is the first of #228's six to land, per the
+      chore that ticket left behind.
     from: dispatch@ticket
     to: close@ticket
     when: after
