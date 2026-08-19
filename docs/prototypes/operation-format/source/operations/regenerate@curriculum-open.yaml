@@ -5,6 +5,7 @@ key:
   class: curriculum-open
 
 ruling: in
+enforcement: none            # #228 — the --check mode exists and no CI calls it
 
 operation:
   inputs:
@@ -77,11 +78,17 @@ procedure:
     gap: >
       nobody and nothing holds this. It is the map's standing case (#198: eighteen closed
       issues still carried debt:open) arriving on a second surface.
+    # RATIFIED BY #228 as a required field on every `regenerate` cell, and the gap
+    # left standing: the cell is ruled IN with `trigger.executor: none`, which files
+    # the defect rather than hiding it (premise 9). The mechanism that eventually
+    # holds it must DISCOVER its work by scanning cells for `trigger:` fields and
+    # may not carry an internal list of things to regenerate (premise 20).
 
 couplings:
   - id: file-couples-in
-    text: "A debt-issue `file` requires a curriculum-open `regenerate`."
-    from: file@debt-issue
+    text: "A debt-issue `add` requires a curriculum-open `regenerate`."
+    from: add@debt-verification            # was file@debt-issue — #226 collapsed `file`, #227 split the class
+    when: after                            # #228 — the ordering, added to every coupling
     note: >
       The inverse of the CONTEXT-entry coupling, and the reason couplings need a place
       distinct from nulls: filed as a null, "you cannot file debt without regenerating"
