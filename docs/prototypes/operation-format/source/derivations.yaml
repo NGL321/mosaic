@@ -1,0 +1,242 @@
+# THE ARITHMETIC. Settled under #228, on Map #220.
+#
+# One home for everything the generator COMPUTES rather than reads. If a fact
+# about a cell can be derived from the flags #227 enumerated, it is derived
+# HERE and nowhere else; a cell file states only what the flags cannot predict.
+#
+# WHY A SEPARATE FILE. classes.yaml holds what an artifact IS, intents.yaml holds
+# what an act IS, and neither is the right home for a rule that reads one and
+# writes the other. Spreading these across both files would put the arithmetic in
+# two places and make "is this cell null?" a question you answer by reading two
+# headers. Premise 10 at the source layer: factored once, flat at the point of
+# use — every rule below renders into the cell exactly as a stated one would, so
+# THE ACTOR CANNOT TELL A DERIVED RULING FROM A WRITTEN ONE. That is the design
+# requirement, not a side effect: premise 18 turns on absent-vs-null, and says
+# nothing about how a null was arrived at.
+#
+# THE GRID. 45 classes x 8 intents x 2 modes. Hand-writing that is not a large
+# job, it is a wrong one — #224 ruled "a null is a file and an absence is a mint"
+# at four cells, where it was cheap and correct. #227 doubled the class axis and
+# the same rule now prices several hundred files, most of them transcribing one
+# sentence. Noah, settling it: there are cases where each is important. So both
+# kinds exist, and the split is by REASON, not by volume: a null a flag predicts
+# is derived, a null a flag cannot predict is written.
+
+id: derivations
+authority: "#228, on #220 — premises 2, 3, 4, 10, 18"
+
+# ---------------------------------------------------------------------------
+# NULL RULES — seven predicates over flags
+# ---------------------------------------------------------------------------
+#
+# Each emits a null WITH ITS REASON AND ITS REDIRECT, which is premise 18's
+# shape generated instead of enumerated. A rule that could not name a redirect
+# would not be admissible here: "no" without "instead, this" is the judgement
+# call this map exists to remove.
+
+nulls:
+  - id: generated-is-not-authored
+    when: {origin: generated}
+    nulls: [add, edit]
+    redirect: regenerate@<class>
+    reason: >
+      The instance is a function of its source. Bringing one into being by hand,
+      or changing one by hand, asserts a fact the generator will overwrite.
+    authority: premise 4 — "the generated flag turns 'do not hand-edit this' from a convention into a property"
+
+  - id: regenerate-needs-a-source
+    when: {origin: [authored]}
+    nulls: [regenerate]
+    redirect: edit@<class>
+    reason: >
+      There is no source to recompute from. `regenerate` is legal only where
+      something upstream determines the bytes — a generator (origin: generated)
+      or an upstream vendor (origin: vendored, where it reads "re-vendor").
+    note: the converse of the rule above, and the reason it is written as its own rule
+
+  - id: frozen-admits-no-edit
+    when: {mutability: frozen}
+    nulls: [edit]
+    redirect: supersede@<class>
+    reason: The instance is fixed for its life; a changed meaning is a new instance with a forward pointer.
+    authority: docs/adr/README.md "superseded, never deleted"; literature/ "Frozen, in the strong sense"
+
+  - id: append-only-admits-no-edit
+    when: {mutability: append-only}
+    nulls: [edit]
+    redirect: add@<class>
+    reason: >
+      A correction is a new row, never a rewritten one. DATA-PROTOCOL §2:
+      "Never remove a row from a manifest." A poor extraction "is not fixed. It
+      becomes another claim."
+
+  - id: vendored-is-not-ours-to-edit
+    when: {origin: vendored}
+    nulls: [edit]
+    redirect: regenerate@<class>
+    reason: >
+      The bytes are someone else's. The Mosaic-side act is to re-vendor from
+      upstream, which is a regenerate: nothing is decided here.
+    note: >
+      `add` and `delete` stay LEGAL on vendored classes — adopting a dependency
+      and dropping one are real acts with real decisions. Live rather than
+      hypothetical: `writing-great-skills` was deleted from both skill trees
+      during this map's life.
+
+  - id: delete-is-null-where-the-record-can-reference-it
+    when: {origin: authored}
+    nulls: [delete]
+    redirect: supersede@<class>
+    reason: >
+      Actions were taken under it, so it must stay addressable or those actions
+      become unauditable.
+    authority: premise 8
+    note: >
+      STRICTER THAN #226 ESTIMATED. #226 put delete at "roughly fifteen nulls"
+      against a smaller class axis; as a flag predicate it is null EVERYWHERE
+      EXCEPT origin: generated (regenerable from source, so nothing is lost) and
+      origin: vendored (droppable — see above). Noah's anti-cancer argument is
+      what keeps delete on the axis at all: an escape hatch that is null almost
+      everywhere is still an escape hatch, and the alternative is a set that only
+      ever grows.
+
+  - id: kernel-is-unreachable-by-an-automated-path
+    when: {modes: [propose]}
+    nulls: ["execute:*"]
+    redirect: propose:<intent>@<class>
+    reason: >
+      No generator run, no CI action and no catch-all invocation may land a change
+      to this class as a step or a side effect.
+    authority: premise 7 as revised by #226
+    note: >
+      Premise 7 needs no register, no list and no machinery of its own: it is one
+      class-level field, `modes: [propose]`, generating eight nulls with one
+      reason. Noah, accepting it: not stoked about mode-derived nulls, and no
+      better answer available — recorded because the discomfort is the honest
+      part of the ruling.
+
+# WHAT IS NOT DERIVED. Which classes admit `dispatch`, `close` and `review` is
+# STATED per cell. Obligation-bearing is not a flag: no combination of track,
+# custody, origin, facing and mutability tells you whether an artifact carries an
+# obligation somebody can discharge. Adding a flag to make it derivable was
+# considered and refused — it would be a flag whose only consumer is this table,
+# which is a flag invented to close a rule rather than to describe an artifact.
+
+# ---------------------------------------------------------------------------
+# THE ACTOR COLUMN — derived from custody, overridable with an authority
+# ---------------------------------------------------------------------------
+#
+# Premise 3: the actor column is a may/may-not column on the cell, never an axis.
+# #227 built custody's three values out of PROTOCOL §5's three postures, and this
+# is what they were built FOR: the column and its propose-redirect fall out of
+# the flag, so a class cannot be added and forget its propose cells.
+
+actor_column:
+  derived_from: custody
+  rules:
+    - when: {custody: agent-writable}
+      agent: may
+      propose_cell: none
+      reason: no refusal, so no proposal — #226 bounds propose-cells by where an actor column actually refuses
+
+    - when: {custody: human-signed}
+      agent:
+        ruling: may-not
+        on: [add, edit, supersede, close]
+        redirect: propose:<intent>@<class>
+      reason: >
+        PROTOCOL §5 posture 2 — "agent-drafted, human-signed". An agent proposes
+        exact text and a human applies and commits. Custody is over the DECISION,
+        not the keystrokes.
+
+    - when: {custody: human-authored}
+      agent:
+        ruling: may-not
+        on: [add, edit, supersede]
+        redirect: none
+      reason: >
+        PROTOCOL §5's three exceptions, where "the keystrokes ARE the claim, and
+        drafting assistance destroys the thing being claimed". A proposal here is
+        not a lesser path to the same place — it is the same breach. THIS IS THE
+        ONE REFUSAL WITH NO REDIRECT, and it is why the propose-redirect had to be
+        keyed to the flag rather than to "wherever an agent is refused".
+
+  override:
+    allowed: true
+    requires: [authority, reason]
+    note: >
+      SETTLED ON THE HARD CELL close@debt-verification (#228), which is the second
+      time an actor column demanded a condition — #224 found the first, and #227
+      dissolved that one by splitting the class. This one does not dissolve: §5's
+      competence floor rules that WHO MAY DECLARE a verification met is not who may
+      edit the row, and that rule comes from the floor, which is not one of the five
+      flags and never will be.
+      An override is STATED with a named authority, so the actor reads a column and
+      never judges one. That is what keeps it inside premise 2's key: the condition
+      is resolved when the cell is WRITTEN, not when it is read. A cell that needed
+      the READER to evaluate a condition would be the break this ticket was
+      chartered to look for.
+      Splitting debt-verification again by competence tier was the alternative and
+      is refused: it multiplies classes against a floor that itself changes.
+
+# ---------------------------------------------------------------------------
+# DEFENCE — the REQUIREMENT is derived; the defence itself is written
+# ---------------------------------------------------------------------------
+
+defence:
+  derives: coupling
+  rule:
+    when:
+      intent: [edit, supersede]
+      origin: authored
+    emits:
+      coupling: add@defence
+      when: with
+  relief:
+    - id: de-minimis
+      text: PROTOCOL §6 — nothing was claimed.
+    - id: prior-citation
+      text: >
+        The claim was defended earlier, and here is where. §5: "Reasoning recorded
+        in advance discharges by citation" — a different claim from de minimis, and
+        the reason the field needs a route rather than a boolean.
+      discharges_by: citing an existing `defence` instance
+  note: >
+    NOAH'S DISTINCTION, which this block is built on: what derives is the
+    NECESSITY of a defence, never the defence. The artifact itself is
+    human-authored (§5: "in Noah's own words") and can only ever be written.
+    A rule that generated a defence would be generating the thing whose entire
+    value is that the author produced it — §5: "its value is that the author
+    produced it, not that it reads well".
+    UNIFICATION: because `defence` is now a class (#228 minted it), "this cell
+    owes a defence" IS a coupling in premise 18's sense and needs no parallel
+    mechanism. `relief: prior-citation` becomes "the coupling is discharged by
+    citing an existing instance" rather than a special case in a second machine.
+  authority: PROTOCOL.md §5 "The defence — which changes owe one"
+  exceptions_stated_per_cell: >
+    §5 is candid that "not every authored-file change does" owe one, and its table
+    keys on WHERE IN A FILE the change lands (CONTEXT.md § Research substance owes
+    one; § Programme structure does not). A per-cell override with a stated reason
+    carries those; the derivation carries the rest.
+
+# ---------------------------------------------------------------------------
+# TRACK — constant on 42 classes, derived on three
+# ---------------------------------------------------------------------------
+
+track:
+  default: constant
+  derived_value:
+    spelling: {track: derived, derived_from: <source>}
+    applies_to: [pull-request, defence, review-record]
+    reason: >
+      These three classes are ABOUT other artifacts rather than standing alone,
+      so they have no track of their own: a pull request takes its branch's, and
+      a defence or a review record takes its subject's. PROTOCOL §6's merge spine
+      already admits this — it takes `track` as a PARAMETER.
+      The alternatives were to lie (pick a constant) or go silent (drop the flag)
+      on the one artifact where §1's test decides how the merge commit is stamped.
+    note: >
+      Premise 2's direction is preserved: the derivation is DECLARED — the class
+      names where to look — and nothing is inferred from a string. This is the
+      first flag value that points at another artifact rather than naming a state,
+      and the third time in two tickets a premise-4 flag has grown.

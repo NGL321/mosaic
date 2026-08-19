@@ -4,6 +4,13 @@
 # (premise 2). Forty-two classes across three surfaces. The ticket estimated
 # "roughly twenty"; the count was a floor, and it was low by half.
 #
+# AMENDED BY #228 — 45. Working the hard cells found three classes this
+# enumeration never reached, because it swept the record by LOCATION and these
+# three are named only inside obligations: `pull-request` and `review-record`
+# (tracker) and `defence` (address deferred). A directory sweep cannot find an
+# artifact the protocol describes but never files. #228 also gave `track` its
+# first DERIVED value, for exactly those three — see derivations.yaml.
+#
 # ---------------------------------------------------------------------------
 # THE FLAGS — five, plus a typed address
 # ---------------------------------------------------------------------------
@@ -101,8 +108,9 @@
 #
 #   `scrub-allowlist` HAS NO ADDRESS. notebook/README.md specifies it completely
 #   — per line, per transcript, hand-written, append-only, "itself part of the
-#   record" — and never says where it lives. The only class here with a full
-#   flag set and no `locate`.
+#   record" — and never says where it lives. #228 found the second instance,
+#   `defence`, and promoted this to a NAMED gap in gaps.yaml: two instances from
+#   two directions is a pattern, not a note on one class.
 #
 #   `charter` and the three `conjecture-*` classes HAVE NO INSTANCES. Deliberate
 #   in both cases (§5 pins CHARTER.md's path "before it is written, because the
@@ -443,12 +451,14 @@ scrub-allowlist:
   authority: notebook/README.md "The scrub fails closed"
 
 # ===========================================================================
-# TRACKER — 7, all over the `issue` class fragment
+# TRACKER — 9, all over the `issue` class fragment (7 + pull-request and
+# review-record, minted by #228)
 # ===========================================================================
 
 map:
   gloss: A wayfinding map — destination, decisions, fog, scope
   fragment: issue
+  gaps: [no-review-of-record]      # gaps.yaml — moved off the fragment by #228
   locate: {surface: tracker, path: "issue, label wayfinder:map"}
   track: tooling
   facing: agent
@@ -462,6 +472,7 @@ map:
 ticket:
   gloss: One decision, sized to a session
   fragment: issue
+  gaps: [no-review-of-record]      # gaps.yaml — moved off the fragment by #228
   locate: {surface: tracker, path: "issue, label wayfinder:research|grilling|prototype|task"}
   track: tooling
   facing: agent
@@ -476,6 +487,7 @@ ticket:
 debt-verification:
   gloss: A derivation step Noah cannot yet defend unaided
   fragment: issue
+  gaps: [no-review-of-record]      # gaps.yaml — moved off the fragment by #228
   locate: {surface: tracker, path: "issue, label debt:verification"}
   track: research
   facing: agent
@@ -487,6 +499,7 @@ debt-verification:
 debt-source:
   gloss: An assertion the record has not sourced
   fragment: issue
+  gaps: [no-review-of-record]      # gaps.yaml — moved off the fragment by #228
   locate: {surface: tracker, path: "issue, label debt:source"}
   track: research
   facing: agent
@@ -503,6 +516,7 @@ debt-source:
 custody-waiver:
   gloss: A custody obligation the scaffolding era defers
   fragment: issue
+  gaps: [no-review-of-record]      # gaps.yaml — moved off the fragment by #228
   locate: {surface: tracker, path: "issue, label custody:deferred"}
   track: tooling
   facing: agent
@@ -512,6 +526,7 @@ custody-waiver:
 health-review:
   gloss: A programme health review, with one Hard Core member as its defendant
   fragment: issue
+  gaps: [no-review-of-record]      # gaps.yaml — moved off the fragment by #228
   locate: {surface: tracker, path: "issue, label health:review"}
   track: research
   facing: agent
@@ -521,6 +536,7 @@ health-review:
 prospect-backlog:
   gloss: The ledger of notions in flight
   fragment: issue
+  gaps: [no-review-of-record]      # gaps.yaml — moved off the fragment by #228
   locate: {surface: tracker, path: "issue #109"}
   track: research
   facing: human
@@ -536,6 +552,58 @@ prospect-backlog:
     work-item.
     TRIPWIRE: if Prospects begin acquiring assignees or blocking edges inside the
     backlog, the ledger has become a queue and must split into issues.
+
+
+# --- MINTED UNDER #228 -----------------------------------------------------
+# Found by working cells, not by sweeping directories: #226's `review` intent
+# writes a judgement against a subject, and §5's defence gate is "a checker
+# agent, on the pull request". Neither artifact had a class. This is not a break
+# of the key (premise 2 is intact); it is the class axis being short, and the
+# ~130-cell transcription cannot start with three of its targets missing.
+
+pull-request:
+  gloss: The merge unit — every branch lands through one
+  fragment: issue
+  locate: {surface: tracker, path: "pull request on the repository"}
+  track: {derived: true, derived_from: branch}
+  custody: agent-writable
+  origin: authored
+  facing: human
+  mutability: amendable
+  authority: PROTOCOL.md §6, §5
+  note: >
+    DECLARES NO GAP. This is the one tracker class that HAS a reviewer of record —
+    §5 prescribes a checker agent and §6 requires a reviewer other than the author —
+    and it is what moved `no-review-of-record` off the `issue` fragment into
+    gaps.yaml. It composes the fragment for what the fragment actually shares:
+    identity by number, labels, and closed-never-deleted.
+    `track` is DERIVED (derivations.yaml): a pull request takes its branch's track.
+    §6's merge spine already admits this by taking `track` as a parameter, and #176
+    ruled a mixed-track branch a violation, so the derivation is single-valued.
+    LIFECYCLE: amendable until merged, frozen after. Recorded as a note rather than
+    a second class — a merged PR is the same artifact, later.
+
+review-record:
+  gloss: A judgement recorded against a subject artifact by a named party
+  fragment: issue
+  locate: {surface: tracker, path: "review on a pull request"}
+  track: {derived: true, derived_from: subject}
+  custody: agent-writable
+  origin: authored
+  facing: agent
+  mutability: frozen
+  subject: required
+  authority: PROTOCOL.md §5 "Gate artifacts are record, not belief"; §8 Review
+  note: >
+    §5 defuses the trap this class would otherwise carry: "a checker agent's
+    critique of a falsifier draft... land in the record even though their SUBJECT
+    is belief. Custody follows the file, never the topic." So custody here is
+    agent-writable however human-authored the subject is — if custody flowed from
+    the subject, a review of a CONTEXT.md proposal would be human-only, forbidding
+    the checker agent §5 explicitly prescribes.
+    `frozen`: a judgement is made at a time. A changed judgement is a new review.
+    Carries #226's `subject:` field, which is why the class needs no per-subject
+    variants.
 
 # ===========================================================================
 # DRIVE — 5
@@ -599,3 +667,32 @@ index-manifest:
   note: >
     "Do not hand-edit; append through a tool." #115 found the manifest every Session:
     citation resolved through did not exist.
+
+# ===========================================================================
+# UNPLACED — 1. A full flag set and no address (gaps.yaml: no-address)
+# ===========================================================================
+
+defence:
+  gloss: What changed and why, in Noah's own words
+  locate: DEFERRED
+  gaps: [no-address]
+  track: {derived: true, derived_from: subject}
+  custody: human-authored
+  origin: authored
+  facing: human
+  mutability: frozen
+  authority: PROTOCOL.md §5 "The defence — which changes owe one"
+  note: >
+    #224 carried `defence` as a class FLAG; #227 removed it on Noah's argument that
+    an undefended landed change is a BREACH, not a state, and routed it to #226 —
+    which had already closed four hours earlier. #228 found the artifact itself was
+    never given a class at all.
+    NOT A SECTION OF THE PULL REQUEST. The PR is agent-writable and a defence is
+    human-authored — §5: "in Noah's own words", where "the keystrokes ARE the claim"
+    — which is two flag-sets in one artifact and a split by #227's own rule.
+    ADDRESS DEFERRED, and filed against #1 rather than decided here (premise 13):
+    §5 says a defence is carried on the pull request and never says what it IS. This
+    is the second instance of the `no-address` gap after scrub-allowlist. The finding
+    for that ticket, not a ruling here: a committed file beats a PR comment, because
+    #203 is exactly the lesson about assertions no clone can verify.
+    What DERIVES is the necessity of a defence (derivations.yaml), never the defence.

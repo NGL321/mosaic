@@ -12,7 +12,10 @@ python docs/prototypes/operation-format/prototype_tui.py
 
 - `source/` — the factored form. `classes.yaml`, `intents.yaml`, `glossary.yaml`,
   `fragments/` (the spine, written once) and `operations/` (four cells: three ruled in,
-  one ruled null).
+  one ruled null). Three files were added later by [#228](https://github.com/NGL321/mosaic/issues/228):
+  `derivations.yaml` (the arithmetic — every null, actor column and defence obligation a
+  flag can predict), `couplings.yaml` (the six couplings visible now, staged until their
+  cells exist) and `gaps.yaml` (named gaps, declared per class).
 - `render.py` — the generator. The whole claim is in `flatten()`.
 - `out/` — the flat form: what an actor is actually handed. **This is the artifact the
   acceptance test judges**, and nothing else is.
@@ -150,3 +153,23 @@ address `locate{surface, path, licence}`. `defence` left for #226 as a property 
 intent. The file's own header carries the argument. Nothing above depends on the axes being
 complete; finding 2 is the only place the *key* is at risk, and it is stated as a question
 for [#228](https://github.com/NGL321/mosaic/issues/228) rather than answered here.
+
+## Amended after #224
+
+This prototype was built to be thrown away and has instead been amended twice, which is
+itself the finding: the source format survived two enumerations landing on top of it.
+
+- [#227](https://github.com/NGL321/mosaic/issues/227) filled `classes.yaml` — 42 classes,
+  five flags, a typed address — and minted the first **class** fragment, `issue.yaml`.
+- [#228](https://github.com/NGL321/mosaic/issues/228) worked six hard cells against it.
+  The key held. It added `derivations.yaml`, `couplings.yaml` and `gaps.yaml`; ratified
+  `trigger:` and `couples:`, which #224 had invented ad hoc, as required fields with
+  rules; minted `enforcement:`; and added three classes the location sweep could not see —
+  `pull-request`, `review-record` and `defence`.
+
+**The four cells in `operations/` are stale against `classes.yaml` and `render.py` no
+longer runs.** `add@CONTEXT-entry` names a class #227 renamed to `vocabulary-entry`, and
+`file@debt-issue` names an intent #226 collapsed and a class #227 split in two. This was
+true before #228 and is left alone deliberately: renaming them is transcription against a
+now-settled model, and premise 15 batches execution at the end. The cells remain readable
+as the primary source they were retained to be.

@@ -1,18 +1,153 @@
-# PROTOTYPE — the intent axis (premise 2), only as far as three Operations need it.
-# Enumerating it is #226's job; this file exists so the KEY can be exercised, and
-# deliberately stops at what the three cells below use.
+# THE INTENT AXIS (premise 2). Enumerated by #226, landed in source by #228.
+#
+# #226 resolved in prose and cut no branch, so this file was still the four-verb
+# prototype stub written under #224 — which the derivations added by #228 refer
+# through. A rule keyed to intents a file does not contain is not checkable, so
+# landing #226's axis here is a prerequisite of #228's own deliverable rather
+# than a courtesy to it.
+#
+# EIGHT GENERIC MEMBERS crossed with the mode `execute | propose`. The grain test
+# that produced them: AN INTENT IS A DISTINCT SHAPE OF DECISION AND AUTHORITY,
+# NOT A DISTINCT VERB. Holding class fixed, two candidates are the SAME intent
+# when they produce the same actor ruling AND the same postcondition shape. All
+# domain specificity lives on the class axis — `file`, `publish`, `cite`,
+# `annotate`, `extract`, `reproduce`, `discharge` and `correct` all collapse, and
+# survive as glossary terms.
+#
+# THE AXIS IS CLOSED. Adding a cell is `propose:add@operation-cell`. Adding an
+# INTENT re-keys every existing cell and forces a ruled-in/null judgement on
+# every class — the apparatus-MAJOR shape this map adopted in its reframe.
 
 add:
   gloss: Bring a new instance of the class into being.
+  postcondition: an instance of the class now exists
+
 edit:
   gloss: Change the meaning of an existing instance.
-propose:
-  gloss: >
-    Produce exact replacement text for an instance the actor may not write, and
-    hand it to one who may. Its own intent, not a mode of `add` — premise 3.
+  postcondition: an existing instance now means something else
+  owes_defence: derived        # derivations.yaml — meaning-changing x origin: authored
+
 regenerate:
   gloss: >
     Recompute a generated instance from its source of truth. Distinct from `edit`
     by construction: there is nothing to decide, so nobody may decide it.
-file:
-  gloss: Open a tracker instance recording an obligation.
+  postcondition: a generated instance is recomputed from its source; nothing was decided
+  requires: [trigger]
+  note: >
+    The one intent an agent completes end to end, precisely because there is no
+    decision to own. Kept as an intent rather than demoted to a class flag on
+    empirical grounds: NOTHING FIRES the regeneration of curriculum/open.md, and
+    that gap was findable only because there was a cell with a field to leave
+    empty. A flag says the file IS generated and stays silent on who generates it.
+
+supersede:
+  gloss: Replace an instance, leaving the prior addressable with a forward pointer.
+  postcondition: replaced, with the prior left addressable and a forward pointer
+  owes_defence: derived
+
+delete:
+  gloss: Remove an instance; nothing remains.
+  postcondition: removed, nothing remains
+  note: >
+    Null almost everywhere by derivation (derivations.yaml), and on the axis
+    anyway. Noah's reason is about the Operation set's own health rather than the
+    record's: "leaving myself without an escape hatch via delete means that the
+    program will likely grow uncontrollably, cancerously."
+
+dispatch:
+  gloss: Transfer authority to write, as a mandate an agent can act under.
+  postcondition: a mandate exists; authority to write has been transferred
+  couples: [close]             # couplings.yaml — dispatch-owes-a-close
+
+review:
+  gloss: Record a judgement against a subject artifact, as a named party.
+  postcondition: a judgement is recorded against a SUBJECT artifact by a named party
+  fields: [subject]
+  note: >
+    The only member whose postcondition names TWO artifacts — the subject it
+    judges and the gate artifact it writes. The gate artifact is `review-record`
+    (#228); custody follows the file, never the topic.
+
+close:
+  gloss: Record an obligation as met, citing the evidence that met it.
+  postcondition: an obligation is recorded as met, and the evidence that met it is cited
+  note: >
+    Distinct from `edit` on both criteria — an edit changes meaning, a close
+    discharges an obligation, and who may DECLARE an obligation met is not who may
+    edit the row. The only intent with a precondition on a companion artifact,
+    which makes it the natural home for couplings.
+
+# ---------------------------------------------------------------------------
+# THE MODE
+# ---------------------------------------------------------------------------
+
+mode:
+  values: [execute, propose]
+  gloss: >
+    The human gate and nothing else. `execute` is ungated; `propose` is gated on
+    Noah. Propose-cells are generated only where an actor column actually refuses
+    (derivations.yaml), so they are bounded by the refusals rather than by the grid.
+  note: >
+    Premise 3 chartered `propose` as its own INTENT; #226 made it the mode,
+    substance unchanged. A bare `propose@<class>` cannot say whether an `add` or an
+    `edit` is being proposed, so as a member it would have to branch internally —
+    and internal branching is judgement.
+
+# ---------------------------------------------------------------------------
+# CELL FIELDS — the schema every cell carries. Ratified and extended by #228.
+# ---------------------------------------------------------------------------
+
+cell_fields:
+  ruling:
+    values: [in, null]
+    note: >
+      An ABSENCE is neither. Absent means nobody looked; null means it was ruled
+      out, with a reason and a redirect (premise 18). The catch-all depends on
+      telling them apart. A null may be DERIVED or STATED and renders identically
+      either way — see derivations.yaml.
+
+  trigger:
+    required_on: [regenerate]
+    values: {do: <what fires this>, executor: <who or what holds it>}
+    empty_is: a filed gap
+    note: >
+      RATIFIED BY #228, having been invented ad hoc by #224's prototype. Required
+      because `executor:` on a regenerate reads "anyone" — true, and recording
+      nothing. What is missing in all three standing instances (#176's `Bump:`,
+      #198's label flip, #203's snapshot) is that NOTHING FIRES IT. Without a
+      field of its own, the one intent that files those three defects is the one
+      intent whose executor field passes.
+      DISCOVERY, NOT A LIST (premise 20): the mechanism that performs regeneration
+      finds its work by SCANNING cells for `trigger:` fields. It may not hold an
+      internal list of things to regenerate. Noah, ruling it: whatever mechanism
+      executes the regeneration should be looking for trigger fields and not
+      looking for an internal list.
+
+  enforcement:
+    required_on: all ruled-in cells
+    values: [ci, command, human-step, none]
+    note: >
+      MINTED BY #228 on the hard cell add@run-output, where Drive has no CI, no
+      ancestry and no publish.sh (#42), so nothing can check the obligation. This
+      is premise 9's move applied to GATES rather than executors: `none` makes an
+      unenforceable cell countable instead of invisible, and an unenforceable cell
+      is a mechanism-shaped hole with an address — a driver for building the
+      mechanism, not a defect to hide or a cell to refuse.
+
+  couples:
+    values: [{companion: <cell>, obligation: <text>, when: before | with | after}]
+    note: >
+      A companion is ALWAYS A CELL, never a bare class: "couples to
+      research-document" does not say what must happen to it. Recorded on the cell
+      that INCURS the obligation; a mutual obligation is two records. See
+      couplings.yaml.
+
+  defence:
+    values: [owed, not-owed]
+    derived: true
+    relief: [de-minimis, prior-citation]
+    note: >
+      What derives is the NECESSITY of a defence; the defence itself is
+      human-authored and can only ever be written. Overridable per cell with a
+      stated reason and relief route — §5 is candid that "not every authored-file
+      change does" owe one.

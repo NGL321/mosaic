@@ -1,0 +1,57 @@
+# NAMED GAPS — stated once, DECLARED per artifact. Minted under #228.
+#
+# WHY THIS FILE EXISTS. #227's `issue` class fragment carried a postcondition
+# named `no-review-of-record`: "a write to this surface has no reviewer... every
+# mechanical obligation on this surface has executor `none`". It was true of all
+# seven tracker classes then known, so it was factored into the fragment.
+#
+# #228 minted `pull-request`, and a pull request is the one tracker artifact that
+# DOES have a reviewer of record — PROTOCOL §5 prescribes a checker agent and §6
+# requires a reviewer other than the author. Composing the fragment would hand it
+# a false postcondition.
+#
+# THE RULING. A fragment factors what is true of EVERYTHING that composes it. The
+# moment one member falsifies a postcondition, that postcondition was never shared
+# substance — it was a gap that happened to be universal. So it moves out of the
+# fragment and is DECLARED by the classes that carry it, via `gaps: [...]`. The
+# alternative — keeping it in the fragment with an override mechanism — was
+# refused: it would make every future reader check whether a postcondition
+# survived, which is judgement at the point of reading.
+#
+# PREMISE 20 APPLIES TO THIS FILE. The text of a gap is defined ONCE here; WHO
+# HAS IT is discovered by scanning classes for `gaps:` declarations. This file
+# holds no list of members, and anything that reports on gaps must scan for them.
+# A membership list here would be the internal list premise 20 forbids, and it
+# would drift the first time a class was added.
+
+id: gaps
+authority: "#228, on #220 — premises 9, 20"
+
+gaps:
+  - id: no-review-of-record
+    text: >
+      A write to this artifact has no reviewer. The branch and pull-request spines
+      drop out on the tracker surface and NOTHING replaces them: no review, no
+      custody check, no reviewer of record. Every mechanical obligation on this
+      artifact has executor `none`.
+    found_by: "#224, on file@debt-issue"
+    authority: premise 9 — "`none` is a filed gap by construction"
+    note: >
+      Stated once rather than rediscovered per class. Declared by the seven tracker
+      classes over the `issue` fragment; NOT declared by `pull-request`, which is
+      the class that forced this file into existence.
+
+  - id: no-address
+    text: >
+      The record specifies this artifact completely — what it contains, who writes
+      it, how it changes — and never says WHERE IT LIVES. A class with a full flag
+      set and no `locate`.
+    found_by: "#227, on scrub-allowlist"
+    note: >
+      #228 found the second instance: `defence`. PROTOCOL §5 says a defence is
+      carried on the pull request and says nothing about what it is — and it cannot
+      simply be a section of the PR body, because the PR is agent-writable and the
+      defence is human-authored, which is two flag-sets in one artifact and a split
+      by #227's own rule. Filed against #1, not decided here (premise 13).
+      Two instances from two directions is what makes this a NAMED gap rather than
+      a note on one class.

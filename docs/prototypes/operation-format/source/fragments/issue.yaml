@@ -61,12 +61,16 @@ postconditions:
       been resolved; deletion destroys the fact that it was ever asked.
     authority: premise 8 — "supersede where record entries were taken under it"
 
-  - id: no-review-of-record
-    text: >
-      A write to this surface has no reviewer.
-    gap: >
-      STANDING GAP, found by #224 on file@debt-issue and true of every class that
-      composes this fragment: the branch and pull-request spines drop out on the
-      tracker and NOTHING replaces them. No review, no custody check, no reviewer
-      of record. Every mechanical obligation on this surface has executor `none`.
-      Stated here once rather than rediscovered per class.
+# MOVED OUT UNDER #228: `no-review-of-record`. It sat here as a postcondition,
+# true of every class then known to compose this fragment. #228 minted
+# `pull-request` — a tracker artifact that DOES have a reviewer of record (§5's
+# checker agent, §6's reviewer other than the author) — and composing this
+# fragment would have handed it a false postcondition.
+#
+# A fragment factors what is true of EVERYTHING that composes it. The moment one
+# member falsifies a postcondition, that postcondition was never shared substance;
+# it was a GAP that happened to be universal. It now lives in gaps.yaml, defined
+# once and DECLARED by the classes that carry it. The alternative — keeping it
+# here with an override mechanism — was refused: it would make every future reader
+# check whether a postcondition survived, which is judgement at the point of
+# reading, and the gap would stop being countable.
