@@ -151,3 +151,38 @@ cell_fields:
       human-authored and can only ever be written. Overridable per cell with a
       stated reason and relief route — §5 is candid that "not every authored-file
       change does" owe one.
+
+  refusals:
+    minted_by: "#232"
+    values: {when: <the condition>, message: <what the actor is told>, redirect: <where they are sent>, reason: <why>}
+    note: >
+      A REFUSAL VOIDS THE CELL and is evaluated by the command BEFORE it renders.
+      A STEP is what can fail WITHIN a valid cell. The rule:
+
+        ANYTHING THAT CAN VOID A CELL IS A REFUSAL.
+        ONLY WHAT CAN FAIL WITHIN A VALID CELL IS A STEP.
+
+      A step can be skipped and a refusal cannot, which is the whole of the
+      distinction. #232 found it by getting it wrong: dispatch@ticket's base case
+      first sat in that cell's STEP list, where it fired after the entry had
+      already rendered — handing the actor a complete procedure and then telling
+      them it was void.
+      DERIVED refusals already exist and are not written here: the actor column
+      and the flag predicates in derivations.yaml. This field is for STATED ones,
+      the same split nulls already carry, and it renders identically either way.
+      A CANDIDATE LINT for #231's suite, and cheap: a step whose failure invalidates
+      every step after it is a refusal in the wrong place.
+
+  routing:
+    minted_by: "#232"
+    required_on: [close]
+    note: >
+      Where a return goes, and the reason `dispatch@ticket` needs no mode
+      restriction. A `close` pops ONE FRAME, to whoever dispatched; a `propose`
+      jumps to the AUTHORITY ROOT, which is always a human. Depth is free; the
+      propose channel does not get deeper.
+      The root is computed by walking parent edges and reading each ticket's
+      DISPATCHER — never its assignee. THE PARENT EDGE IS NOT THE AUTHORITY EDGE:
+      the parent edge is the work tree, the dispatcher is the authority chain, and
+      #232 found this by building the rule as first stated and watching it route a
+      proposal to an agent on the first run.

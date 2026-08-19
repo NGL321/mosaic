@@ -478,6 +478,22 @@ ticket:
   facing: agent
   mutability: amendable
   ticket_types: [research, grilling, prototype, task]
+  state_labels: [agent:dispatched, agent:in-progress, agent:blocked]
+  state_labels_note: >
+    ADDED BY #232, and forced by the `issue` fragment rather than chosen: `labelled` says an
+    issue carries EXACTLY the labels its class declares, so a mandate label that is declared
+    nowhere puts every dispatched ticket outside its own class. `locate.path` carries the
+    IDENTITY labels — what makes the class queryable — and these are STATE, so they need
+    their own key.
+    ADOPTED VERBATIM from #24 rather than re-coined, because that prototype settled their
+    BEHAVIOUR and a rename would inherit the behaviour while losing the citation:
+    `agent:dispatched` is consumed by the run answering it, so re-dispatch is an act by a
+    named actor; `agent:in-progress` is the concurrency guard, and works whether or not a
+    workflow's `concurrency:` block was written correctly; `agent:blocked` is ordinary
+    traffic cleared by whoever clears the block, and the THIRD identical block opens an
+    issue instead of retrying.
+    These three are also the whole of the mandate — there is no mandate artifact and no
+    register of open mandates. They are a label query (premise 20).
   note: >
     One class, not four. The types differ in PROCEDURE — a research ticket resolves via
     subagent, a grilling ticket via a live session — and procedure does not individuate.

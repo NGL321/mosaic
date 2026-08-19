@@ -167,6 +167,12 @@ itself the finding: the source format survived two enumerations landing on top o
   rules; minted `enforcement:`; and added three classes the location sweep could not see —
   `pull-request`, `review-record` and `defence`.
 
+- [#232](https://github.com/NGL321/mosaic/issues/232) wrote the first three cells that were
+  not #224's own — `dispatch@ticket`, `close@ticket` and the `dispatch@map` null — and with
+  them the first of #228's six couplings to migrate onto its cells. It minted two more cell
+  fields, `refusals:` and `routing:`, and added `state_labels:` to `ticket`. Its own
+  prototype is [`operation-interface`](../operation-interface/README.md).
+
 **The four cells in `operations/` are stale against `classes.yaml` and `render.py` no
 longer runs.** `add@CONTEXT-entry` names a class #227 renamed to `vocabulary-entry`, and
 `file@debt-issue` names an intent #226 collapsed and a class #227 split in two. This was
