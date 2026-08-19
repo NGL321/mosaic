@@ -707,3 +707,56 @@ file list, because that script already cross-checks its set against its workflow
 the pull request composer — reaching the contributor at the moment they contribute. This
 section is the decision of record; restating it there would create a second copy to keep
 in sync.
+
+---
+
+## 9. Search rules
+
+Two rules govern what an Inquiry **reaches for**. They are Positive Heuristic content and
+not admission criteria: neither says what may enter the Protective Belt — §5's gate and
+[#9](https://github.com/NGL321/mosaic/issues/9)'s eligibility conditions do that — and
+neither can be satisfied or violated by a single commit. They are here because they bind the
+session that *opens* an Inquiry, and that session reads this file.
+
+Both were adopted in [#17](https://github.com/NGL321/mosaic/issues/17) for **precedent**:
+the first empirical line's real job is to set the tone every future Inquiry-opening session
+reads.
+
+### Reuse machinery across Inquiries
+
+> **Minimise unnecessary redundancy to make space for necessary redundancy.**
+
+The necessary kind is **replication**. Reuse is how a programme affords to repeat itself
+where repetition is the point — one that rebuilds its apparatus per Inquiry spends its
+budget on scaffolding and has none left for the second run that would say whether the first
+was real.
+
+Two consequences, neither of them obvious from the sentence:
+
+- **It reprices conjectures.** A conjecture reachable by reusing an open Inquiry's machinery
+  is cheaper to cash than one needing new machinery. This constrains *cashing* and never
+  *naming*: posting a conjecture stays free — [#9](https://github.com/NGL321/mosaic/issues/9)'s
+  condition 1 — and the price attaches when someone proposes to bridge to it.
+  [#17](https://github.com/NGL321/mosaic/issues/17) is the worked case, constraining
+  [#7](https://github.com/NGL321/mosaic/issues/7)'s cashing without touching its naming.
+- **It is a recorded field, not a habit.** What machinery an entry would reuse is written
+  down at the point the idea is filed — the Prospect format,
+  [#109](https://github.com/NGL321/mosaic/issues/109) — so the price is legible at a glance
+  years later instead of re-derived by whoever picks the idea up.
+
+### Explore a domain before committing to it
+
+Exploratory Inquiries move between domains; a confirmatory Inquiry opens only once a domain
+has proved useful. In Noah's words:
+
+> *"I want generally the cycle of this repository to be moving from one domain to the next in
+> exploratory phases and only using confirmatory lines of inquiry when a useful domain has
+> been identified."*
+
+This pairs with `Register` (`CONTEXT.md`), which already bars an exploratory result from the
+belt and admits it only as a new Inquiry's committed hypothesis. `Register` says an
+exploratory result may not be asserted; this rule says when the Inquiry that *could* assert
+it is due; and the rule above says that Inquiry should be built on the first one's machinery.
+
+Together they are a two-step pattern an agent can copy — and the programme's first Inquiry
+is deliberately step one of it, exploratory by design and unable to produce a belt claim.
