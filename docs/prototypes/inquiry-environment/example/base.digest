@@ -1,0 +1,11 @@
+# PROTOTYPE — the repo-level base pin. TOOLING TRACK.
+#
+# This is the DEFAULT FOR NEW FREEZES and nothing else. It is not what any frozen Inquiry
+# runs on: each env.lock carries its own copy of a digest, taken from this file on the day
+# it froze. Bumping this line therefore cannot reach backwards into a frozen Inquiry, and
+# the prototype's finding 4 is why that matters more than premise 12 assumed.
+
+image: ghcr.io/ngl321/mosaic-base
+digest: sha256:9c1f1a1e4a1f3b8f4d2c5e6a7b8c9d0e1f2a3b4c5d6e7f8091a2b3c4d5e6f708
+built: 2026-08-04
+recipe: docs/prototypes/inquiry-environment/example/base/Dockerfile
